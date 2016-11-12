@@ -12,6 +12,9 @@
     "express":"latest",
     "chalk":"latest",
     "figlet":"latest",
-    "mongoose":"latest"
+    "mongoose":"latest",
+    "express-handlebars": "latest",
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3"
   }
 }
