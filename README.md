@@ -20,3 +20,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - -filter:v and -vf is the same thing.
 - "-ss {seconds}" seek to position in seconds
 - "-sseof {seconds}" seek to position relative to 'end of file' (use negative numbers).
+- [FFMPEG ProRes to MP4: Explicitly set pixel format with 'pix_fmt yuv420p'](http://superuser.com/questions/855678/ffmpeg-mov-prores-to-mp4)

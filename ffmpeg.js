@@ -6,38 +6,49 @@ const chalk = require('chalk');
 const clear = require('clear');
 
 const fs = require('fs');
-const ffmpeg = require('ffmpeg');
 const child_process = require('child_process');
 const exec = child_process.exec;
 
-var inputFile = __dirname + '/video_source/IMG_0003.m4v';
-var outputFile = __dirname + '/video_output/node_output.mp4';
+var videoData = {
+    inputPath: __dirname + '/video_source/to_process/',
+    outputPath: __dirname + '/video_output/',
+    options: '-filter:v "scale=w=1280:h=-1" ',
+    outputExtension: '.mp4'
+};
 
-var cmd = 'ffmpeg -i ' + inputFile + ' ' + outputFile;
 
 var fileArray = fs.readdirSync(process.cwd() + '/video_source/to_process');
 
-var inputFileName = process.argv[2];
-
-
-// run FFMPEG
-// child_process.exec(cmd, function(error, stdout, stderr){
-//     if(error) console.log('Error: ' + error);
-//
-//     console.log(stdout);
-//     process.exit();
-// });
 
 // =======
 // RUNTIME
 // =======
-//processArrayOfFiles(fileArray);
-processOneFile('IMG_0005.m4v');
+convertFile();
 
 
 // ========
 // FUNCTION
 // ========
+
+function convertFile(){
+
+    child_process.exec('ffmpeg -i ' + videoData.inputPath + 'IMG_0005.m4v ' + videoData.options + videoData.outputPath + 'IMG_0005' + videoData.outputExtension, function(error, stdout, stderr){
+
+        // if there's an error launching the process...
+        if(error){
+            console.log(Error(error));
+        } else {
+            if (stderr) {
+                console.log(stderr);
+                process.exit(1);
+            } else {
+                console.log(stdout);
+                process.exit(0);
+            }
+        }
+
+    });
+}
 
 function processOneFile(fileName) {
 
@@ -51,12 +62,15 @@ function processOneFile(fileName) {
 
             if(err) {
                 console.log('Error: ' + error);
+                process.exit(1);
             }
             else if (stderr) {
                 console.log('STDOUT: ' + stderr);
             } else {
                 console.log(stdout);
+                process.exit(0);
             }
+
     });
 }
 /**
