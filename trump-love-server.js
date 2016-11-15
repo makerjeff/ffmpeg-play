@@ -103,7 +103,7 @@ app.get('/data/log/', function(req, res){
 app.post('/post', function(req,res){
     console.log(req.body.datum);
 
-    res.json({status: 'Post route is working!', data: 'data you posted: ' + req.body.datum});
+    res.json({status: 'working', data: 'data you posted: ' + req.body.datum});
 
 });
 
