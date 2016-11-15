@@ -12,7 +12,7 @@ const exec = child_process.exec;
 var videoData = {
     inputPath: __dirname + '/video_source/to_process/',
     outputPath: __dirname + '/video_output/',
-    options: '-filter:v "scale=w=1280:h=-1" ',
+    options: '-filter:v "scale=w=1280:h=-1" -pix_fmt yuv420p ',
     outputExtension: '.mp4'
 };
 
@@ -23,16 +23,16 @@ var fileArray = fs.readdirSync(process.cwd() + '/video_source/to_process');
 // =======
 // RUNTIME
 // =======
-convertFile();
+convertFile(process.argv[2]);
 
 
 // ========
 // FUNCTION
 // ========
 
-function convertFile(){
+function convertFile(inputFileName){
 
-    child_process.exec('ffmpeg -i ' + videoData.inputPath + 'IMG_0005.m4v ' + videoData.options + videoData.outputPath + 'IMG_0005' + videoData.outputExtension, function(error, stdout, stderr){
+    child_process.exec('ffmpeg -i ' + videoData.inputPath + inputFileName + '.mov ' + videoData.options + videoData.outputPath + inputFileName + videoData.outputExtension, function(error, stdout, stderr){
 
         // if there's an error launching the process...
         if(error){

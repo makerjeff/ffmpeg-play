@@ -21,3 +21,5 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - "-ss {seconds}" seek to position in seconds
 - "-sseof {seconds}" seek to position relative to 'end of file' (use negative numbers).
 - [FFMPEG ProRes to MP4: Explicitly set pixel format with 'pix_fmt yuv420p'](http://superuser.com/questions/855678/ffmpeg-mov-prores-to-mp4)
+- [Bootstrap Modal Close Event](http://www.coding-issues.com/2014/06/bootstrap-modal-close-event.html)
+- [NPM Body Parser](https://www.npmjs.com/package/body-parser)
