@@ -32,6 +32,9 @@ const handlebars    = hbsModule.create({defaultLayout: 'main'});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+// -- get user IP setup --
+app.enable('trust proxy');
+
 
 
 // MIDDLEWARE
@@ -44,7 +47,7 @@ app.use(function(req,res,next){
 });
 
 app.use(function(req,res,next){
-    console.log(req.method + ' ' + req.url);
+    console.log(req.method + ' ' + req.url + ' ' + req.hostname);
     next();
 });
 
@@ -82,11 +85,13 @@ app.get('/api/:query', function(req,res){
     console.log('"' + req.params.query + '"');
 });
 
+
+//NOTE: this should be sent as a post, not as a GET request.  Default browser
+// URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
 app.get('/data/writedata/:data', function(req,res){
     res.send('Writing Data: "' + req.params.data + '"');
     console.log('Writing Data: "' + req.params.data + '"');
 
-    //TODO: write input data to text file, simulating requested videos.
     db.writeData(req.params.data);
 
 });

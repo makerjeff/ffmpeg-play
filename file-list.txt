@@ -11,3 +11,8 @@ More random data.
 >> Mon Nov 14 2016 15:27:53 GMT-0800 (PST):: debugging data makes my face swell to double the size.
 >> Mon Nov 14 2016 15:28:35 GMT-0800 (PST):: debugging data makes my face swell to double the size.
 >> Mon Nov 14 2016 15:28:46 GMT-0800 (PST):: Monkeys are not allowed to walk on the boardwalk.
+>> Tue Nov 15 2016 11:19:37 GMT-0800 (PST):: something to write to the temp db.
+>> Tue Nov 15 2016 11:20:17 GMT-0800 (PST):: What the hell is this
+>> Tue Nov 15 2016 11:22:04 GMT-0800 (PST):: this is sorcery 
+>> Tue Nov 15 2016 11:28:50 GMT-0800 (PST):: "something awesome within quotes, wonder if this will work for question marks
+>> Tue Nov 15 2016 11:29:12 GMT-0800 (PST):: nope this does not work... i'll have to URL encode and escape the question mark
