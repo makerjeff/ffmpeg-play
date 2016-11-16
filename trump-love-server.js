@@ -32,6 +32,9 @@ const handlebars    = hbsModule.create({defaultLayout: 'main'});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
+// -- get user IP setup --
+app.enable('trust proxy');
+
 
 
 // MIDDLEWARE
@@ -39,12 +42,12 @@ app.set('view engine', 'handlebars');
 // --- header information ---
 
 app.use(function(req,res,next){
-    res.setHeader('X-Powered-By', '180 Core Technologies');
+    res.setHeader('X-Powered-By', 'The American people.');
     next();
 });
 
 app.use(function(req,res,next){
-    console.log(req.method + ' ' + req.url);
+    console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
     next();
 });
 
@@ -72,6 +75,7 @@ app.get('/video', function(req, res){
     res.render('video', {data: 'some data.'});
 });
 
+// ---- API Routes ----
 // TODO: get these on to an external file
 app.get('/api/', function(req,res){
     res.send('API');
@@ -82,20 +86,16 @@ app.get('/api/:query', function(req,res){
     console.log('"' + req.params.query + '"');
 });
 
+
+// ---- Writing Data Routes ----
+//NOTE: this should be sent as a post, not as a GET request.  Default browser
+// URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
 app.get('/data/writedata/:data', function(req,res){
     res.send('Writing Data: "' + req.params.data + '"');
     console.log('Writing Data: "' + req.params.data + '"');
 
-    //TODO: write input data to text file, simulating requested videos.
     db.writeData(req.params.data);
 
-});
-
-app.get('/data/log/', function(req, res){
-
-    db.logFileNames();
-
-    res.send('Data inputted.');
 });
 
 
@@ -103,10 +103,16 @@ app.get('/data/log/', function(req, res){
 app.post('/post', function(req,res){
     console.log(req.body.datum);
 
-    res.json({status: 'Post route is working!', data: 'data you posted: ' + req.body.datum});
+    res.json({status: 'working', data: 'data you posted: ' + req.body.datum});
 
 });
 
+app.post('/trump', function(req,res){
+
+    db.writeData(req.body.datum);
+
+    res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
+});
 
 
 // ========================

@@ -23,3 +23,9 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [FFMPEG ProRes to MP4: Explicitly set pixel format with 'pix_fmt yuv420p'](http://superuser.com/questions/855678/ffmpeg-mov-prores-to-mp4)
 - [Bootstrap Modal Close Event](http://www.coding-issues.com/2014/06/bootstrap-modal-close-event.html)
 - [NPM Body Parser](https://www.npmjs.com/package/body-parser)
+- [encodeURIComponent: Use this to ensure questionmarks get encoded.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)
+- [Debian.org FFMPEG and Libav (DOES NOT WORK FOR RASPBERRY PI, see below)](https://wiki.debian.org/ffmpeg)
+- [Compiling FFMPEG on raspbian / Raspberry Pi](http://hannes.enjoys.it/blog/2016/03/ffmpeg-on-raspbian-raspberry-pi/)
+- GIT is a root process, so make sure you change the ownership of cloned git repo folder before trying to write to it with RSYNC or SCP.
+- [Node Clusters Tutorial (also benchmarking with Seige)](http://rowanmanning.com/posts/node-cluster-and-express/)
+- [MongoDB GridFS: For files larger than 16mb](https://docs.mongodb.com/v3.0/core/gridfs/)
