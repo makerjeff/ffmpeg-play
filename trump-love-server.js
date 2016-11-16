@@ -42,12 +42,12 @@ app.enable('trust proxy');
 // --- header information ---
 
 app.use(function(req,res,next){
-    res.setHeader('X-Powered-By', '180 Core Technologies');
+    res.setHeader('X-Powered-By', 'The American people.');
     next();
 });
 
 app.use(function(req,res,next){
-    console.log(req.method + ' ' + req.url + ' ' + req.hostname);
+    console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
     next();
 });
 
@@ -75,6 +75,7 @@ app.get('/video', function(req, res){
     res.render('video', {data: 'some data.'});
 });
 
+// ---- API Routes ----
 // TODO: get these on to an external file
 app.get('/api/', function(req,res){
     res.send('API');
@@ -86,6 +87,7 @@ app.get('/api/:query', function(req,res){
 });
 
 
+// ---- Writing Data Routes ----
 //NOTE: this should be sent as a post, not as a GET request.  Default browser
 // URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
 app.get('/data/writedata/:data', function(req,res){
@@ -94,13 +96,6 @@ app.get('/data/writedata/:data', function(req,res){
 
     db.writeData(req.params.data);
 
-});
-
-app.get('/data/log/', function(req, res){
-
-    db.logFileNames();
-
-    res.send('Data inputted.');
 });
 
 
@@ -112,6 +107,12 @@ app.post('/post', function(req,res){
 
 });
 
+app.post('/trump', function(req,res){
+
+    db.writeData(req.body.datum);
+
+    res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
+});
 
 
 // ========================

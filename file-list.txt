@@ -16,3 +16,16 @@ More random data.
 >> Tue Nov 15 2016 11:22:04 GMT-0800 (PST):: this is sorcery 
 >> Tue Nov 15 2016 11:28:50 GMT-0800 (PST):: "something awesome within quotes, wonder if this will work for question marks
 >> Tue Nov 15 2016 11:29:12 GMT-0800 (PST):: nope this does not work... i'll have to URL encode and escape the question mark
+>> Tue Nov 15 2016 17:21:04 GMT-0800 (PST):: This should write data to fileDB.
+>> Tue Nov 15 2016 17:25:28 GMT-0800 (PST):: Enter something awesome.
+>> Tue Nov 15 2016 17:59:14 GMT-0800 (PST):: Wonderful tactic.
+>> Tue Nov 15 2016 17:59:33 GMT-0800 (PST):: I should implement sockets to identify users.
+>> Tue Nov 15 2016 18:02:42 GMT-0800 (PST):: testing./
+>> Tue Nov 15 2016 18:03:09 GMT-0800 (PST):: something.
+>> Tue Nov 15 2016 18:03:23 GMT-0800 (PST):: Write more data.
+>> Tue Nov 15 2016 18:03:32 GMT-0800 (PST):: data data data data.
+>> Tue Nov 15 2016 18:04:45 GMT-0800 (PST):: funky monkey.
+>> Tue Nov 15 2016 18:09:47 GMT-0800 (PST):: Funky monkey.
+>> Tue Nov 15 2016 18:13:09 GMT-0800 (PST):: funky monkey tattoo.
+>> Tue Nov 15 2016 18:16:49 GMT-0800 (PST):: funktastic monkies.
+>> Tue Nov 15 2016 18:17:21 GMT-0800 (PST):: What a wonderfully fantastic voyage this has been.

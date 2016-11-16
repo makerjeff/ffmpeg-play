@@ -2,6 +2,7 @@
  * Created by jefferson.wu on 11/14/16.
  */
 
+const chalk         = require('chalk');
 const fs            = require('fs');
 const child_process = require('child_process');
 const dataFile      = 'file-list.txt';
@@ -34,7 +35,7 @@ module.exports.writeData = function(dataToWrite) {
         if(err){
             console.log(Error(err));
         } else {
-            console.log('Data written: ' + dataToWrite);
+            console.log(chalk.blue('Data written: ') + dataToWrite);
         }
     });
 };
