@@ -27,3 +27,5 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [Debian.org FFMPEG and Libav (DOES NOT WORK FOR RASPBERRY PI, see below)](https://wiki.debian.org/ffmpeg)
 - [Compiling FFMPEG on raspbian / Raspberry Pi](http://hannes.enjoys.it/blog/2016/03/ffmpeg-on-raspbian-raspberry-pi/)
 - GIT is a root process, so make sure you change the ownership of cloned git repo folder before trying to write to it with RSYNC or SCP.
+- [Node Clusters Tutorial (also benchmarking with Seige)](http://rowanmanning.com/posts/node-cluster-and-express/)
+- [MongoDB GridFS: For files larger than 16mb](https://docs.mongodb.com/v3.0/core/gridfs/)
