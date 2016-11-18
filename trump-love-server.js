@@ -18,7 +18,9 @@ const bodyParser    = require('body-parser');
 const cookieParser  = require('cookie-parser');
 
 // custom modules
-const db            = require('./models/pseudo-db');
+const db            = require('./models/log-db');
+const videoDb       = require('./models/video-db');
+const trumpQuotes   = require('./models/trumpQuotes-db');
 
 
 
@@ -42,7 +44,7 @@ app.enable('trust proxy');
 // --- header information ---
 
 app.use(function(req,res,next){
-    res.setHeader('X-Powered-By', 'The American people.');
+    res.setHeader('X-Powered-By', trumpQuotes.getTrumpQuote());
     next();
 });
 
@@ -90,23 +92,19 @@ app.get('/api/:query', function(req,res){
 // ---- Writing Data Routes ----
 //NOTE: this should be sent as a post, not as a GET request.  Default browser
 // URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
-app.get('/data/writedata/:data', function(req,res){
-    res.send('Writing Data: "' + req.params.data + '"');
-    console.log('Writing Data: "' + req.params.data + '"');
 
-    db.writeData(req.params.data);
 
+// get word list
+app.get('/words', function(req,res){
+
+    //var words = videoDb.getAvailableVideos();
+    //TODO: figure out this error.
+    res.send(words.toString());
+    //console.log(words);
 });
 
 
-// ---- data post proto ----
-app.post('/post', function(req,res){
-    console.log(req.body.datum);
-
-    res.json({status: 'working', data: 'data you posted: ' + req.body.datum});
-
-});
-
+// ---- first manual test log route ----
 app.post('/trump', function(req,res){
 
     db.writeData(req.body.datum);
