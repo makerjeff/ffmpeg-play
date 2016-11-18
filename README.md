@@ -29,3 +29,6 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - GIT is a root process, so make sure you change the ownership of cloned git repo folder before trying to write to it with RSYNC or SCP.
 - [Node Clusters Tutorial (also benchmarking with Seige)](http://rowanmanning.com/posts/node-cluster-and-express/)
 - [MongoDB GridFS: For files larger than 16mb](https://docs.mongodb.com/v3.0/core/gridfs/)
+- [JQuery AJAX Add Headers](http://api.jquery.com/jquery.ajax/)
+- [Google+ Domains API: Inserting Media](https://developers.google.com/+/domains/api/media/insert)
+- [Words API (for finding alternative words in our library)](https://www.wordsapi.com/)
