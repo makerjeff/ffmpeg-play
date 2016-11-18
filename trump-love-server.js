@@ -143,7 +143,7 @@ http.listen(3000, function(err){
         console.log(Error('Error: ' + err));
     } else {
         clear();
-        console.log(chalk.green('Listening on localhost:' + port));
+        console.log(chalk.green('Making America great again locally on port ' + port));
     }
 });
 
