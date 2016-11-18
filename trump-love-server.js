@@ -37,6 +37,10 @@ app.set('view engine', 'handlebars');
 // -- get user IP setup --
 app.enable('trust proxy');
 
+// -- grab available words --
+//TODO: make this stateless, or refresh every hour or two.
+var words = videoDb.getAvailableVideos();
+
 
 
 // MIDDLEWARE
@@ -98,9 +102,13 @@ app.get('/api/:query', function(req,res){
 app.get('/words', function(req,res){
 
     //var words = videoDb.getAvailableVideos();
-    //TODO: figure out this error.
-    res.send(words.toString());
-    //console.log(words);
+
+    //var words = 'this is working fine';
+    //TODO: DB error.
+    res.send('this is working, but data isn\'t passing through. ' + new Date().toLocaleString());
+
+    //TODO: words is returning undefined. Figure out why.
+    console.log(words);
 });
 
 

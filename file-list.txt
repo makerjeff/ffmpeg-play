@@ -1,5 +1,3 @@
-This is amazing.this is stupidly amazing.my_data_is_not_secure.Some random data.
-More random data.
 >> Mon Nov 14 2016 15:07:42 GMT-0800 (PST):: f'n dumb butts
 >> Mon Nov 14 2016 15:07:57 GMT-0800 (PST):: "words within quotes"
 >> Mon Nov 14 2016 15:08:12 GMT-0800 (PST):: exec('delete stuff');
@@ -36,3 +34,5 @@ More random data.
 >> Thu Nov 17 2016 22:37:17 GMT-0800 (PST):: Log this you son of a bitch
 >> Thu Nov 17 2016 22:48:39 GMT-0800 (PST):: wonderful tastic let's make america great again
 >> Thu Nov 17 2016 23:07:50 GMT-0800 (PST):: Wonderful tastic.
+>> Fri Nov 18 2016 10:43:47 GMT-0800 (PST):: some data to write to the file db.
+>> Fri Nov 18 2016 14:32:52 GMT-0800 (PST):: Wonderfultastic stuff.

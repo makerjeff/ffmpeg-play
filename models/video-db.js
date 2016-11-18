@@ -21,13 +21,20 @@ module.exports.getSourceVideoNames = function(folder) {
     return videosArray;
 };
 
+/**
+ *
+ */
 module.exports.getAvailableVideos = function() {
+
+    var availData;
+    
     fs.readdir(__dirname + '/../public/videos/', function(err, files){
+
         if(err){
             console.log(Error('Error occured: ' + err));
         } else {
-            console.log(files);
-            return files;
+            //console.log(files);
+            return availData = files;
         }
     });
 };
