@@ -47,9 +47,11 @@
             success: function(data, textStatus, jqXHR){
                 pingEnd = Date.now();   //stores return time.
                 console.log('data returned from server: ' + JSON.stringify(data));
+
+                updateResultDiv(resultDiv, JSON.stringify(data));
                 resultDiv.innerHTML = JSON.stringify(data);
                 //console.log(pingEnd);
-                console.log('Ping-Pong: ' + (pingEnd - pingStart).toString());
+                console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -60,20 +62,52 @@
         grabbedData.value = '';
     });
 
+
+
     //grab word list
     wordListButton.addEventListener('click', function(e){
+        ajaxPath('/words', 'GET');
+    });
+
+
+    // =========================
+    // FUNCTION DEFINITIONS ====
+    // =========================
+
+    /**
+     * Custom conditional AJAX method.
+     * @param path  Endpoint path.
+     * @param method    HTTP method.
+     * @returns {*}     Returns a
+     */
+    function ajaxPath(path, method) {
+        var internalPing = Date.now();
+
         $.ajax({
-            url: '/words',
-            type: 'GET',
+            url: path,
+            type: method,
             success: function(data, status, jqXHR){
+
+                var internalPong = Date.now();
+                updateResultDiv(resultDiv, '<b>ajax success data: </b>' + data);
                 console.log(data);
-                resultDiv.innerHTML = data;
+                console.log('PingPong: ' + (internalPong - internalPing).toString());
+
             },
             error: function(jqXHR, status, error){
                 console.log('Horrible AJAX error occurred: ' + status);
-                resultDiv.innerHTML = error;
+                console.log('PingPong: ' + (internalPong - internalPing).toString());
             }
         });
-    });
+    }
+
+    /**
+     * Updates the results div.
+     * @param rDiv  result div object.
+     * @param data  data to pass in.
+     */
+    function updateResultDiv(rDiv, data){
+        rDiv.innerHTML = data;
+    }
 
 </script>

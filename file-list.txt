@@ -36,3 +36,16 @@
 >> Thu Nov 17 2016 23:07:50 GMT-0800 (PST):: Wonderful tastic.
 >> Fri Nov 18 2016 10:43:47 GMT-0800 (PST):: some data to write to the file db.
 >> Fri Nov 18 2016 14:32:52 GMT-0800 (PST):: Wonderfultastic stuff.
+>> Fri Nov 18 2016 14:49:19 GMT-0800 (PST):: something something evil darkside.
+>> Fri Nov 18 2016 14:53:33 GMT-0800 (PST):: funky monkeyu.
+>> Fri Nov 18 2016 14:54:26 GMT-0800 (PST):: funky.
+>> Fri Nov 18 2016 14:54:41 GMT-0800 (PST):: feces and beer.
+>> Fri Nov 18 2016 14:59:07 GMT-0800 (PST):: get pussy.
+>> Fri Nov 18 2016 15:01:08 GMT-0800 (PST):: funky monkey.
+>> Fri Nov 18 2016 15:03:57 GMT-0800 (PST):: alert('wonderfultastic');
+>> Fri Nov 18 2016 15:04:13 GMT-0800 (PST):: monkey Poodles.
+>> Fri Nov 18 2016 15:04:22 GMT-0800 (PST):: This is amazing. We're going to make this country great again.
+>> Fri Nov 18 2016 15:05:46 GMT-0800 (PST):: The data file log doesn't seem to be too bogged down.
+>> Fri Nov 18 2016 16:05:10 GMT-0800 (PST):: submit something to the queue.
+>> Fri Nov 18 2016 17:08:42 GMT-0800 (PST):: Fantastic Monkies.
+>> Fri Nov 18 2016 18:31:28 GMT-0800 (PST):: fancy dancy pantsies.

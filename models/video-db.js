@@ -22,7 +22,7 @@ module.exports.getSourceVideoNames = function(folder) {
 };
 
 /**
- *
+ * Get Available Videos ASYNC (TODO: promisify)
  */
 module.exports.getAvailableVideos = function() {
 
@@ -34,8 +34,15 @@ module.exports.getAvailableVideos = function() {
             console.log(Error('Error occured: ' + err));
         } else {
             //console.log(files);
-            return availData = files;
+            availData = files;
         }
     });
+
+    return availData;
 };
 
+module.exports.getAvailableVideosSync = function() {
+    var data;
+    data = fs.readdirSync(__dirname + '/../public/videos/');
+    return data;
+};

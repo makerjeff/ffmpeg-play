@@ -19,7 +19,7 @@ const cookieParser  = require('cookie-parser');
 
 // custom modules
 const db            = require('./models/log-db');
-const videoDb       = require('./models/video-db');
+const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 
 
@@ -39,7 +39,13 @@ app.enable('trust proxy');
 
 // -- grab available words --
 //TODO: make this stateless, or refresh every hour or two.
-var words = videoDb.getAvailableVideos();
+
+//var words = ['a', 'man', 'woman', 'great', 'amazing', 'pussy'];
+var trumpWords = vdb.getAvailableVideos();
+
+if (trumpWords === undefined) {
+    console.log('vdb words data not found still.');
+}
 
 
 
@@ -100,15 +106,10 @@ app.get('/api/:query', function(req,res){
 
 // get word list
 app.get('/words', function(req,res){
-
-    //var words = videoDb.getAvailableVideos();
-
-    //var words = 'this is working fine';
-    //TODO: DB error.
-    res.send('this is working, but data isn\'t passing through. ' + new Date().toLocaleString());
-
-    //TODO: words is returning undefined. Figure out why.
-    console.log(words);
+    var data = vdb.getAvailableVideosSync();    //TODO: SOLVED: promisify  Otherwise data isn't returning.
+    console.log(data);
+    res.header("Content-Type","text/plain");
+    res.send(data);
 });
 
 

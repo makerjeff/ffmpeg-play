@@ -32,3 +32,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [JQuery AJAX Add Headers](http://api.jquery.com/jquery.ajax/)
 - [Google+ Domains API: Inserting Media](https://developers.google.com/+/domains/api/media/insert)
 - [Words API (for finding alternative words in our library)](https://www.wordsapi.com/)
+- **!! IMPORTANT !!** : Any ASYNC operation for the file system needs to be Promisified, or just do a sync operation.
