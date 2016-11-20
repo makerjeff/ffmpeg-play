@@ -5,7 +5,7 @@
 const chalk         = require('chalk');
 const fs            = require('fs');
 const child_process = require('child_process');
-const dataFile      = 'file-list.txt';
+const dataFile      = 'logger_data.txt';
 
 //Log data debug
 /**
