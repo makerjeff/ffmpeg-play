@@ -30,23 +30,21 @@ const trumpQuotes   = require('./models/trumpQuotes-db');
 const port          = process.env.PORT || 3000;
 
 // -- handlebars setup --
-const handlebars    = hbsModule.create({defaultLayout: 'main'});
+const handlebars    = hbsModule.create({
+    defaultLayout: 'main',
+    helpers: {
+        section: function(name, options) {
+            if(!this._sections) this._sections = {};
+            this._sections[name] = options.fn(this);
+            return null;
+        }
+    }
+});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 // -- get user IP setup --
 app.enable('trust proxy');
-
-// -- grab available words --
-//TODO: make this stateless, or refresh every hour or two.
-
-//var words = ['a', 'man', 'woman', 'great', 'amazing', 'pussy'];
-var trumpWords = vdb.getAvailableVideos();
-
-if (trumpWords === undefined) {
-    console.log('vdb words data not found still.');
-}
-
 
 
 // MIDDLEWARE
@@ -58,6 +56,7 @@ app.use(function(req,res,next){
     next();
 });
 
+// --- basic logger ---
 app.use(function(req,res,next){
     console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
     next();
@@ -83,20 +82,26 @@ app.get('/', function(req, res){
     res.render('index', {data: 'some data.'});
 });
 
-app.get('/video', function(req, res){
-    res.render('video', {data: 'some data.'});
+app.get('/logger', function(req, res){
+    res.render('logger', {data: 'some data.'});
 });
 
+app.get('/promises', function(req,res){
+    res.render('promises', {data: 'some templated data on promises page.'});
+});
+
+app.get('/player', function(req, res){
+    res.render('player', {data: {message:'You\'re on the Player page, but you need to pass in a query string.'}});
+});
+
+app.get('/player/:video', function(req,res){
+    
+    var qArray = req.params.video.split(' ');
+
+    res.render('player', {data: {message:'Properly formatted!', video: 'http://www.youtube.com/' + qArray.join('_') + '.mp4'}});
+});
 // ---- API Routes ----
-// TODO: get these on to an external file
-app.get('/api/', function(req,res){
-    res.send('API');
-});
 
-app.get('/api/:query', function(req,res){
-    res.send('API: "' + req.params.query + '"');
-    console.log('"' + req.params.query + '"');
-});
 
 
 // ---- Writing Data Routes ----
@@ -114,7 +119,7 @@ app.get('/words', function(req,res){
 
 
 // ---- first manual test log route ----
-app.post('/trump', function(req,res){
+app.post('/logger', function(req,res){
 
     db.writeData(req.body.datum);
 
