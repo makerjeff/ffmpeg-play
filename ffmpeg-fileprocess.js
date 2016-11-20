@@ -26,6 +26,10 @@ console.log(uuid.v1());
 
 
 
+
+// ======================
+// functions ============
+// ======================
 function buildFileList(dataArray, file) {
     var addToFileList = '';
 
@@ -35,14 +39,7 @@ function buildFileList(dataArray, file) {
     cleanData.forEach(function(elem, ind, arr){
 
         addToFileList = addToFileList + "file '" +  elem + "'\n";
-
-        // fs.appendFile(file, "file '" + elem + "'\n", {encoding: 'utf8'}, function(err){
-        //     if(err){
-        //         console.log(err);
-        //     } else {
-        //         console.log('writeFile ' + elem + ' OK');
-        //     }
-        // });
+        
     });
 
     //write File
