@@ -36,3 +36,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [NPM Junk: Regex that removes junk files from array](https://www.npmjs.com/package/junk)
 - [NPM Node-UUID: Create UUIDs for temp filelist creation](https://www.npmjs.com/package/node-uuid)
 - [NPM ShortId for filelist ID creation](https://www.npmjs.com/package/shortid)
+- [printf instead of echo for filelist creation](http://unix.stackexchange.com/questions/65803/why-is-printf-better-than-echo)
