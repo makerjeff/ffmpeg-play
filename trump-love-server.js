@@ -133,10 +133,14 @@ app.post('/logger', function(req,res){
 
 // post data to /video
 app.post('/video', function(req, res){
+    
+    var statusObject = vdb.generateVideo(req.body.datum);
+    res.json(statusObject);
+});
 
-
-    vdb.generateVideo(req.body.datum);
-    res.json({status: 'completed', data: {status: 'completed', videoUrl: req.body.datum}});
+app.get('/video/:filename', function(req, res){
+    console.log("attempting to send video file to the front end.");
+    res.sendFile(process.cwd() + '/video_output/' + req.params.filename);
 });
 
 

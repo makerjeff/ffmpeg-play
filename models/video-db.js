@@ -25,7 +25,7 @@ const junk          = require('junk');
 var configObject = {
     libraryFolder: process.cwd() + '/video_source/',
     tempFolder: process.cwd() + '/video_temp/',
-    outputFolder: process.cwd() + '/video_output/',
+    outputFolder: process.cwd() + '/public/videos/',
     outputExtension: '.mp4'
 };
 
@@ -74,6 +74,13 @@ module.exports.generateVideo = function(inputStr) {
 
         }
     });
+
+    var dataObject = {
+        status: 'complete',
+        videoUrl: getFileName(inputString)
+    };
+
+    return dataObject;
 };
 
 

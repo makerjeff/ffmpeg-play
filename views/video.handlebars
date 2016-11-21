@@ -18,6 +18,7 @@
 
 <!--Word List Button-->
 <button id="wordListButton" class="btn btn-default">Word List</button>
+<button id="loadVideoButton" class="btn btn-primary">Load Video</button>
 
 
 
@@ -31,8 +32,11 @@
     var resultDiv = document.getElementById('resultDiv');
     var form = document.getElementById('main-form');
     var wordListButton = document.getElementById('wordListButton');
+    var loadVideoButton = document.getElementById('loadVideoButton');
 
     var textInput = document.getElementById('input-text');
+
+    var videoDataObject;
 
 
     form.addEventListener('submit', function(e){
@@ -51,10 +55,12 @@
                 console.log('data returned from server: ' + JSON.stringify(data));
 
                 //TODO: is broke.
-               // updateResultDiv(resultDiv, JSON.stringify(data));
                 resultDiv.innerHTML = JSON.stringify(data);
-                //console.log(pingEnd);
                 console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
+
+                videoDataObject = data;
+
+                console.log(videoDataObject);
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -70,6 +76,17 @@
     //grab word list
     wordListButton.addEventListener('click', function(e){
         ajaxPath('/words', 'GET');
+    });
+
+    loadVideoButton.addEventListener('click', function(e){
+
+        //TODO: make a function.
+        var video = document.createElement('video');
+        video.src = '/videos/' + videoDataObject.videoUrl;
+        video.autoPlay = true;
+
+
+        resultDiv.appendChild(video);
     });
 
 
