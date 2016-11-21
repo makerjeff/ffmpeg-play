@@ -86,16 +86,11 @@ app.get('/logger', function(req, res){
     res.render('logger', {data: 'some data.'});
 });
 
-app.get('/player', function(req, res){
-    res.render('player', {data: {message:'You\'re on the Player page, but you need to pass in a query string.'}});
+app.get('/video', function(req, res){
+    res.render('video', {data: 'You\'re on the Video page.'});
 });
 
-app.get('/player/:video', function(req,res){
-    
-    var qArray = req.params.video.split(' ');
 
-    res.render('player', {data: {message:'Properly formatted!', video: 'http://www.youtube.com/' + qArray.join('_') + '.mp4'}});
-});
 
 //debug current directory
 app.get('/cwd', function(req,res){
@@ -103,6 +98,7 @@ app.get('/cwd', function(req,res){
     res.send('Requested Data: ' + vdb.getLocalDirectory());
 });
 
+//get all local routes
 app.get('/cwdall', function(req,res){
     console.log(vdb.getAllDirectories());
     res.setHeader('Content-Type', 'application/json');
@@ -117,6 +113,7 @@ app.get('/cwdall', function(req,res){
 // URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
 
 
+
 // get word list
 app.get('/words', function(req,res){
     var data = vdb.getAvailableVideosSync();    //TODO: SOLVED: promisify  Otherwise data isn't returning.
@@ -126,13 +123,20 @@ app.get('/words', function(req,res){
 });
 
 
+
 // ---- first manual test log route ----
 // post data to the same page getter route.
 app.post('/logger', function(req,res){
-
     db.writeData(req.body.datum);
-
     res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
+});
+
+// post data to /video
+app.post('/video', function(req, res){
+
+
+    vdb.generateVideo(req.body.datum);
+    res.json({status: 'completed', data: {status: 'completed', videoUrl: req.body.datum}});
 });
 
 

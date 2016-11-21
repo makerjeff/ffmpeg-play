@@ -1,0 +1,142 @@
+<h3>(video) (post to '/video')</h3>
+
+<!--DEBUG-->
+{{#if data}}
+    <!-- partials here-->
+    {{data}}
+{{/if}}
+
+<!-- MAIN FORM -->
+<form id="main-form" class="">
+    <div class="form-group">
+        <label for="input-text">Enter Text </label>
+        <input type="text" class="form-control" id="input-text" name="input_data" required autocomplete="off" autofocus>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button> <br>
+</form>
+
+<!--Word List Button-->
+<button id="wordListButton" class="btn btn-default">Word List</button>
+
+
+
+<div id="resultDiv"></div>
+
+
+<script>
+    var pingStart;
+    var pingEnd;
+
+    var resultDiv = document.getElementById('resultDiv');
+    var form = document.getElementById('main-form');
+    var wordListButton = document.getElementById('wordListButton');
+
+    var textInput = document.getElementById('input-text');
+
+
+    form.addEventListener('submit', function(e){
+        pingStart = Date.now();         //store start time.
+        e.preventDefault();
+
+        var grabbedData = document.getElementById('input-text');
+
+        //AJAX call to API
+        $.ajax({
+            url: '/video',
+            type:'POST',
+            data:{datum: grabbedData.value},
+            success: function(data, textStatus, jqXHR){
+                pingEnd = Date.now();   //stores return time.
+                console.log('data returned from server: ' + JSON.stringify(data));
+
+                //TODO: is broke.
+               // updateResultDiv(resultDiv, JSON.stringify(data));
+                resultDiv.innerHTML = JSON.stringify(data);
+                //console.log(pingEnd);
+                console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Horrible AJAX error occurred: ' + textStatus);
+                resultDiv.innerHTML = 'Horrible error occurred: ' + textStatus;
+            }
+        });
+        grabbedData.value = '';
+    });
+
+
+
+    //grab word list
+    wordListButton.addEventListener('click', function(e){
+        ajaxPath('/words', 'GET');
+    });
+
+
+    // =========================
+    // FUNCTION DEFINITIONS ====
+    // =========================
+
+    /**
+     * Custom conditional AJAX method.
+     * @param path  Endpoint path.
+     * @param method    HTTP method.
+     * @returns {*}     Returns a
+     */
+    function ajaxPath(path, method) {
+        var internalPing = Date.now();
+
+        $.ajax({
+            url: path,
+            type: method,
+            success: function(data, status, jqXHR){
+
+                var internalPong = Date.now();
+                updateResultDiv(resultDiv, data);
+                //console.log(data);
+                console.log('PingPong: ' + (internalPong - internalPing).toString());
+
+            },
+            error: function(jqXHR, status, error){
+                console.log('Horrible AJAX error occurred: ' + status);
+                console.log('PingPong: ' + (internalPong - internalPing).toString());
+            }
+        });
+    }
+
+    /**
+     * Updates the results div.
+     * @param rDiv  result div object.
+     * @param data  data to pass in.
+     */
+    function updateResultDiv(rDiv, data){
+        //rDiv.innerHTML = data;
+
+        var ul = document.createElement('ul');
+
+        var parsedData = JSON.parse(data);
+
+        console.log(parsedData);
+
+        parsedData.forEach(function(elem, ind, arr){
+            var li = document.createElement('li');
+            //li.innerHTML = elem;
+
+            var button = document.createElement('button');
+            var buttonText = document.createTextNode(elem);
+
+            button.appendChild(buttonText);
+
+            button.addEventListener('click', function(e){
+                textInput.value += ' ' + elem.split('.').shift();
+            });
+
+            li.appendChild(button);
+            ul.appendChild(li);
+
+        });
+
+        rDiv.appendChild(ul);
+    }
+
+</script>

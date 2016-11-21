@@ -9,10 +9,18 @@ const chalk         = require('chalk');
 const fs            = require('fs');
 const child_process = require('child_process');
 const shortid       = require('shortid');
+const junk          = require('junk');
 
 // ============================
 // CONFIGURATION ==============
 // ============================
+
+// var configObject = {
+//     libraryFolder: process.cwd() + '/video_source/',
+//     tempFolder: process.cwd() + '/video_temp/',
+//     outputFolder: process.cwd() + '/video_output/',
+//     outputExtension: '.mp4'
+// };
 
 var configObject = {
     libraryFolder: process.cwd() + '/video_source/',
@@ -31,13 +39,40 @@ var configObject = {
 // EXPORT METHODS =============
 // ============================
 module.exports.generateVideo = function(inputStr) {
+
     var fileHash = shortid.generate();
     var inputString = inputStr.toLowerCase();
+
     var inputArray = inputString.split(' ');
+
+
+    if(inputArray[0] === '') {
+        inputArray.splice(0,1);
+    }
+
     var filelistString = '';
 
     inputArray.forEach(function(elem,ind,arr){
-        filelistString = filelistString + "file '" + elem + ".mp4'\n";
+        filelistString = filelistString + "file '" + configObject.libraryFolder + elem + ".mp4'\n";
+    });
+
+    //TODO: might need to make sync
+    fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
+    function(err){
+        if (err) {
+            console.log(chalk.red('Error writing text file.'));
+        } else {
+
+            fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
+                if(err){
+                    console.log('Error reading generated text file.');
+                } else {
+                    //using a read-file check to ensure file is created.
+                    concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(inputString));
+                }
+            });
+
+        }
     });
 };
 
@@ -51,8 +86,34 @@ module.exports.getAllDirectories = function() {
     return configObject;
 };
 
+
+/**
+ * Get Available Videos ASYNC (TODO: promisify)
+ */
+module.exports.getAvailableVideos = function() {
+
+    var availData;
+
+    fs.readdir(configObject.libraryFolder, function(err, files){
+
+        if(err){
+            console.log(Error('Error occured: ' + err));
+        } else {
+            //console.log(files);
+            availData = files;
+        }
+    });
+
+    return availData;
+};
+
+
 module.exports.getAvailableVideosSync = function() {
-    return ['dummy', 'file', 'data', 'to', 'be', 'replaced', 'by', 'fileread'];
+    var data;
+    var cleandata;
+    data = fs.readdirSync(configObject.libraryFolder);
+    cleandata = data.filter(junk.not);
+    return cleandata;
 };
 // ============================
 // INTERNAL FUNCTIONS =========
@@ -60,10 +121,38 @@ module.exports.getAvailableVideosSync = function() {
 
 function concatVideoFile(relFilePath, outputFileName) {
 
+    //debug
+    console.log(relFilePath);
+    console.log(outputFileName);
+
+
+    child_process.exec('ffmpeg -y -f concat -safe 0 -i ' + relFilePath + ' -c copy ' + outputFileName, {encoding: 'utf8'},
+    function(err, stdout, stderr){
+        if(err) {
+            console.log(chalk.red('Error generating video file. ' +  err));
+        } else {
+            if(stderr){
+                console.log('Successful Video Generation (but stderr)');
+            } else {
+                console.log(stdout + ' Success Message.');
+            }
+        }
+    });
+
 }
 
+/**
+ * Get the file name from an input string.
+ * @param inputStr   String that the user has inputted.
+ * @returns {string}    Returns a file name complete with .mp4 extension.
+ */
 function getFileName(inputStr) {
-    var inputArray = inputString.toLowerCase().split(' ');
+    var inputArray = inputStr.toLowerCase().split(' ');
+
+    if(inputArray[0] === '') {
+        inputArray.splice(0,1);
+    }
+
     return inputArray.join('_') + '.mp4';
 }
 
