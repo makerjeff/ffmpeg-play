@@ -86,10 +86,6 @@ app.get('/logger', function(req, res){
     res.render('logger', {data: 'some data.'});
 });
 
-app.get('/promises', function(req,res){
-    res.render('promises', {data: 'some templated data on promises page.'});
-});
-
 app.get('/player', function(req, res){
     res.render('player', {data: {message:'You\'re on the Player page, but you need to pass in a query string.'}});
 });
@@ -99,6 +95,18 @@ app.get('/player/:video', function(req,res){
     var qArray = req.params.video.split(' ');
 
     res.render('player', {data: {message:'Properly formatted!', video: 'http://www.youtube.com/' + qArray.join('_') + '.mp4'}});
+});
+
+//debug current directory
+app.get('/cwd', function(req,res){
+    console.log(vdb.getLocalDirectory());         //return the ROOT project directory.
+    res.send('Requested Data: ' + vdb.getLocalDirectory());
+});
+
+app.get('/cwdall', function(req,res){
+    console.log(vdb.getAllDirectories());
+    res.setHeader('Content-Type', 'application/json');
+    res.send('Requested Data: \n ' + JSON.stringify(vdb.getAllDirectories()));
 });
 // ---- API Routes ----
 
@@ -119,6 +127,7 @@ app.get('/words', function(req,res){
 
 
 // ---- first manual test log route ----
+// post data to the same page getter route.
 app.post('/logger', function(req,res){
 
     db.writeData(req.body.datum);
