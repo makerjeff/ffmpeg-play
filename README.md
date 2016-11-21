@@ -37,3 +37,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [NPM Node-UUID: Create UUIDs for temp filelist creation](https://www.npmjs.com/package/node-uuid)
 - [NPM ShortId for filelist ID creation](https://www.npmjs.com/package/shortid)
 - [printf instead of echo for filelist creation](http://unix.stackexchange.com/questions/65803/why-is-printf-better-than-echo)
+- [Array.shift(): Use this and Array.split('.') to return a file name without extension](http://www.w3schools.com/jsref/jsref_shift.asp)
