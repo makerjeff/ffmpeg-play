@@ -83,14 +83,12 @@
 
         //TODO: make a function.
         var video = document.createElement('video');
+        video.id = 'videoElement';
         video.src = '/videos/' + videoDataObject.videoUrl;
         //video.autoPlay = true;
 
         video.setAttribute('autoplay', true);
-
-
         resultDiv.appendChild(video);
-
         video.addEventListener('canplaythrough', function(e){
             this.play();
         });
@@ -101,6 +99,10 @@
             }
         });
     });
+
+    window.addEventListener('resize', function(e){
+        console.log('height: ' + window.innerHeight + ', width: ' + window.innerWidth);
+    }, false);
 
 
     // =========================
@@ -168,5 +170,10 @@
 
         rDiv.appendChild(ul);
     }
+
+    function resizeVideoElement(videoElem){
+        videoElem.videoWidth = window.innerHeight;
+    }
+
 
 </script>

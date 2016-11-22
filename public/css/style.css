@@ -10,3 +10,9 @@ html, body {
 
 #resultDiv {
 }
+
+/* dynamically generated */
+#videoElement {
+    width: 100% !important;
+    height: auto !important;
+}
