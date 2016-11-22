@@ -22,6 +22,8 @@ const db            = require('./models/log-db');
 const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 
+var serverVersion   = 'v0.0.1';
+
 
 
 // =========================
@@ -52,7 +54,7 @@ app.enable('trust proxy');
 // --- header information ---
 
 app.use(function(req,res,next){
-    res.setHeader('X-Powered-By', trumpQuotes.getTrumpQuote());
+    res.setHeader('X-Powered-By', trumpQuotes.getTrumpQuote() + ' ' + serverVersion);
     next();
 });
 
