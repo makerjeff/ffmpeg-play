@@ -81,17 +81,12 @@ app.use('/writedata', dataRoutes);
 
 // TEMP ROUTES
 app.get('/', function(req, res){
-    res.render('index', {data: 'some data.'});
+    res.render('video', {data: 'DEBUG: You\'re on the video page'});
 });
 
 app.get('/logger', function(req, res){
     res.render('logger', {data: 'some data.'});
 });
-
-app.get('/video', function(req, res){
-    res.render('video', {data: 'You\'re on the Video page.'});
-});
-
 
 
 //debug current directory
