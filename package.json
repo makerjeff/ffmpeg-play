@@ -9,15 +9,18 @@
   "author": "Jefferson Wu <makerjeffwu@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "express":"latest",
-    "chalk":"latest",
-    "figlet":"latest",
-    "mongoose":"latest",
-    "express-handlebars": "latest",
     "body-parser": "~1.15.1",
+    "chalk": "latest",
+    "cheerio": "latest",
+    "clear": "latest",
     "cookie-parser": "~1.4.3",
-    "ffmpeg":"latest",
-    "clear":"latest",
-    "cheerio":"latest"
+    "express": "latest",
+    "express-handlebars": "latest",
+    "ffmpeg": "latest",
+    "figlet": "latest",
+    "junk": "latest",
+    "mongoose": "latest",
+    "node-uuid": "^1.4.7",
+    "shortid":"latest"
   }
 }

@@ -29,3 +29,13 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - GIT is a root process, so make sure you change the ownership of cloned git repo folder before trying to write to it with RSYNC or SCP.
 - [Node Clusters Tutorial (also benchmarking with Seige)](http://rowanmanning.com/posts/node-cluster-and-express/)
 - [MongoDB GridFS: For files larger than 16mb](https://docs.mongodb.com/v3.0/core/gridfs/)
+- [JQuery AJAX Add Headers](http://api.jquery.com/jquery.ajax/)
+- [Google+ Domains API: Inserting Media](https://developers.google.com/+/domains/api/media/insert)
+- [Words API (for finding alternative words in our library)](https://www.wordsapi.com/)
+- **!! IMPORTANT !!** : Any ASYNC operation for the file system needs to be Promisified, or just do a sync operation.
+- [NPM Junk: Regex that removes junk files from array](https://www.npmjs.com/package/junk)
+- [NPM Node-UUID: Create UUIDs for temp filelist creation](https://www.npmjs.com/package/node-uuid)
+- [NPM ShortId for filelist ID creation](https://www.npmjs.com/package/shortid)
+- [printf instead of echo for filelist creation](http://unix.stackexchange.com/questions/65803/why-is-printf-better-than-echo)
+- [Array.shift(): Use this and Array.split('.') to return a file name without extension](http://www.w3schools.com/jsref/jsref_shift.asp)
+- [Disable FFMPEG safe mode: -safe 0](http://stackoverflow.com/questions/38996925/ffmpeg-concat-unsafe-file-name)

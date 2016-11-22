@@ -1,10 +1,4 @@
-<h3>(video) (post to '/video')</h3>
-
-<!--DEBUG-->
-{{#if data}}
-    <!-- partials here-->
-    {{data}}
-{{/if}}
+<h3>(logger page) (post to '/logger')</h3>
 
 <!-- MAIN FORM -->
 <form id="main-form" class="">
@@ -18,9 +12,11 @@
 
 <!--Word List Button-->
 <button id="wordListButton" class="btn btn-default">Word List</button>
-<button id="loadVideoButton" class="btn btn-primary">Load Video</button>
 
-
+<!--PARTIAL-->
+{{#if data}}
+    <!-- partials here-->
+{{/if}}
 
 <div id="resultDiv"></div>
 
@@ -32,35 +28,30 @@
     var resultDiv = document.getElementById('resultDiv');
     var form = document.getElementById('main-form');
     var wordListButton = document.getElementById('wordListButton');
-    var loadVideoButton = document.getElementById('loadVideoButton');
-
-    var textInput = document.getElementById('input-text');
-
-    var videoDataObject;
 
 
     form.addEventListener('submit', function(e){
         pingStart = Date.now();         //store start time.
         e.preventDefault();
+        //console.log('Form submission averted.');
+        //console.log(pingStart);
 
         var grabbedData = document.getElementById('input-text');
+        //console.log(grabbedData.value);
 
-        //AJAX call to API
+        //insert stuff here
         $.ajax({
-            url: '/video',
+            url: '/logger',
             type:'POST',
             data:{datum: grabbedData.value},
             success: function(data, textStatus, jqXHR){
                 pingEnd = Date.now();   //stores return time.
                 console.log('data returned from server: ' + JSON.stringify(data));
 
-                //TODO: is broke.
+                updateResultDiv(resultDiv, JSON.stringify(data));
                 resultDiv.innerHTML = JSON.stringify(data);
+                //console.log(pingEnd);
                 console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
-
-                videoDataObject = data;
-
-                console.log(videoDataObject);
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -75,31 +66,7 @@
 
     //grab word list
     wordListButton.addEventListener('click', function(e){
-        resultDiv.innerHTML = '';
         ajaxPath('/words', 'GET');
-    });
-
-    loadVideoButton.addEventListener('click', function(e){
-
-        //TODO: make a function.
-        var video = document.createElement('video');
-        video.src = '/videos/' + videoDataObject.videoUrl;
-        //video.autoPlay = true;
-
-        video.setAttribute('autoplay', true);
-
-
-        resultDiv.appendChild(video);
-
-        video.addEventListener('canplaythrough', function(e){
-            this.play();
-        });
-
-        video.addEventListener('click', function(e){
-            if(this.paused) {
-                this.play();
-            }
-        });
     });
 
 
@@ -122,8 +89,8 @@
             success: function(data, status, jqXHR){
 
                 var internalPong = Date.now();
-                updateResultDiv(resultDiv, data);
-                //console.log(data);
+                updateResultDiv(resultDiv, '<b>ajax success data: </b>' + data);
+                console.log(data);
                 console.log('PingPong: ' + (internalPong - internalPing).toString());
 
             },
@@ -140,33 +107,7 @@
      * @param data  data to pass in.
      */
     function updateResultDiv(rDiv, data){
-        //rDiv.innerHTML = data;
-
-        var ul = document.createElement('ul');
-
-        var parsedData = JSON.parse(data);
-
-        console.log(parsedData);
-
-        parsedData.forEach(function(elem, ind, arr){
-            var li = document.createElement('li');
-            //li.innerHTML = elem;
-
-            var button = document.createElement('button');
-            var buttonText = document.createTextNode(elem);
-
-            button.appendChild(buttonText);
-
-            button.addEventListener('click', function(e){
-                textInput.value += ' ' + elem.split('.').shift();
-            });
-
-            li.appendChild(button);
-            ul.appendChild(li);
-
-        });
-
-        rDiv.appendChild(ul);
+        rDiv.innerHTML = data;
     }
 
 </script>

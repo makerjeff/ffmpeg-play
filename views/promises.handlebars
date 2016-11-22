@@ -1,0 +1,74 @@
+<h3>(promises)</h3>
+
+{{#section 'head'}}
+    <!-- stuff that goes in head...example: -->
+    <meta name="robots" content="noindex">
+
+    <style>
+        #resultDiv {
+            width: 100%;
+            height: 500px;
+            background: rgba(200,200,100,1.0);
+        }
+    </style>
+{{/section}}
+
+
+<!--PARTIAL-->
+{{#if data}}
+    <!-- partials here-->
+
+    <p>Data was passed in!</p>
+{{/if}}
+
+
+<div id="inputDiv">
+    <button class="btn btn-primary"> A Button </button>
+</div>
+
+<div id="resultDiv">
+    {{data}}
+</div>
+
+
+<script>
+    var button = document.getElementsByTagName('button')[0];
+
+    button.addEventListener('click', function(e){
+
+
+        var myPromise = new NumberPromiseGenerator();
+
+
+        // ----- RESOLVE or REJECT
+        myPromise.then(function(val){
+            console.log(val);
+        }).catch(function(reason){
+            console.log(reason);
+        });
+
+        var myPromise2 = new NumberPromiseGenerator();
+
+        myPromise2.then(function(val){
+            console.log(val)
+        }).catch (function(reason){
+            console.log(reason);
+        });
+    });
+
+
+    function NumberPromiseGenerator() {
+        // ----- Create Prommise -----
+        return new Promise(function(resolve, reject){
+
+            var number = Math.floor(Math.random() * 100);
+            if(number > 50) {
+                resolve('This resolved properly. ' + number);
+            } else {
+                reject('This was rejected. ' + number);
+            }
+        });
+    }
+
+
+</script>

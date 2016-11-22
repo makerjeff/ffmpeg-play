@@ -18,7 +18,9 @@ const bodyParser    = require('body-parser');
 const cookieParser  = require('cookie-parser');
 
 // custom modules
-const db            = require('./models/pseudo-db');
+const db            = require('./models/log-db');
+const vdb           = require('./models/video-db');
+const trumpQuotes   = require('./models/trumpQuotes-db');
 
 
 
@@ -28,7 +30,16 @@ const db            = require('./models/pseudo-db');
 const port          = process.env.PORT || 3000;
 
 // -- handlebars setup --
-const handlebars    = hbsModule.create({defaultLayout: 'main'});
+const handlebars    = hbsModule.create({
+    defaultLayout: 'main',
+    helpers: {
+        section: function(name, options) {
+            if(!this._sections) this._sections = {};
+            this._sections[name] = options.fn(this);
+            return null;
+        }
+    }
+});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -36,16 +47,16 @@ app.set('view engine', 'handlebars');
 app.enable('trust proxy');
 
 
-
 // MIDDLEWARE
 
 // --- header information ---
 
 app.use(function(req,res,next){
-    res.setHeader('X-Powered-By', 'The American people.');
+    res.setHeader('X-Powered-By', trumpQuotes.getTrumpQuote());
     next();
 });
 
+// --- basic logger ---
 app.use(function(req,res,next){
     console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
     next();
@@ -71,47 +82,65 @@ app.get('/', function(req, res){
     res.render('index', {data: 'some data.'});
 });
 
+app.get('/logger', function(req, res){
+    res.render('logger', {data: 'some data.'});
+});
+
 app.get('/video', function(req, res){
-    res.render('video', {data: 'some data.'});
+    res.render('video', {data: 'You\'re on the Video page.'});
 });
 
+
+
+//debug current directory
+app.get('/cwd', function(req,res){
+    console.log(vdb.getLocalDirectory());         //return the ROOT project directory.
+    res.send('Requested Data: ' + vdb.getLocalDirectory());
+});
+
+//get all local routes
+app.get('/cwdall', function(req,res){
+    console.log(vdb.getAllDirectories());
+    res.setHeader('Content-Type', 'application/json');
+    res.send('Requested Data: \n ' + JSON.stringify(vdb.getAllDirectories()));
+});
 // ---- API Routes ----
-// TODO: get these on to an external file
-app.get('/api/', function(req,res){
-    res.send('API');
-});
 
-app.get('/api/:query', function(req,res){
-    res.send('API: "' + req.params.query + '"');
-    console.log('"' + req.params.query + '"');
-});
 
 
 // ---- Writing Data Routes ----
 //NOTE: this should be sent as a post, not as a GET request.  Default browser
 // URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
-app.get('/data/writedata/:data', function(req,res){
-    res.send('Writing Data: "' + req.params.data + '"');
-    console.log('Writing Data: "' + req.params.data + '"');
 
-    db.writeData(req.params.data);
 
+
+// get word list
+app.get('/words', function(req,res){
+    var data = vdb.getAvailableVideosSync();    //TODO: SOLVED: promisify  Otherwise data isn't returning.
+    console.log(data);
+    res.header("Content-Type","text/plain");
+    res.send(data);
 });
 
 
-// ---- data post proto ----
-app.post('/post', function(req,res){
-    console.log(req.body.datum);
 
-    res.json({status: 'working', data: 'data you posted: ' + req.body.datum});
-
-});
-
-app.post('/trump', function(req,res){
-
+// ---- first manual test log route ----
+// post data to the same page getter route.
+app.post('/logger', function(req,res){
     db.writeData(req.body.datum);
-
     res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
+});
+
+// post data to /video
+app.post('/video', function(req, res){
+    
+    var statusObject = vdb.generateVideo(req.body.datum);
+    res.json(statusObject);
+});
+
+app.get('/video/:filename', function(req, res){
+    console.log("attempting to send video file to the front end.");
+    res.sendFile(process.cwd() + '/video_output/' + req.params.filename);
 });
 
 
@@ -143,7 +172,7 @@ http.listen(3000, function(err){
         console.log(Error('Error: ' + err));
     } else {
         clear();
-        console.log(chalk.green('Listening on localhost:' + port));
+        console.log(chalk.green('Making America great again locally on port ' + port));
     }
 });
 

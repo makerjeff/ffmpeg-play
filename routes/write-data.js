@@ -6,7 +6,7 @@
 
 var express = require('express');
 var router  = express.Router();
-var db      = require('../models/pseudo-db');
+var db      = require('../models/log-db');
 
 // ====== DATA ROUTES ======
 router.get('/debug', function(req,res){

@@ -2,4 +2,7 @@
 node_modules/
 video_source/
 video_output/
+video_temp/
 public/videos/
+_fileBackups/
+logger_data.txt
