@@ -75,6 +75,7 @@
 
     //grab word list
     wordListButton.addEventListener('click', function(e){
+        resultDiv.innerHTML = '';
         ajaxPath('/words', 'GET');
     });
 
@@ -83,10 +84,22 @@
         //TODO: make a function.
         var video = document.createElement('video');
         video.src = '/videos/' + videoDataObject.videoUrl;
-        video.autoPlay = true;
+        //video.autoPlay = true;
+
+        video.setAttribute('autoplay', true);
 
 
         resultDiv.appendChild(video);
+
+        video.addEventListener('canplaythrough', function(e){
+            this.play();
+        });
+
+        video.addEventListener('click', function(e){
+            if(this.paused) {
+                this.play();
+            }
+        });
     });
 
 
