@@ -142,38 +142,35 @@
      * @param data  data to pass in.
      */
     function updateResultDiv(rDiv, data){
-        //rDiv.innerHTML = data;
-
-        var ul = document.createElement('ul');
 
         var parsedData = JSON.parse(data);
 
         console.log(parsedData);
 
         parsedData.forEach(function(elem, ind, arr){
-            var li = document.createElement('li');
-            //li.innerHTML = elem;
 
             var button = document.createElement('button');
             var buttonText = document.createTextNode(elem);
 
             button.appendChild(buttonText);
+            button.setAttribute('class','btn btn-success');
+
+            button.classList.add('buttonSpace');
 
             button.addEventListener('click', function(e){
                 textInput.value += ' ' + elem.split('.').shift();
             });
 
-            li.appendChild(button);
-            ul.appendChild(li);
+            //li.appendChild(button);
+            //ul.appendChild(li);
+
+            rDiv.appendChild(button);
 
         });
 
-        rDiv.appendChild(ul);
+        //rDiv.appendChild(ul);
     }
 
-    function resizeVideoElement(videoElem){
-        videoElem.videoWidth = window.innerHeight;
-    }
 
 
 </script>
