@@ -88,6 +88,9 @@ app.get('/logger', function(req, res){
     res.render('logger', {data: 'some data.'});
 });
 
+app.get('/box2d', function(req, res){
+    res.render('box2d', {data: 'Box2D experiments.'});
+});
 
 //debug current directory
 app.get('/cwd', function(req,res){
