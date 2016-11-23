@@ -15,13 +15,6 @@ const junk          = require('junk');
 // CONFIGURATION ==============
 // ============================
 
-// var configObject = {
-//     libraryFolder: process.cwd() + '/video_source/',
-//     tempFolder: process.cwd() + '/video_temp/',
-//     outputFolder: process.cwd() + '/video_output/',
-//     outputExtension: '.mp4'
-// };
-
 var configObject = {
     libraryFolder: process.cwd() + '/video_source/',
     tempFolder: process.cwd() + '/video_temp/',
@@ -40,11 +33,12 @@ var configObject = {
 // ============================
 module.exports.generateVideo = function(inputStr) {
 
+    // -------------------------
+    // PROCESS INPUT STRING ----
+    // -------------------------
     var fileHash = shortid.generate();
     var inputString = inputStr.toLowerCase();
-
     var inputArray = inputString.split(' ');
-
 
     if(inputArray[0] === '') {
         inputArray.splice(0,1);
@@ -56,22 +50,23 @@ module.exports.generateVideo = function(inputStr) {
         filelistString = filelistString + "file '" + configObject.libraryFolder + elem + ".mp4'\n";
     });
 
-    //TODO: might need to make sync
+    // --------------------------
+    // WRITE FILE-LIST ----------
+    // --------------------------
     fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
     function(err){
         if (err) {
             console.log(chalk.red('Error writing text file.'));
         } else {
 
+            //using a readFile to check if the file exists before concat.
             fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
                 if(err){
                     console.log('Error reading generated text file.');
                 } else {
-                    //using a read-file check to ensure file is created.
                     concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(inputString));
                 }
             });
-
         }
     });
 
@@ -83,16 +78,22 @@ module.exports.generateVideo = function(inputStr) {
     return dataObject;
 };
 
-
+/**
+ * DEBUG: Get local directory.
+ * @returns {*|String} Node process.cwd();
+ */
 module.exports.getLocalDirectory = function(){
     console.log(process.cwd());
     return process.cwd();
 };
 
+/**
+ * Gets the configObject of video-db.
+ * @returns {{libraryFolder: string, tempFolder: string, outputFolder: string, outputExtension: string}} Config Object.
+ */
 module.exports.getAllDirectories = function() {
     return configObject;
 };
-
 
 /**
  * Get Available Videos ASYNC (TODO: promisify)
