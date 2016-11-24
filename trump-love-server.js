@@ -106,14 +106,6 @@ app.get('/cwdall', function(req,res){
 });
 // ---- API Routes ----
 
-
-
-// ---- Writing Data Routes ----
-//NOTE: this should be sent as a post, not as a GET request.  Default browser
-// URL encoding only encodes URI, not the component.  "encodeURIComponent()" is needed to escape "?".
-
-
-
 // get word list
 app.get('/words', function(req,res){
     var data = vdb.getAvailableVideosSync();    //TODO: SOLVED: promisify  Otherwise data isn't returning.
@@ -121,8 +113,6 @@ app.get('/words', function(req,res){
     res.header("Content-Type","text/plain");
     res.send(data);
 });
-
-
 
 // ---- first manual test log route ----
 // post data to the same page getter route.
@@ -138,9 +128,14 @@ app.post('/video', function(req, res){
     res.json(statusObject);
 });
 
+// return a video after generating
 app.get('/video/:filename', function(req, res){
     console.log("attempting to send video file to the front end.");
     res.sendFile(process.cwd() + '/video_output/' + req.params.filename);
+});
+
+app.get('/facebook', function(req, res){
+    res.render('facebook');
 });
 
 
@@ -175,6 +170,3 @@ http.listen(3000, function(err){
         console.log(chalk.green('Making America great again locally on port ' + port));
     }
 });
-
-
-

@@ -20,3 +20,45 @@ html, body {
 .buttonSpace {
     margin: 2px 2px 2px 2px;
 }
+
+
+#box {
+
+    display: flex;
+    height: 100px;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-weight: 700;
+
+    background: rgba(20,200,20,1.0);
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px rgba(10,10,10,0.25);
+
+    transition: box-shadow 0.5s;
+
+    text-transform: uppercase;
+
+}
+
+#box:hover {
+    box-shadow: 5px 5px 10px rgba(10,10,10,0.25);
+    cursor: pointer;
+
+}
+
+
+@keyframes flyOutAnim {
+    from {transform:translate(0px, 0px)}
+    to {transform:translate(1000px, 0px)}
+}
+
+/*TODO: figure out why fill mode isnt working*/
+.fly {
+    animation-name: flyOutAnim;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}

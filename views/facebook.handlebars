@@ -6,14 +6,17 @@
     {{data}}
 {{/if}}
 
-<!--Word List Button-->
-<button id="wordListButton" class="btn btn-default">Word List</button>
-<button id="loadVideoButton" class="btn btn-primary">Load Video</button>
-
-
+<div id="box">Box</div>
 
 <div id="resultDiv"></div>
 
 
 <script>
+    var box = document.getElementById('box');
+    box.addEventListener('click', function(e){
+        this.classList.add('fly');
+        this.addEventListener('animationend', function(e){
+            this.classList.remove('fly');
+        });
+    });
 </script>
