@@ -2,6 +2,7 @@
 Experimenting with FFMPEG and FFMPEG node modules.
 
 ## Notes
+- [How to install FFMPEG on Mac OSX](http://www.renevolution.com/ffmpeg/2013/03/16/how-to-install-ffmpeg-on-mac-os-x.html)
 - [Hong Kiat: FFMPEG Guide](http://www.hongkiat.com/blog/ffmpeg-guide/)
 - [FFMPEG Documentation](https://ffmpeg.org/ffmpeg.html)
 - [Stack overflow: Concatenating Videos](http://stackoverflow.com/questions/7333232/concatenate-two-mp4-files-using-ffmpeg)
