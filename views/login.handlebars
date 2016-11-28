@@ -1,0 +1,74 @@
+<h3>(login)</h3>
+
+<!--DEBUG-->
+{{#if data}}
+    <!-- partials here-->
+    {{data}}
+{{/if}}
+
+<!-- MAIN FORM -->
+<form id="main-form" class="">
+    <div class="form-group">
+        <label for="input-text">Enter Password </label>
+        <input type="password" class="form-control" id="password_input" name="password" required autocomplete="off" autofocus>
+
+    </div>
+
+    <button type="submit" alt="Submit" class="btn btn-default pull-right">Enter</button> <br>
+</form>
+
+
+
+
+<script>
+
+    var token;
+
+    window.addEventListener('load', function(e){
+        if(!window.localStorage){
+            console.log('your browser is not supported.');
+        } else {
+
+            token = localStorage.getItem('token');
+            if(!token) {
+                console.log('token not found');
+            } else {
+                console.log('token found: ' + token);
+            }
+        }
+    });
+
+
+
+    var form = document.getElementById('main-form');
+
+    form.addEventListener('submit', function(e){
+        var inputData = document.getElementById('password_input');
+
+        e.preventDefault();
+        //console.log('debug password: "' + inputData.value + '"');
+
+        //AJAX POST
+        $.ajax({
+            url: '/auth/authenticate',
+            type: 'POST',
+            data: {password: inputData.value},
+            headers: {
+                'x-access-token':'dummy data that should be stored in localStorage or cookie'
+            },
+            success: function(data, status, jqXHR) {
+
+                console.log('Successfully submitted password.');
+                console.log('Data return: ' + 'Status: ' + data.status + ', message: ' + data.message);
+                console.log('Token: ' + data.token);
+            },
+            error: function(jqXHR, status, err){
+                console.log(err);
+            }
+        });
+
+        inputData.value = '';
+
+    });
+
+</script>

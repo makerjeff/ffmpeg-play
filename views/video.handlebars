@@ -6,23 +6,28 @@
     {{data}}
 {{/if}}
 
-<!-- MAIN FORM -->
-<form id="main-form" class="">
-    <div class="form-group">
-        <label for="input-text">Enter Text </label>
-        <input type="text" class="form-control" id="input-text" name="input_data" required autocomplete="off" autofocus>
+<div class="container">
+    <!-- MAIN FORM -->
+    <form id="main-form" class="">
+        <div class="form-group">
+            <label for="input-text">Enter Text </label>
+            <input type="text" class="form-control" id="input-text" name="input_data" required autocomplete="off" autofocus>
+
+        </div>
+
+        <button type="submit" alt="Submit" class="btn btn-default pull-right">Make Video</button> <br>
+    </form>
+
+    <!-- DEBUG CONTROLS -->
+    <div id="debugControlsDiv">
+        <!--Word List Button-->
+        <button id="wordListButton" class="btn btn-default">Word List</button>
     </div>
 
-    <button type="submit" class="btn btn-default">Submit</button> <br>
-</form>
+    <!--Results Div-->
+    <div id="resultDiv"></div>
+</div>
 
-<!--Word List Button-->
-<button id="wordListButton" class="btn btn-default">Word List</button>
-<button id="loadVideoButton" class="btn btn-primary">Load Video</button>
-
-
-<!--Results Div-->
-<div id="resultDiv"></div>
 
 
 <script>
@@ -32,16 +37,22 @@
     var resultDiv = document.getElementById('resultDiv');
     var form = document.getElementById('main-form');
     var wordListButton = document.getElementById('wordListButton');
-    var loadVideoButton = document.getElementById('loadVideoButton');
+
+    //create loadVideoButton on the fly
+    //var loadVideoButton = document.getElementById('loadVideoButton');
 
     var textInput = document.getElementById('input-text');
-
-    var videoDataObject;
 
 
     // =========================
     // EVENT LISTENERS =========
     // =========================
+
+    // startup
+    window.addEventListener('load', function(e){
+        console.log('Ready to make America great again.');
+
+    });
 
 
     form.addEventListener('submit', function(e){
@@ -56,16 +67,23 @@
             type:'POST',
             data:{datum: grabbedData.value},
             success: function(data, textStatus, jqXHR){
-                pingEnd = Date.now();   //stores return time.
-                console.log('data returned from server: ' + JSON.stringify(data));
 
-                //TODO: is broke.
-                resultDiv.innerHTML = JSON.stringify(data);
+                var stringData = JSON.stringify(data);
+
+                pingEnd = Date.now();   //stores return time.
+                console.log('data returned from server: ' + stringData);
+
+                // add to results div
+                resultDiv.innerHTML = stringData;
                 console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
 
-                videoDataObject = data;
+                console.log(data);
 
-                console.log(videoDataObject);
+                // if video is completed...
+                if(data.status == 'complete') {
+                    // create load video button, which will be replaced with auto-load in the future.
+                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                }
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -84,31 +102,54 @@
         ajaxPath('/words', 'GET');
     });
 
-    loadVideoButton.addEventListener('click', function(e){
 
-        //TODO: make a function.
-        var video = document.createElement('video');
-        video.id = 'videoElement';
-        video.src = '/videos/' + videoDataObject.videoUrl;
-        //video.autoPlay = true;
 
-        video.setAttribute('autoplay', true);
-        resultDiv.appendChild(video);
-        video.addEventListener('canplaythrough', function(e){
-            this.play();
-        });
-
-        video.addEventListener('click', function(e){
-            if(this.paused) {
-                this.play();
-            }
-        });
-    });
 
 
     // =========================
     // FUNCTION DEFINITIONS ====
     // =========================
+
+    function createLoadVideoButton(targetDiv, data){
+
+        // create button
+        var loadVideoButton = document.createElement('button');
+        loadVideoButton.id = 'loadVideoButton';
+
+        var loadVideoButtonText = document.createTextNode('Load Video');
+        loadVideoButton.appendChild(loadVideoButtonText);
+
+        loadVideoButton.classList.add('btn');
+        loadVideoButton.classList.add('btn-success');
+
+        targetDiv.appendChild(loadVideoButton);
+
+
+        // add events
+        loadVideoButton.addEventListener('click', function(e){
+
+            //TODO: make a function.
+            var video = document.createElement('video');
+            video.id = 'videoElement';
+            video.src = '/videos/' + data.videoUrl;
+            //video.autoPlay = true;
+
+            video.setAttribute('autoplay', true);
+            resultDiv.appendChild(video);
+            video.addEventListener('canplaythrough', function(e){
+                this.play();
+            });
+
+            video.addEventListener('click', function(e){
+                if(this.paused) {
+                    this.play();
+                }
+            });
+
+            //remove button
+            this.parentNode.removeChild(this);
+        });
+    }
 
     /**
      * Custom conditional AJAX method.
