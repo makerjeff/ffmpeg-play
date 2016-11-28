@@ -2,6 +2,7 @@
 Experimenting with FFMPEG and FFMPEG node modules.
 
 ## Notes
+- [Install FFMPEG on Raspberry Pi3](http://hannes.enjoys.it/blog/2016/03/ffmpeg-on-raspbian-raspberry-pi/)
 - [How to install FFMPEG on Mac OSX](http://www.renevolution.com/ffmpeg/2013/03/16/how-to-install-ffmpeg-on-mac-os-x.html)
 - [Hong Kiat: FFMPEG Guide](http://www.hongkiat.com/blog/ffmpeg-guide/)
 - [FFMPEG Documentation](https://ffmpeg.org/ffmpeg.html)

@@ -22,7 +22,7 @@ const db            = require('./models/log-db');
 const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 
-var serverVersion   = 'v0.0.1';
+var serverVersion   = 'v0.0.2';
 
 
 
@@ -42,6 +42,7 @@ const handlebars    = hbsModule.create({
         }
     }
 });
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -50,6 +51,10 @@ app.enable('trust proxy');
 
 
 // MIDDLEWARE
+
+// --- enable body parser ---
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 // --- header information ---
 
