@@ -144,14 +144,19 @@
      */
     function updateResultDiv(rDiv, data){
 
+        // parse AJAX'd data
         var parsedData = JSON.parse(data);
 
+        // print AJAX'd data to console
         console.log(parsedData);
 
+        // create a button for each of the array
         parsedData.forEach(function(elem, ind, arr){
 
+            var inputWord = elem.split('.').shift();
+
             var button = document.createElement('button');
-            var buttonText = document.createTextNode(elem);
+            var buttonText = document.createTextNode(inputWord);
 
             button.appendChild(buttonText);
             button.setAttribute('class','btn btn-success');

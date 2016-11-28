@@ -1,0 +1,18 @@
+.jumbotron {
+  margin: 0;
+  font-family: 'visitor', sans-serif;
+  text-transform: uppercase;
+  background: rgba(0,0,100,1.0);
+  color: white;
+}
+
+.jumbotron span:nth-child(3n+0) {
+  color: blue;
+}
+
+.jumbotron span:nth-child(3n+1) {
+  color: red;
+}
+.jumbotron h1 {
+  text-shadow: 4px 4px 0px rgba(10,10,10,0.45);
+}

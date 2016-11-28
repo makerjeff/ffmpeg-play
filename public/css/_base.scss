@@ -1,0 +1,38 @@
+
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'visitor', sans-serif;
+    font-size: 16px;
+}
+
+#resultDiv {
+}
+
+/* dynamically generated */
+#videoElement {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.buttonSpace {
+    margin: 2px 2px 2px 2px;
+}
+
+/*====== SPINNERS =======*/
+.spinnerContainer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.25);
+
+    justify-content: center;
+    align-items: center;
+}
+
+.spinnerObject {
+    width: 50px;
+    height: 50px;
+}
