@@ -87,6 +87,11 @@ app.get('/', function(req, res){
     res.render('video', {data: 'DEBUG: You\'re on the video page'});
 });
 
+// ------- experimental front-end checking ---------
+app.get('/custom', function(req, res){
+    res.render('customvalidity', {data: 'DEBUG: You\'re on the custom validity page.'});
+});
+
 app.get('/logger', function(req, res){
     res.render('logger', {data: 'some data.'});
 });

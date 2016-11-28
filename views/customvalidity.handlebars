@@ -1,0 +1,121 @@
+<h3>(custom validity) (post to '/video')</h3>
+
+<!--DEBUG-->
+{{#if data}}
+    <!-- partials here-->
+    {{data}}
+{{/if}}
+
+<!-- MAIN FORM -->
+<form id="main-form" class="">
+    <div class="form-group">
+        <label for="input-text">Enter Text </label>
+        <input type="text" class="form-control" id="input-text" name="input_data" required autocomplete="off" autofocus>
+    </div>
+
+    <button type="submit" class="btn btn-default">Submit</button> <br>
+</form>
+
+<!--Word List Button-->
+<button id="checkValidity" class="btn btn-primary">Check Validity</button>
+
+
+<!--Results Div-->
+<div id="resultDiv"></div>
+
+<div id="nthChildSpans">
+    <div>ONE</div>
+    <div>TWO</div>
+    <div>THREE</div>
+    <div>FOUR</div>
+    <div>FIVE</div>
+    <div>SIX</div>
+    <div>SEVEN</div>
+    <div>EIGHT</div>
+    <div>NINE</div>
+    <div>TEN</div>
+    <div>ELEVEN</div>
+    <div>TWELVE</div>
+    <div>THIRTEEN</div>
+    <div>FOURTEEN</div>
+    <div>FIFTEEN</div>
+    <div>SIXTEEN</div>
+    <div>SEVENTEEN</div>
+    <div>EIGHTEEN</div>
+    <div>NINETEEN</div>
+    <div>TWENTY</div>
+</div>
+
+
+<script>
+    var pingStart;
+    var pingEnd;
+
+    var resultDiv = document.getElementById('resultDiv');
+    var form = document.getElementById('main-form');
+    var wordListButton = document.getElementById('wordListButton');
+    var checkValidityButton = document.getElementById('checkValidity');
+    var textInput = document.getElementById('input-text');
+    var videoDataObject;
+
+    // runtime loop.
+    window.addEventListener('load', function(e){
+        //once loaded...
+        customModule.init();
+
+
+    });
+
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+
+    });
+
+    // ========================
+    // APPLICATION MODULE =====
+    // ========================
+    var customModule = {
+        form: document.getElementById('main-form'),
+        textInput: document.getElementById('input-text'),
+
+        /**
+         * Initialize the application.
+         */
+        init: function() {
+            console.log('CustomValidity module has been initialized.');
+            this.textInput.setCustomValidity(randomGenerator.getRandomError(randomGenerator.errorArray));
+        },
+
+        /**
+         * Bind all events.
+         */
+        bindEvents: function(){
+            this.form.addEventListener('submit', function(e){
+
+            });
+
+
+
+        }
+    };
+
+    var randomGenerator = {
+        errorArray: [
+                'This ain\'t workin\' yo.',
+                'There is an error processing your request.',
+                'Enter something else.',
+                'Your entry is invalid.',
+                'Try again.',
+                'Nope. Try again.',
+                'Take this message as a sign of failure.'
+        ],
+        getRandomError: function(){
+            return this.errorArray[Math.floor(Math.random() * this.errorArray.length)];
+        }
+    }
+
+
+
+</script>
