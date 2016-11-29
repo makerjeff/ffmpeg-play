@@ -177,9 +177,9 @@ videomakerRoutes.get('/authenticate', function(req, res){
 videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
     if(req.body.password == sdb.credentials.password) {
-        res.send('password correct!');
+        res.json({status: 'success', message: 'password is correct!'});
     } else {
-        res.send('password is incorrect!');
+        res.json({status: 'fail', message: 'password is incorrect! Try again.'});
     }
 
 });
@@ -198,13 +198,13 @@ app.use(express.static('public/'));
 // 404
 app.use(function(req,res,next){
     res.status(404);
-    res.render('404');
+    res.send('404: Page not found!');
 });
 
 // 500
 app.use(function(req,res,next){
     res.status(500);
-    res.render('500');
+    res.render('500: Server error!');
 });
 
 // ========================

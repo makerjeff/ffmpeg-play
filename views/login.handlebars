@@ -6,6 +6,10 @@
     {{data}}
 {{/if}}
 
+<!-- OVERLAY INDICATOR -->
+
+
+
 <!-- MAIN FORM -->
 <form id="main-form" class="">
     <div class="form-group">
@@ -14,6 +18,10 @@
     </div>
 
     <button type="submit" alt="Submit" class="btn btn-default pull-right">Enter</button> <br>
+
+    <audio>
+        <source src="/sound/get_outta_here.ogg">
+    </audio>
 </form>
 
 
@@ -22,9 +30,15 @@
 <script>
 
     var token;
+    var sndError;
+    var sndSuccess;
 
     // on load, check token
     window.addEventListener('load', function(e){
+
+        //load audio
+        initAudio();
+
 
         //if local storage is available
         if(!window.localStorage){
@@ -65,7 +79,7 @@
             },
             success: function(data, status, jqXHR) {
 
-                console.log('Authentication request made. Data returned: ' + data);
+                console.log('Authentication request made. Data returned: ' + JSON.stringify(data));
 
                 processResult(data);
             },
@@ -79,6 +93,10 @@
     });
 
 
+    /**
+     * Process server returned results.
+     */
+
     function processResult(inputData){
 
         var pwLabel = document.getElementById('label');
@@ -86,15 +104,77 @@
         if(inputData.status == 'success') {
             //grab token and store it.
 
+            blinkColor(pwLabel, true);
+            sndSuccess.play();
+
+            createOverlay();
+
+            window.setTimeout(function(){
+                console.log('Redirecting after audio clip.');
+                document.location = 'http://google.com';
+            }, 3000);
+
         } else {
 
-            //color blink
-            pwLabel.classList.add('passwordError');
-            pwLabel.addEventListener('animationend', function(e){
-                pwLabel.classList.remove('passwordError');
-            });
+            blinkColor(pwLabel, false);
+            sndError.play();
 
         }
     }
+
+    /**
+     * Blink an element a feedback color.
+     * @param elem  Element to blink either red or green.
+     * @param success   Boolean - true for green, false for red
+     */
+    function blinkColor(elem, success){
+
+        if (success) {
+            elem.classList.add('passwordSuccess');
+            elem.addEventListener('animationend', function(e){
+                elem.classList.remove('passwordSuccess');
+            });
+        } else {
+            elem.classList.add('passwordError');
+            elem.addEventListener('animationend', function(e){
+                elem.classList.remove('passwordError');
+            });
+        }
+    }
+
+    /**
+     * Initialize and load the audio.
+     */
+    function initAudio(){
+        sndError = new Audio('/sound/get_outta_here.ogg');
+        sndSuccess = new Audio('/sound/politically_correct.ogg');
+    }
+
+    /**
+     * Creates the 'ACCEPTED' overlay message.
+     */
+    function createOverlay(){
+        var containerDiv = document.createElement('div');
+        var div = document.createElement('div');
+
+        containerDiv.classList.add('loginAcceptedContainer');
+        div.classList.add('loginAcceptedIcon');
+
+        div.innerHTML = getRandomAcceptMessage();
+
+        containerDiv.appendChild(div);
+
+        document.body.appendChild(containerDiv);
+    }
+
+    /**
+     * Get a random accepted messaged.
+     * @returns {string}    A string message.
+     */
+    function getRandomAcceptMessage(){
+        var db = ['OK!', '&#10004', 'GREAT!'];
+        return db[Math.floor(Math.random() * db.length)];
+    }
+
 
 </script>

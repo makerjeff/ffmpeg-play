@@ -1,6 +1,6 @@
 #loginBox {
   display: block;
-  width: calc(100% - 100px);
+  width: calc(300px);
   height: 250px;
   transform: translateY(-50px);
 }
@@ -12,4 +12,46 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.passwordError{
+  animation-name: redToBlack;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+
+.passwordSuccess{
+  animation-name: greenToBlack;
+  animation-timing-function: ease-in;
+  animation-duration: 2s;
+}
+
+.loginAcceptedContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;   //OVERLAY z-index
+}
+
+.loginAcceptedIcon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  font-size: 24px;
+  justify-content: center;
+  align-items: center;
+  background-color: green;
+  color: white;
+  box-shadow: 4px 4px 2px rgba(0,0,0,0.25);
+  z-index: 101;   //OVERLAY TEXT
+
+  animation-name: SuperPopIn;
+  animation-timing-function: ease;
+  animation-duration: 0.25s;
 }
