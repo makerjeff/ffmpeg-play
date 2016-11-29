@@ -9,7 +9,7 @@
 <!-- MAIN FORM -->
 <form id="main-form" class="">
     <div class="form-group">
-        <label for="input-text">Enter Password </label>
+        <label id="label" for="input-text">Enter Password </label>
         <input type="password" class="form-control" id="password_input" name="password" required autocomplete="off" autofocus>
 
     </div>
@@ -30,10 +30,11 @@
         } else {
 
             token = localStorage.getItem('token');
-            if(!token) {
-                console.log('token not found');
+            if(token) {
+                document.location = '/vm/video';
+
             } else {
-                console.log('token found: ' + token);
+                console.log('token not found');
             }
         }
     });
@@ -61,6 +62,8 @@
                 console.log('Successfully submitted password.');
                 console.log('Data return: ' + 'Status: ' + data.status + ', message: ' + data.message);
                 console.log('Token: ' + data.token);
+
+                processResult(data);
             },
             error: function(jqXHR, status, err){
                 console.log(err);
@@ -70,5 +73,27 @@
         inputData.value = '';
 
     });
+
+
+    function processResult(inputData){
+
+        var pwLabel = document.getElementById('label');
+
+        if(inputData.status == 'success') {
+            window.localStorage.setItem('token', inputData.token);
+            console.log('Success processed, redirecting...');
+            window.setTimeout(function(){
+                document.location = '/vm/video';
+            }, 1000);
+        } else {
+            console.log('Failure processed, enter password again.');
+            pwLabel.classList.add('passwordError');
+
+            pwLabel.addEventListener('animationend', function(e){
+                pwLabel.classList.remove('passwordError');
+            });
+
+        }
+    }
 
 </script>

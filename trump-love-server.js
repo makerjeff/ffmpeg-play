@@ -24,7 +24,7 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.2';
+var serverVersion   = 'v0.0.2b';
 
 
 
@@ -73,6 +73,9 @@ app.use(function(req,res,next){
     next();
 });
 
+// --- check for token ----
+
+
 
 // ==================
 // ROUTES ===========
@@ -90,7 +93,7 @@ app.use('/writedata', dataRoutes);
 
 // TEMP ROUTES
 app.get('/', function(req, res){
-    res.render('video', {data: 'DEBUG: You\'re on the video page'});
+    res.render('login', {layout: 'super.handlebars'});
 });
 
 // ---- login route ----
@@ -111,24 +114,13 @@ app.get('/box2d', function(req, res){
     res.render('box2d', {data: 'Box2D experiments.'});
 });
 
-//debug current directory
-app.get('/cwd', function(req,res){
-    console.log(vdb.getLocalDirectory());         //return the ROOT project directory.
-    res.send('Requested Data: ' + vdb.getLocalDirectory());
-});
-
-//get all local routes
-app.get('/cwdall', function(req,res){
-    console.log(vdb.getAllDirectories());
-    res.setHeader('Content-Type', 'application/json');
-    res.send('Requested Data: \n ' + JSON.stringify(vdb.getAllDirectories()));
-});
 // ---- API Routes ----
 
 // get word list
 app.get('/words', function(req,res){
     var data = vdb.getAvailableVideosSync();    //TODO: SEMI-SOLVED: Currently SYNC operation, need to PROMISIFY
-    console.log(data);
+    //console.log(data);
+    console.log('words grabbed.');
     res.header("Content-Type","text/plain");
     res.send(data);
 });
@@ -140,83 +132,69 @@ app.post('/logger', function(req,res){
     res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
 });
 
-// post data to /video
-app.post('/video', function(req, res){
-    
-    var statusObject = vdb.generateVideo(req.body.datum);
-    res.json(statusObject);
-});
-
-
+// dummy facebook login data
 app.get('/facebook', function(req, res){
     res.render('facebook');
 });
 
 
-// -============= EX-PORE-REMENT ===========-
-var authRoutes = express.Router();
-authRoutes.get('/', function(req, res) {
-    res.json({message:'Best. Authorization route. Ever.'});
+// ==================== BASE VIDEO ROUTES =====================
+// hide me soon
+
+// GET video page
+app.get('/video', function(req, res){
+    res.render('video', {status:'success', message: 'You\'re on the video page.'});
+});
+// post data to /video
+app.post('/video', function(req, res){
+    var statusObject = vdb.generateVideo(req.body.datum);
+    res.json(statusObject);
 });
 
-authRoutes.get('/data', function(req, res){
-    res.json({data: ['Lots of data!', 'Even more data!', 'Supermega data!']});
-});
-
-authRoutes.post('/authenticate', function(req, res){
-    console.log(req.body.password);
-    // res.send('Your password entered: ' + req.body.password);
-
-    if (req.body.password == sdb.credentials.password) {
-
-        //successful password check...
-
-        var jwtPayload = {data: ['info', 'that', 'should', 'be', 'hidden']};
-        
-        //create jwt and return it as 'token'
-        var token = jwt.sign(jwtPayload, sdb.credentials.secret, {expiresIn: '5m'}, function(err, token){
-            if(err){
-                console.log("error creating token.");
-                res.send('Error creating token. Error: ' + err);
-            } else {
-                res.json({status: 'success', message: 'You\'ve entered the correct password! Redirecting to main page.', token: token});
-            }
-        });
 
 
-    } else {
+// ============== AUTHENTICATE VIDEO MAKING ROUTES ============
+var videomakerRoutes = express.Router();
 
-        //failed password check...
-        res.json({status: 'failure', message: 'You\'ve entered the wrong password. Redirecting to Google.'});
-    }
-    
-    
-});
-
-// --- path authentication ---
-authRoutes.use(function(req, res, next){
-
+// ----- ROUTE CHECKER -------
+videomakerRoutes.use(function(req, res, next){
     var token = req.headers['x-access-token'];
-    console.log(token);
 
-    //if  token exists, decode it
     if(token) {
         jwt.verify(token, sdb.credentials.secret, function(err, decoded){
-            if (err) {
-                return res.json({status: 'failed', message: 'Token verification failed. Redirecting to login page.'});
+            if(err) {
+                console.log(err);
+                return res.json({status: 'failed', message:'Failed to authenticate token.'});
             } else {
+                //save to req object
                 req.decoded = decoded;
-                console.log('Successfully decoded token: ' + req.decoded);
+                console.log(decoded);
+                res.render('video', {status: 'success', message:'logged in.'});
+
                 next();
             }
         });
+
     } else {
-        res.status(403);
-        res.send({status: 'auth failed.', message:'Token invalid or not provided.'});
+        //no token? return error
+        //return res.status(403).send({status: 'failed', message:'No token provided.'});
+        res.render('login', {layout: 'super.handlebars'});
     }
 });
 
-app.use('/auth', authRoutes);
+// ---- default / login -----
+videomakerRoutes.get('/', function(req, res){
+    res.render('login', {layout: 'super.handlebars'});
+});
+
+// ---- video maker -----
+videomakerRoutes.get('/video', function(req, res){
+    res.render('video', {status: 'success', message: 'you\'re now at the video page.'});
+});
+
+// activate routes
+app.use('/vm', videomakerRoutes);
+
 
 
 // ========================

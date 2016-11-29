@@ -1,4 +1,16 @@
 /* ====== ANIMATIONS ======*/
+@keyframes redToBlack {
+  0% {color: red}
+  50% {color: red}
+  100% {color: black}
+}
+
+.passwordError{
+  animation-name: redToBlack;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+
 #box {
 
   display: flex;
@@ -36,3 +48,6 @@
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
 }
+
+
+

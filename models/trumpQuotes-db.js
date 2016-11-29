@@ -1,11 +1,10 @@
 /**
  * Created by jefferson.wu on 11/17/16.
  */
-const fs            = require('fs');
-
-var dataFile = 'quotes.json';
-var trumpQuotesObject = {};
-var trumpQuotes   = [];
+const fs                = require('fs');
+const dataFile          = 'quotes.json';
+var trumpQuotesObject   = {};
+var trumpQuotes         = [];
 
 
 fs.readFile(__dirname + '/' + dataFile, {"encoding":"utf8"},function(err, data){
@@ -13,10 +12,9 @@ fs.readFile(__dirname + '/' + dataFile, {"encoding":"utf8"},function(err, data){
         console.log(Error(err));
     } else {
         trumpQuotesObject = JSON.parse(data);
-
         trumpQuotesObject.forEach(function(elem, ind, array){
             trumpQuotes.push(decodeURIComponent(elem.quote));
-            console.log(decodeURIComponent(elem.quote));
+            //console.log(decodeURIComponent(elem.quote));
         });
     }
 });

@@ -135,6 +135,7 @@
             //video.autoPlay = true;
 
             video.setAttribute('autoplay', true);
+            //video.setAttribute('muted', true);    //for android mobile
             resultDiv.appendChild(video);
             video.addEventListener('canplaythrough', function(e){
                 this.play();
@@ -148,6 +149,7 @@
 
             //remove button
             this.parentNode.removeChild(this);
+
         });
     }
 
