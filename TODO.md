@@ -21,3 +21,6 @@
     
     
 ##JWT-based app authentication
+
+##Filename length: 255 characters
+- overcome with random UUID or shortID filenames. Each file will be unique, so must impose file size limits (maybe 10mb each);

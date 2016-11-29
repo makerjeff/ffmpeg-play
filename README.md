@@ -42,3 +42,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [Array.shift(): Use this and Array.split('.') to return a file name without extension](http://www.w3schools.com/jsref/jsref_shift.asp)
 - [Disable FFMPEG safe mode: -safe 0](http://stackoverflow.com/questions/38996925/ffmpeg-concat-unsafe-file-name)
 - [Authenticate Node Application with JSON Web Tokens](https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens)
+- [Linux file name limit : 255 characters](http://serverfault.com/questions/9546/filename-length-limits-on-linux)
