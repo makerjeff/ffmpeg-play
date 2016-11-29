@@ -156,34 +156,32 @@ app.post('/video', function(req, res){
 // ============== AUTHENTICATE VIDEO MAKING ROUTES ============
 var videomakerRoutes = express.Router();
 
-// ----- ROUTE CHECKER -------
-videomakerRoutes.use(function(req, res, next){
-    var token = req.headers['x-access-token'];
-
-    //TODO: AUTHENTICATE EACH ROUTE, make sure it works, then put into middleware.
-    
-});
 
 // ---- default / login -----
 videomakerRoutes.get('/', function(req, res){
-    res.render('login', {layout: 'super.handlebars'});
+    res.send('Hello! Welcome to the best API in Sol!');
 });
 
 // ---- video maker -----
-videomakerRoutes.get('/video', function(req, res){
-    res.render('video', {status: 'success', message: 'you\'re now at the video page.'});
+videomakerRoutes.get('/data', function(req, res){
+    res.json({data: ['data one', 'data two', 'data three', 'data four']});
+
+});
+
+// ---- get authenticate page ----
+videomakerRoutes.get('/authenticate', function(req, res){
+    res.render('login', {layout: 'super.handlebars'});
 });
 
 // ---- authenticate ----
 videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
-
-    if(req.body.password == sdb.credentials.password){
-        console.log(chalk.green('proper password.'));
-        res.render('/vm/video', {status: 'success', message: 'successfully authenticated/'});
+    if(req.body.password == sdb.credentials.password) {
+        res.send('password correct!');
     } else {
-        console.log(chalk.yellow('wrong password.'));
+        res.send('password is incorrect!');
     }
+
 });
 
 // activate routes
@@ -208,7 +206,6 @@ app.use(function(req,res,next){
     res.status(500);
     res.render('500');
 });
-
 
 // ========================
 // ===== START SERVER =====

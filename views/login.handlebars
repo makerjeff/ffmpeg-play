@@ -11,7 +11,6 @@
     <div class="form-group">
         <label id="label" for="input-text">Enter Password </label>
         <input type="password" class="form-control" id="password_input" name="password" required autocomplete="off" autofocus>
-
     </div>
 
     <button type="submit" alt="Submit" class="btn btn-default pull-right">Enter</button> <br>
@@ -24,14 +23,21 @@
 
     var token;
 
+    // on load, check token
     window.addEventListener('load', function(e){
+
+        //if local storage is available
         if(!window.localStorage){
+
             console.log('your browser is not supported.');
+
         } else {
 
             token = localStorage.getItem('token');
+
             if(token) {
-                document.location = '/vm/video';
+
+                //do something (maybe ajax) before redirecting.
 
             } else {
                 console.log('token not found');
@@ -59,9 +65,7 @@
             },
             success: function(data, status, jqXHR) {
 
-                console.log('Successfully submitted password.');
-                console.log('Data return: ' + 'Status: ' + data.status + ', message: ' + data.message);
-                console.log('Token: ' + data.token);
+                console.log('Authentication request made. Data returned: ' + data);
 
                 processResult(data);
             },
@@ -80,15 +84,12 @@
         var pwLabel = document.getElementById('label');
 
         if(inputData.status == 'success') {
-            window.localStorage.setItem('token', inputData.token);
-            console.log('Success processed, redirecting...');
-            window.setTimeout(function(){
-                document.location = '/vm/video';
-            }, 1000);
-        } else {
-            console.log('Failure processed, enter password again.');
-            pwLabel.classList.add('passwordError');
+            //grab token and store it.
 
+        } else {
+
+            //color blink
+            pwLabel.classList.add('passwordError');
             pwLabel.addEventListener('animationend', function(e){
                 pwLabel.classList.remove('passwordError');
             });
