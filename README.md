@@ -43,3 +43,4 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [Disable FFMPEG safe mode: -safe 0](http://stackoverflow.com/questions/38996925/ffmpeg-concat-unsafe-file-name)
 - [Authenticate Node Application with JSON Web Tokens](https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens)
 - [Linux file name limit : 255 characters](http://serverfault.com/questions/9546/filename-length-limits-on-linux)
+- [TERMINAL COLORS](http://jafrog.com/2013/11/23/colors-in-terminal.html)

@@ -70,6 +70,11 @@ app.use(function(req,res,next){
 // --- basic logger ---
 app.use(function(req,res,next){
     console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
+
+    if(req.body.password) {
+        console.log(' ----- Attempted password: ' + req.body.password);
+    }
+
     next();
 });
 
@@ -135,6 +140,11 @@ app.post('/logger', function(req,res){
 // dummy facebook login data
 app.get('/facebook', function(req, res){
     res.render('facebook');
+});
+
+//frontend promise play
+app.get('/promises', function(req, res){
+    res.render('promises');
 });
 
 

@@ -9,51 +9,75 @@
 
 
 <div id="inputDiv">
-    <button class="btn btn-primary"> A Button </button>
+    <button class="btn btn-primary"> B Button </button>
+    <button class="btn btn-primary"> C Button </button>
 </div>
-
+<br><br>
 <div id="resultDiv">
-    {{data}}
 </div>
 
 
 <script>
-    var button = document.getElementsByTagName('button')[0];
-
-    button.addEventListener('click', function(e){
-
-
-        var myPromise = new NumberPromiseGenerator();
+    var buttonB = document.getElementsByTagName('button')[0];
+    var buttonC = document.getElementsByTagName('button')[1];
 
 
-        // ----- RESOLVE or REJECT
-        myPromise.then(function(val){
+    buttonB.addEventListener('click', function(e){
+        var myProm1 = new timedPromiseGen(1000, 1500);
+
+        myProm1.then(function(val){
             console.log(val);
         }).catch(function(reason){
             console.log(reason);
         });
+    });
 
-        var myPromise2 = new NumberPromiseGenerator();
-
-        myPromise2.then(function(val){
-            console.log(val)
-        }).catch (function(reason){
-            console.log(reason);
+    buttonC.addEventListener('click', function(e){
+        console.log('Iniitiated AJAX promise request.');
+        updateResultDiv('Sending AJAX request...');
+        $.ajax({
+            url: '/promisegen',
+            type: 'POST',
+            data: {nothing: "Nothing Yo"},
+            success: function(data, status, jqxHR) {
+                updateResultDiv(data);
+                console.log(data);
+            },
+            error: function(jqXHR, status, err) {
+                updateResultDiv(err);
+                console.log(err);
+            }
         });
     });
 
 
-    function NumberPromiseGenerator() {
-        // ----- Create Prommise -----
-        return new Promise(function(resolve, reject){
+    /**
+     * Generate a time delayed Promise.
+     * @param range Range from 0.
+     * @param delay Delay time.
+     * @returns {Promise|Promise<T>}    Promise to be fulfilled.
+     */
+    function timedPromiseGen(range, delay){
 
-            var number = Math.floor(Math.random() * 100);
-            if(number > 50) {
-                resolve('This resolved properly. ' + number);
-            } else {
-                reject('This was rejected. ' + number);
-            }
+        return new Promise(function(resolve, reject){
+            var num = Math.floor(Math.random() * range);
+
+            console.log('Promise generated for ' + num + ', awaiting fulfillment.');
+
+            window.setTimeout(function(){
+                if(num > range /2) {
+                    resolve('The number ' + num + ' was greater than ' + range/2 +  ' . (resolved).');
+                } else {
+                    reject('The number ' + num + ' was less than ' + range/2 + ' . (rejected).');
+                }
+            },delay);
         });
+    }
+
+
+    function updateResultDiv(info){
+        var resultDiv = document.getElementById('resultDiv');
+        resultDiv.innerHTML = '<h3>' + info + '</h3>';
     }
 
 
