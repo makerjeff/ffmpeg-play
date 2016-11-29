@@ -160,29 +160,8 @@ var videomakerRoutes = express.Router();
 videomakerRoutes.use(function(req, res, next){
     var token = req.headers['x-access-token'];
 
-    if(token) {
-        // jwt.verify(token, sdb.credentials.secret, function(err, decoded){
-        //     if(err) {
-        //         console.log(err);
-        //         return res.json({status: 'failed', message:'Failed to authenticate token.'});
-        //     } else {
-        //         //save to req object
-        //         req.decoded = decoded;
-        //         console.log(decoded);
-        //         res.render('video', {status: 'success', message:'logged in.'});
-        //
-        //         next();
-        //     }
-        // });
-
-        console.log('token found.');
-        res.render('video', {status: 'success', message:'logged in'});
-
-    } else {
-        //no token? return error
-        //return res.status(403).send({status: 'failed', message:'No token provided.'});
-        res.render('login', {layout: 'super.handlebars'});
-    }
+    //TODO: AUTHENTICATE EACH ROUTE, make sure it works, then put into middleware.
+    
 });
 
 // ---- default / login -----
