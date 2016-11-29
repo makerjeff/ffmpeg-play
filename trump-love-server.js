@@ -161,19 +161,22 @@ videomakerRoutes.use(function(req, res, next){
     var token = req.headers['x-access-token'];
 
     if(token) {
-        jwt.verify(token, sdb.credentials.secret, function(err, decoded){
-            if(err) {
-                console.log(err);
-                return res.json({status: 'failed', message:'Failed to authenticate token.'});
-            } else {
-                //save to req object
-                req.decoded = decoded;
-                console.log(decoded);
-                res.render('video', {status: 'success', message:'logged in.'});
+        // jwt.verify(token, sdb.credentials.secret, function(err, decoded){
+        //     if(err) {
+        //         console.log(err);
+        //         return res.json({status: 'failed', message:'Failed to authenticate token.'});
+        //     } else {
+        //         //save to req object
+        //         req.decoded = decoded;
+        //         console.log(decoded);
+        //         res.render('video', {status: 'success', message:'logged in.'});
+        //
+        //         next();
+        //     }
+        // });
 
-                next();
-            }
-        });
+        console.log('token found.');
+        res.render('video', {status: 'success', message:'logged in'});
 
     } else {
         //no token? return error
@@ -190,6 +193,18 @@ videomakerRoutes.get('/', function(req, res){
 // ---- video maker -----
 videomakerRoutes.get('/video', function(req, res){
     res.render('video', {status: 'success', message: 'you\'re now at the video page.'});
+});
+
+// ---- authenticate ----
+videomakerRoutes.post('/authenticate', function(req,res){
+    // check credentials
+
+    if(req.body.password == sdb.credentials.password){
+        console.log(chalk.green('proper password.'));
+        res.render('/vm/video', {status: 'success', message: 'successfully authenticated/'});
+    } else {
+        console.log(chalk.yellow('wrong password.'));
+    }
 });
 
 // activate routes
