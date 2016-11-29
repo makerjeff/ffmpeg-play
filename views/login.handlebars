@@ -36,6 +36,8 @@
     // on load, check token
     window.addEventListener('load', function(e){
 
+        document.title = 'login';
+
         //load audio
         initAudio();
 
@@ -97,6 +99,7 @@
      * Process server returned results.
      */
 
+
     function processResult(inputData){
 
         var pwLabel = document.getElementById('label');
@@ -109,10 +112,14 @@
 
             createOverlay();
 
+
+            //TODO: Replace this with a URL from TOKEN.
+            //================================================
             window.setTimeout(function(){
                 console.log('Redirecting after audio clip.');
-                document.location = 'http://google.com';
+                document.location = 'http://10.90.42.103:3000/video';
             }, 3000);
+            //================================================
 
         } else {
 

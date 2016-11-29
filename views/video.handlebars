@@ -132,6 +132,7 @@
             var video = document.createElement('video');
             video.id = 'videoElement';
             video.src = '/videos/' + data.videoUrl;
+            video.preload = 'auto';
             //video.autoPlay = true;
 
             video.setAttribute('autoplay', true);

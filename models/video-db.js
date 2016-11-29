@@ -36,6 +36,8 @@ module.exports.generateVideo = function(inputStr) {
     // -------------------------
     // PROCESS INPUT STRING ----
     // -------------------------
+
+    var status;
     var fileHash = shortid.generate();
     var inputString = inputStr.toLowerCase();
     var inputArray = inputString.split(' ');
@@ -129,6 +131,8 @@ module.exports.getAvailableVideosSync = function() {
 
 function concatVideoFile(relFilePath, outputFileName) {
 
+    var statusData;
+
     //debug
     console.log(relFilePath);
     console.log(outputFileName);
@@ -146,6 +150,7 @@ function concatVideoFile(relFilePath, outputFileName) {
             }
         }
     });
+
 
 }
 

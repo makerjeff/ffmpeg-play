@@ -1,5 +1,5 @@
 /**
- * Created by jefferson.wu on 11/28/16.
+ * Created by jefferson.wu on 11/29/16.
  */
 
 const fs        = require('fs');
@@ -14,7 +14,3 @@ module.exports.credentials = {
     'password':passwordFile,
     'signingkey': signingKey
 };
-
-function checkPasswordFile(){
-
-}
