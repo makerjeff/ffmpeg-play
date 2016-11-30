@@ -223,7 +223,6 @@ videomakerRoutes.post('/authenticate', function(req,res){
         res.json({status: 'fail', message: 'password is incorrect! Try again.'});
         console.log('----- Attempts made: ' + req.signedCookies.lgna);
     }
-
 });
 
 // activate routes
@@ -259,6 +258,7 @@ http.listen(3000, function(err){
     } else {
         clear();
         console.log(chalk.green('Making America great again locally on port ' + port));
+        console.log(chalk.black.bgYellow(' Sever version: ' + serverVersion + ' '));
 
         // -- TEST --
         console.log(sdb.credentials);
