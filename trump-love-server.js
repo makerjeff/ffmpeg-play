@@ -60,6 +60,8 @@ app.enable('trust proxy');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use(cookieParser('cookieparserkey'));    //add in params if signed.
+
 // --- header information ---
 
 app.use(function(req,res,next){
@@ -98,6 +100,7 @@ app.use('/writedata', dataRoutes);
 
 // TEMP ROUTES
 app.get('/', function(req, res){
+    res.cookie('login_attempts', 0, {signed: true});
     res.render('login', {layout: 'super.handlebars'});
 });
 
@@ -189,7 +192,12 @@ videomakerRoutes.post('/authenticate', function(req,res){
     if(req.body.password == sdb.credentials.password) {
         res.json({status: 'success', message: 'password is correct!'});
     } else {
+
+
+
+        res.cookie('login_attempts', parseInt(req.signedCookies.login_attempts) + 1, {signed: true});
         res.json({status: 'fail', message: 'password is incorrect! Try again.'});
+        console.log('----- Attempts made: ' + req.signedCookies.login_attempts);
     }
 
 });
