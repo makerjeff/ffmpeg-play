@@ -16,7 +16,7 @@ var passwordFile = fs.readFile(process.cwd() + '/password.txt', {encoding: 'utf8
     }
 });
 
-var signingKey = fs.readFile(process.cwd() + '/password.txt', {encoding: 'utf8'}, function(err, data){
+var signingKey = fs.readFile(process.cwd() + '/signingkey.txt', {encoding: 'utf8'}, function(err, data){
     if(err){
         return 'signingkey file not found!';
     } else {
