@@ -44,3 +44,11 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [Authenticate Node Application with JSON Web Tokens](https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens)
 - [Linux file name limit : 255 characters](http://serverfault.com/questions/9546/filename-length-limits-on-linux)
 - [TERMINAL COLORS](http://jafrog.com/2013/11/23/colors-in-terminal.html)
+- [REGEX String Stripping Punctuation](http://stackoverflow.com/questions/4328500/how-can-i-strip-all-punctuation-from-a-string-in-javascript-using-regex)
+- [REGEX String Stripping multiple spaces and tabs, etc](http://stackoverflow.com/questions/1981349/regex-to-replace-multiple-spaces-with-a-single-space)
+- [REGEX Remove trailing spaces](http://stackoverflow.com/questions/9532340/how-to-remove-trailing-white-spaces-using-a-regular-expression-without-removing)
+- [REGEX W3Schools reference](http://www.w3schools.com/jsref/jsref_obj_regexp.asp)
+    - Remove trailing white space:    var string4 = string3.replace(/[ \t]+$/g, '');
+    - Remove leading white space:    var string5 = string4.replace(/^[ \t]/g, '');
+
+
