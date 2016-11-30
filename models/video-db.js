@@ -116,10 +116,13 @@ module.exports.getAvailableVideos = function() {
         }
     });
 
-    return availData;
+    return availData;   //TODO: return promise instead of actual object.
 };
 
-
+/**
+ * Get Available Videos SYNC.
+ * @returns {Array.<T>|*|{PSEUDO, CHILD, ID, TAG, CLASS, ATTR, POS}}
+ */
 module.exports.getAvailableVideosSync = function() {
     var data;
     var cleandata;
@@ -127,10 +130,16 @@ module.exports.getAvailableVideosSync = function() {
     cleandata = data.filter(junk.not);
     return cleandata;
 };
+
 // ============================
 // INTERNAL FUNCTIONS =========
 // ============================
 
+/**
+ * Concatenate videos using FFMPEG.
+ * @param relFilePath   File path.
+ * @param outputFileName    Output file name.
+ */
 function concatVideoFile(relFilePath, outputFileName) {
 
     var statusData;

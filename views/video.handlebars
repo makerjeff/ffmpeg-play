@@ -1,10 +1,18 @@
 <h3>(video) (post to '/video')</h3>
 
-<!--DEBUG-->
+{{! ---- DEBUG ---- }}
 {{#if server}}
     <div class="serverVersion">{{server}}</div>
 {{/if}}
 
+
+{{!--LIBRARIES & MODULES--}}
+<script src="/js/pingerTool.js"></script>
+<script src="/js/textSanitizer.js"></script>
+<script src="/js/overlayGen.js"></script>
+<script src="/js/videoGen.js"></script>
+
+<!-- MAIN DIV -->
 <div class="container">
     <!-- MAIN FORM -->
     <form id="main-form" class="">
@@ -43,6 +51,7 @@
     var textInput = document.getElementById('input-text');
 
 
+
     // =========================
     // EVENT LISTENERS =========
     // =========================
@@ -55,7 +64,9 @@
 
 
     form.addEventListener('submit', function(e){
-        pingStart = Date.now();         //store start time.
+        overlayGen.createWaitOverlay();
+        pingerTool.pingStart(); // start ping
+
         e.preventDefault();
 
         var grabbedData = document.getElementById('input-text');
@@ -69,12 +80,13 @@
 
                 var stringData = JSON.stringify(data);
 
-                pingEnd = Date.now();   //stores return time.
                 console.log('data returned from server: ' + stringData);
 
                 // add to results div
                 resultDiv.innerHTML = stringData;
-                console.log('Pingo-Pongo: ' + (pingEnd - pingStart).toString());
+
+                overlayGen.removeWaitOverlay();
+                pingerTool.pingEnd();   //display end
 
                 console.log(data);
 
@@ -98,6 +110,8 @@
     //grab word list
     wordListButton.addEventListener('click', function(e){
         resultDiv.innerHTML = '';
+
+        overlayGen.createWaitOverlay();
         ajaxPath('/words', 'GET');
     });
 
@@ -140,6 +154,7 @@
             //video.autoPlay = true;
 
             video.setAttribute('autoplay', true);
+            video.setAttribute('controls', true);
             //video.setAttribute('muted', true);    //for android mobile
             resultDiv.appendChild(video);
             video.addEventListener('canplaythrough', function(e){
@@ -165,22 +180,25 @@
      * @returns {*}     Returns a
      */
     function ajaxPath(path, method) {
-        var internalPing = Date.now();
+
+        pingerTool.pingStart();
 
         $.ajax({
             url: path,
             type: method,
             success: function(data, status, jqXHR){
 
-                var internalPong = Date.now();
                 updateResultDiv(resultDiv, data);
                 //console.log(data);
-                console.log('PingPong: ' + (internalPong - internalPing).toString());
 
+                overlayGen.removeWaitOverlay();
+                pingerTool.pingEnd();
             },
             error: function(jqXHR, status, error){
                 console.log('Horrible AJAX error occurred: ' + status);
-                console.log('PingPong: ' + (internalPong - internalPing).toString());
+
+                overlayGen.removeWaitOverlay();
+                pingerTool.pingEnd();
             }
         });
     }
@@ -224,7 +242,6 @@
 
         //rDiv.appendChild(ul);
     }
-
 
 
 </script>
