@@ -4,7 +4,7 @@
 
 var chalk = require('chalk');
 var clear = require('clear');
-var pdb = require('./models/promise-db');
+var pdb = require('./../models/promise-db');
 var bodyParser = require('body-parser');
 
 var express = require('express');

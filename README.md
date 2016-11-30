@@ -50,5 +50,6 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [REGEX W3Schools reference](http://www.w3schools.com/jsref/jsref_obj_regexp.asp)
     - Remove trailing white space:    var string4 = string3.replace(/[ \t]+$/g, '');
     - Remove leading white space:    var string5 = string4.replace(/^[ \t]/g, '');
+- [Foolproof HTML Escaping in JS](http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/)
 
 
