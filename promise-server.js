@@ -65,7 +65,6 @@ app.use(express.static('public/'));
 
 
 //start server on port 3000
-
 http.listen(3000, function(err){
     if(err){
         console.log(err);

@@ -16,6 +16,7 @@
 <div id="resultDiv">
 </div>
 
+<script src="/js/overlayGen.js"></script>
 
 <script>
     var buttonB = document.getElementsByTagName('button')[0];
@@ -34,6 +35,9 @@
 
     buttonC.addEventListener('click', function(e){
         console.log('Iniitiated AJAX promise request.');
+
+        overlayGen.createWaitOverlay();
+
         updateResultDiv('Sending AJAX request...');
         $.ajax({
             url: '/promisegen',
@@ -42,10 +46,12 @@
             success: function(data, status, jqxHR) {
                 updateResultDiv(data);
                 console.log(data);
+                overlayGen.removeWaitOverlay();
             },
             error: function(jqXHR, status, err) {
                 updateResultDiv(err);
                 console.log(err);
+                overlayGen.removeWaitOverlay();
             }
         });
     });
