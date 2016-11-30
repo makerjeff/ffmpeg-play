@@ -33,7 +33,7 @@ var configObject = {
 // ============================
 
 //TODO: PROMISIFY THIS.
-module.exports.generateVideo = function(inputStr) {
+module.exports.generateVideoSync = function(inputStr) {
 
     // -------------------------
     // PROCESS INPUT STRING ----

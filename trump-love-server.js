@@ -24,7 +24,8 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.2c';
+var serverVersion   = 'v0.0.2d';
+var tokenLifespan   = '5m';
 
 
 
@@ -165,7 +166,7 @@ app.get('/video', function(req, res){
             res.send('Token expired! <a href="/">Login again </a>');
         } else {
             console.log(decoded);
-            res.render('video', {status:'success', message: 'You\'re on the video page.'});
+            res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
         }
     });
 
@@ -174,7 +175,7 @@ app.get('/video', function(req, res){
 
 // post data to /video
 app.post('/video', function(req, res){
-    var statusObject = vdb.generateVideo(req.body.datum);
+    var statusObject = vdb.generateVideoSync(req.body.datum);
     res.json(statusObject);
 });
 
@@ -215,7 +216,7 @@ videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
     if(req.body.password == sdb.credentials.password) {
 
-        var token = sdb.createToken('30s');
+        var token = sdb.createToken(tokenLifespan);
         res.cookie('token', token, {signed:true} );
         res.json({status: 'success', message: 'password is correct!', token: token});
     } else {
@@ -270,17 +271,3 @@ http.listen(3000, function(err){
 // ====================
 // temp functions =====
 // ====================
-
-
-//TODO: MOVE THIS OUT TO SIGNIN-DB
-function createToken(){
-
-    var secret = fs.readFileSync(process.cwd() + '/signingkey.txt');
-    var dataObject = {iss:'http://localhost', datum:'this is some data.'};
-
-    var token = jwt.sign(dataObject, secret, {expiresIn: '30s'});
-
-    console.log(token);
-
-    return token;
-}
