@@ -168,11 +168,9 @@
 
         containerDiv.classList.add('loginAcceptedContainer');
         div.classList.add('loginAcceptedIcon');
-
         div.innerHTML = getRandomAcceptMessage();
 
         containerDiv.appendChild(div);
-
         document.body.appendChild(containerDiv);
     }
 
@@ -185,11 +183,13 @@
         return db[Math.floor(Math.random() * db.length)];
     }
 
+    /**
+     * Put JWT in localStorage.
+     * @param token Token object.
+     */
     function setToken(token){
         window.localStorage.setItem('token', token);
         console.log('token set. ');
-
-
     }
 
 

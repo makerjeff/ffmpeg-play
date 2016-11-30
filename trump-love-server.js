@@ -215,7 +215,7 @@ videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
     if(req.body.password == sdb.credentials.password) {
 
-        var token = createToken();
+        var token = sdb.createToken('30s');
         res.cookie('token', token, {signed:true} );
         res.json({status: 'success', message: 'password is correct!', token: token});
     } else {
