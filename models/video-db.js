@@ -31,6 +31,8 @@ var configObject = {
 // ============================
 // EXPORT METHODS =============
 // ============================
+
+//TODO: PROMISIFY THIS.
 module.exports.generateVideo = function(inputStr) {
 
     // -------------------------

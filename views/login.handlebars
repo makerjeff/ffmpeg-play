@@ -113,12 +113,14 @@
             createOverlay();
 
 
+            setToken(inputData.token);
+
             //TODO: Replace this with a URL from TOKEN.
             //================================================
             window.setTimeout(function(){
                 console.log('Redirecting after audio clip.');
-                document.location = 'http://10.90.42.103:3000/video';
-            }, 3000);
+                document.location = 'http://localhost:3000/video';
+            }, 3200);
             //================================================
 
         } else {
@@ -181,6 +183,13 @@
     function getRandomAcceptMessage(){
         var db = ['OK!', '&#10004', 'GREAT!'];
         return db[Math.floor(Math.random() * db.length)];
+    }
+
+    function setToken(token){
+        window.localStorage.setItem('token', token);
+        console.log('token set. ');
+
+
     }
 
 

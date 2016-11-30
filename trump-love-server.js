@@ -24,7 +24,7 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.2b';
+var serverVersion   = 'v0.0.2c';
 
 
 
@@ -100,7 +100,7 @@ app.use('/writedata', dataRoutes);
 
 // TEMP ROUTES
 app.get('/', function(req, res){
-    res.cookie('login_attempts', 0, {signed: true});
+    res.cookie('lgna', 0, {signed:true});
     res.render('login', {layout: 'super.handlebars'});
 });
 
@@ -156,8 +156,22 @@ app.get('/promises', function(req, res){
 
 // GET video page
 app.get('/video', function(req, res){
-    res.render('video', {status:'success', message: 'You\'re on the video page.'});
+
+    //TODO: REMOVE THIS, ADD to /VM/
+    jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
+        if(err) {
+            console.log(chalk.red(err));
+            //res.render('login', {layout: 'super.handlebars'});    //redirects to login page
+            res.send('Token expired! <a href="/">Login again </a>');
+        } else {
+            console.log(decoded);
+            res.render('video', {status:'success', message: 'You\'re on the video page.'});
+        }
+    });
+
+
 });
+
 // post data to /video
 app.post('/video', function(req, res){
     var statusObject = vdb.generateVideo(req.body.datum);
@@ -169,16 +183,26 @@ app.post('/video', function(req, res){
 // ============== AUTHENTICATE VIDEO MAKING ROUTES ============
 var videomakerRoutes = express.Router();
 
-
 // ---- default / login -----
 videomakerRoutes.get('/', function(req, res){
     res.send('Hello! Welcome to the best API in Sol!');
 });
 
 // ---- video maker -----
-videomakerRoutes.get('/data', function(req, res){
-    res.json({data: ['data one', 'data two', 'data three', 'data four']});
 
+//TODO: EXTRACT THIS AND MAKE IT GLOBAL.
+videomakerRoutes.get('/data', function(req, res){
+
+    jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
+        if(err) {
+            console.log(chalk.red(err));
+            //res.render('login', {layout: 'super.handlebars'});    //redirects to login page
+            res.send('Token expired! <a href="/">Login again </a>');
+        } else {
+            console.log(decoded);
+            res.json({data: ['data one', 'data two', 'data three', 'data four']});
+        }
+    });
 });
 
 // ---- get authenticate page ----
@@ -190,14 +214,14 @@ videomakerRoutes.get('/authenticate', function(req, res){
 videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
     if(req.body.password == sdb.credentials.password) {
-        res.json({status: 'success', message: 'password is correct!'});
+
+        var token = createToken();
+        res.cookie('token', token, {signed:true} );
+        res.json({status: 'success', message: 'password is correct!', token: token});
     } else {
-
-
-
-        res.cookie('login_attempts', parseInt(req.signedCookies.login_attempts) + 1, {signed: true});
+        res.cookie('lgna', parseInt(req.signedCookies.lgna) + 1, {signed: true});
         res.json({status: 'fail', message: 'password is incorrect! Try again.'});
-        console.log('----- Attempts made: ' + req.signedCookies.login_attempts);
+        console.log('----- Attempts made: ' + req.signedCookies.lgna);
     }
 
 });
@@ -240,3 +264,23 @@ http.listen(3000, function(err){
         console.log(sdb.credentials);
     }
 });
+
+
+
+// ====================
+// temp functions =====
+// ====================
+
+
+//TODO: MOVE THIS OUT TO SIGNIN-DB
+function createToken(){
+
+    var secret = fs.readFileSync(process.cwd() + '/signingkey.txt');
+    var dataObject = {iss:'http://localhost', datum:'this is some data.'};
+
+    var token = jwt.sign(dataObject, secret, {expiresIn: '30s'});
+
+    console.log(token);
+
+    return token;
+}
