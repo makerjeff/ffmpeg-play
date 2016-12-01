@@ -100,56 +100,6 @@ module.exports.generateVideoSync2 = function(inputStr) {
 
 };
 
-//TODO: PROMISIFY THIS.
-module.exports.generateVideoSync = function(inputStr) {
-
-    // -------------------------
-    // PROCESS INPUT STRING ----
-    // -------------------------
-
-    var status;
-    var fileHash = shortid.generate();
-    var inputString = inputStr.toLowerCase();
-    var inputArray = inputString.split(' ');
-
-    // TODO: remove once verified sanitiation works.
-    if(inputArray[0] === '') {
-        inputArray.splice(0,1);
-    }
-
-    var filelistString = '';
-
-    inputArray.forEach(function(elem,ind,arr){
-        filelistString = filelistString + "file '" + configObject.libraryFolder + elem + ".mp4'\n";
-    });
-
-    // --------------------------
-    // WRITE FILE-LIST ----------
-    // --------------------------
-    fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
-    function(err){
-        if (err) {
-            console.log(chalk.red('Error writing text file.'));
-        } else {
-
-            //using a readFile to check if the file exists before concat.
-            fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
-                if(err){
-                    console.log('Error reading generated text file.');
-                } else {
-                    concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(inputString));
-                }
-            });
-        }
-    });
-
-    var dataObject = {
-        status: 'complete',
-        videoUrl: getFileName(inputString)
-    };
-
-    return dataObject;
-};
 
 /**
  * DEBUG: Get local directory.
