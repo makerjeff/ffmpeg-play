@@ -272,12 +272,12 @@ app.use(function(req,res,next){
 // ===== START SERVER =====
 // ========================
 
-http.listen(3000, function(err){
+http.listen(port, function(err){
     if(err) {
         console.log(Error('Error: ' + err));
     } else {
         clear();
-        console.log(chalk.green('Making America great again locally on port ' + port));
+        console.log(chalk.green('Making America great again on port ' + port));
         console.log(chalk.black.bgYellow(' Sever version: ' + serverVersion + ' '));
 
         // -- TEST --

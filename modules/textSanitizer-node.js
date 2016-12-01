@@ -8,6 +8,6 @@
  * @returns {string|XML}    Sanitized string output.
  */
 module.exports.getSanitizedString = function(dirtyString) {
-    return dirtyString.replace(/[0123456789!@#$%^&*()_+{}]/g, '').replace(/\s\s+/g, ' ').replace(/[ ]+$/g, '').replace(/^[ ]/g, '');
+    return dirtyString.replace(/[0123456789!@#$%^&*()_+{}]/g, '').replace(/\s\s+/g, ' ').replace(/[ ]+$/g, '').replace(/\[.*?\]/g,"").replace(/^[ ]/g, '');
 };
 

@@ -177,7 +177,7 @@ function concatVideoFile(relFilePath, outputFileName) {
             statusData = {status:'failed', payload: {message:'Video generation error on the server (video-db).'}}
         } else {
             if(stderr){
-                console.log('Successful Video Generation (but stderr)');
+                console.log(chalk.green('Successful Video Generation (but stderr)'));
                 statusData = {status: 'completed', payload: {message:'Video successfully generated on the server. (video-db)'}};
             } else {
                 console.log(stdout + ' Success Message.');
