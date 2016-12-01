@@ -11,6 +11,8 @@ const child_process = require('child_process');
 const shortid       = require('shortid');
 const junk          = require('junk');
 
+const textSanitizer = require('../modules/textSanitizer-node');
+
 // ============================
 // CONFIGURATION ==============
 // ============================
@@ -32,6 +34,44 @@ var configObject = {
 // EXPORT METHODS =============
 // ============================
 
+
+// NEW VERSION
+module.exports.generateVideoSync2 = function(inputStr) {
+    // -------------------------------
+    // PROCESS INPUT STRING ----------
+    // -------------------------------
+    var status;
+    var fileHash = shortid.generate();
+    var inputString = inputStr.toLowerCase();
+    var cleanText = textSanitizer.getSanitizedString(inputString);
+    var inputArray = cleanText.split(' ');
+    var filelistString = '';
+
+    //build filelist data
+    inputArray.forEach(function(elem, ind, arr){
+        filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
+    });
+
+    // -------------------------------
+    // WRITE FILE-LIST ---------------
+    // -------------------------------
+    fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
+    function (err) {
+        if(err) {
+            console.log(chalk.red('Error writing text file.'));
+        } else {
+            //use a readFile check before concat
+            fs.readFile(configObject.tempFolder + filehash + '.txt', function(err, data){
+                if(err){
+                    console.log(chalk.red('Error reading text file.'));
+                } else {
+                    concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
+                }
+            });
+        }
+    });
+};
+
 //TODO: PROMISIFY THIS.
 module.exports.generateVideoSync = function(inputStr) {
 
@@ -44,6 +84,7 @@ module.exports.generateVideoSync = function(inputStr) {
     var inputString = inputStr.toLowerCase();
     var inputArray = inputString.split(' ');
 
+    // TODO: remove once verified sanitiation works.
     if(inputArray[0] === '') {
         inputArray.splice(0,1);
     }
@@ -171,13 +212,17 @@ function concatVideoFile(relFilePath, outputFileName) {
  * @returns {string}    Returns a file name complete with .mp4 extension.
  */
 function getFileName(inputStr) {
-    var inputArray = inputStr.toLowerCase().split(' ');
 
-    if(inputArray[0] === '') {
-        inputArray.splice(0,1);
-    }
+    var cleanText = textSanitizer.getSanitizedString(inputStr);
+    var inputArray = cleanText.toLowerCase().split(' ');
 
     return inputArray.join('_') + '.mp4';
+}
+
+//check DB for available word.
+
+function checkWordAvailability(word) {
+    
 }
 
 

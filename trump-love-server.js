@@ -19,12 +19,13 @@ const cookieParser  = require('cookie-parser');
 const jwt           = require('jsonwebtoken');
 
 // custom modules
+const textSanitizer = require('./modules/textSanitizer-node');
 const db            = require('./models/log-db');
 const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.2d';
+var serverVersion   = 'v0.0.2e';
 var tokenLifespan   = '5m';
 
 
@@ -163,7 +164,7 @@ app.get('/video', function(req, res){
         if(err) {
             console.log(chalk.red(err));
             //res.render('login', {layout: 'super.handlebars'});    //redirects to login page
-            res.send('Token expired! <a href="/">Login again </a>');
+            res.send('Token expired! &nbsp; <b><a href="/"> LOGIN. </a></b>');
         } else {
             console.log(decoded);
             res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});

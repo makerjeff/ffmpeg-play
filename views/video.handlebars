@@ -59,7 +59,14 @@
     // startup
     window.addEventListener('load', function(e){
         console.log('Ready to make America great again.');
+    });
 
+    window.addEventListener('blur', function(e){
+        document.title = 'Hey come back!';
+    });
+
+    window.addEventListener('focus', function(e){
+        document.title = 'trump with love';
     });
 
 
@@ -112,7 +119,7 @@
         resultDiv.innerHTML = '';
 
         overlayGen.createWaitOverlay();
-        ajaxPath('/words', 'GET');
+        getWords();
     });
 
 
@@ -150,13 +157,15 @@
             var video = document.createElement('video');
             video.id = 'videoElement';
             video.src = '/videos/' + data.videoUrl;
-            video.preload = 'auto';
-            //video.autoPlay = true;
 
+            video.setAttribute('preload', true);
             video.setAttribute('autoplay', true);
             video.setAttribute('controls', true);
+
             //video.setAttribute('muted', true);    //for android mobile
+
             resultDiv.appendChild(video);
+
             video.addEventListener('canplaythrough', function(e){
                 this.play();
             });
@@ -175,17 +184,15 @@
 
     /**
      * Custom conditional AJAX method.
-     * @param path  Endpoint path.
-     * @param method    HTTP method.
      * @returns {*}     Returns a
      */
-    function ajaxPath(path, method) {
+    function getWords() {
 
         pingerTool.pingStart();
 
         $.ajax({
-            url: path,
-            type: method,
+            url: '/words',
+            type: 'GET',
             success: function(data, status, jqXHR){
 
                 updateResultDiv(resultDiv, data);
