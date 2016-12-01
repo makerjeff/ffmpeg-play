@@ -1,27 +1,32 @@
 .characterContainer {
+    //FLEX overrides the gaping space in SVGs.
+    display: flex;
+    flex-direction: row;
+
     position: fixed;
     bottom: 0;
     left: 0;
-
     padding: 0 0 0 10px;
-
     height: 100px;
     width: 100%;
-
     box-sizing: border-box;
-
     z-index: 200;
 }
 
 .characterRoot {
     position: relative;
     color: blue;
-
-    width: 30px;
+    width: 15px;
     height: 100px;
+    margin: 0 3px 0 3px;
 }
 
 .characterHead {
     fill: rgb(246, 220, 172);
+}
+
+.characterRootImgFix {
+    vertical-align: top;
+    transform-origin: 15px 50px;
 }
 

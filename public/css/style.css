@@ -125,6 +125,8 @@
   animation-duration: 0.25s; }
 
 .characterContainer {
+  display: flex;
+  flex-direction: row;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -137,11 +139,16 @@
 .characterRoot {
   position: relative;
   color: blue;
-  width: 30px;
-  height: 100px; }
+  width: 15px;
+  height: 100px;
+  margin: 0 3px 0 3px; }
 
 .characterHead {
   fill: #f6dcac; }
+
+.characterRootImgFix {
+  vertical-align: top;
+  transform-origin: 15px 50px; }
 
 html, body {
   width: 100%;
