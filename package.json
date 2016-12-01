@@ -18,10 +18,11 @@
     "express-handlebars": "latest",
     "ffmpeg": "latest",
     "figlet": "latest",
+    "jsonwebtoken": "latest",
     "junk": "latest",
     "mongoose": "latest",
     "node-uuid": "^1.4.7",
-    "shortid":"latest",
-    "jsonwebtoken":"latest"
+    "shortid": "latest",
+    "socket.io": "^1.7.1"
   }
 }

@@ -11,6 +11,7 @@
 <script src="/js/textSanitizer.js"></script>
 <script src="/js/overlayGen.js"></script>
 <script src="/js/videoGen.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 
 <!-- MAIN DIV -->
 <div class="container">
@@ -38,8 +39,7 @@
 
 
 <script>
-    var pingStart;
-    var pingEnd;
+    var socket = io();
 
     var resultDiv = document.getElementById('resultDiv');
     var form = document.getElementById('main-form');

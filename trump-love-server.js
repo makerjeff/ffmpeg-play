@@ -17,6 +17,7 @@ const hbsModule     = require('express-handlebars');
 const bodyParser    = require('body-parser');
 const cookieParser  = require('cookie-parser');
 const jwt           = require('jsonwebtoken');
+const io            = require('socket.io')(http);
 
 // custom modules
 const textSanitizer = require('./modules/textSanitizer-node');
@@ -27,6 +28,8 @@ const sdb           = require('./models/signin-db');
 
 var serverVersion   = 'v0.0.3b';
 var tokenLifespan   = '5m';
+
+var connectedClients = 0;
 
 
 
@@ -52,6 +55,15 @@ app.set('view engine', 'handlebars');
 
 // -- get user IP setup --
 app.enable('trust proxy');
+
+//enable socket.io
+io.on('connection', function(socket){
+    connectedClients++;
+    console.log(socket.id + ' connected. Total: ' + connectedClients);
+
+    //SOCKET events here.
+});
+
 
 
 
