@@ -8,3 +8,4 @@ _fileBackups/
 logger_data.txt
 password.txt
 signingkey.txt
+.DS_Store
