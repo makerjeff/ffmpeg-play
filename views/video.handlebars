@@ -92,15 +92,22 @@
                 // add to results div
                 resultDiv.innerHTML = stringData;
 
+                //put on the veil
                 overlayGen.removeWaitOverlay();
                 pingerTool.pingEnd();   //display end
 
+                //print data
                 console.log(data);
 
-                // if video is completed...
-                if(data.status == 'complete') {
-                    // create load video button, which will be replaced with auto-load in the future.
-                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                // ===== CHECK FOR STATUS =====
+                switch (data.status) {
+                    case 'completed': createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                        break;
+                    case 'failed': console.log('Video creation failed on the server.');
+                        break;
+                    case 'rejected': console.log('Video creation rejected, not all words available.');
+                        break;
+                    default: console.log(data.payload);
                 }
 
             },
@@ -156,7 +163,7 @@
             //TODO: make a function.
             var video = document.createElement('video');
             video.id = 'videoElement';
-            video.src = '/videos/' + data.videoUrl;
+            video.src = '/videos/' + data.payload.videoUrl;
 
             video.setAttribute('preload', true);
             video.setAttribute('autoplay', true);
@@ -239,15 +246,8 @@
             button.addEventListener('click', function(e){
                 textInput.value += ' ' + elem.split('.').shift();
             });
-
-            //li.appendChild(button);
-            //ul.appendChild(li);
-
             rDiv.appendChild(button);
-
         });
-
-        //rDiv.appendChild(ul);
     }
 
 

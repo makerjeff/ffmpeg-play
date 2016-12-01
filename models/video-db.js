@@ -67,11 +67,36 @@ module.exports.generateVideoSync2 = function(inputStr) {
         }
     });
 
-    return {
-        status: 'complete',
-        videoUrl: getFileName(inputString)
-    };
 
+    // TODO: continue working here tonight (NOV 30th 2016)
+    // =============================================================================================
+
+    //var dummyStatus = 'completed';
+
+
+    var outputStatus;
+    // status object
+    // available statuses 'completed', 'failed', 'rejected' (include a rejected payload), maybe move to error ##'s?
+
+
+    switch(dummyStatus) {
+        case 'completed':
+            outputStatus = {status: 'completed', payload: {videoUrl: getFileName(inputString)}};
+            break;
+        case 'failed':
+            outputStatus = {status: 'failed', payload: {errorObject: {data1: 'one', data2: 'two'}}};
+            break;
+        case 'rejected':
+            outputStatus = {status: 'rejected', payload: {rejectedArr: ['word1', 'word2', 'word3']}};
+            break;
+        default:
+            outputStatus = {nothing: 'Not implemented yet.'};
+
+    }
+
+    return outputStatus;
+
+    // ==============================================================================================
 
 };
 

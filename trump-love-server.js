@@ -25,7 +25,7 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.3';
+var serverVersion   = 'v0.0.3b';
 var tokenLifespan   = '5m';
 
 
