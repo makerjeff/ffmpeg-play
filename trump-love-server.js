@@ -25,7 +25,7 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.2e';
+var serverVersion   = 'v0.0.3';
 var tokenLifespan   = '5m';
 
 
@@ -176,7 +176,7 @@ app.get('/video', function(req, res){
 
 // post data to /video
 app.post('/video', function(req, res){
-    var statusObject = vdb.generateVideoSync(req.body.datum);
+    var statusObject = vdb.generateVideoSync2(req.body.datum);
     res.json(statusObject);
 });
 

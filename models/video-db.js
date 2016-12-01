@@ -25,12 +25,6 @@ var configObject = {
 };
 
 // ============================
-// RUNTIME ====================
-// ============================
-
-// NOT FOR MODULES
-
-// ============================
 // EXPORT METHODS =============
 // ============================
 
@@ -47,6 +41,8 @@ module.exports.generateVideoSync2 = function(inputStr) {
     var inputArray = cleanText.split(' ');
     var filelistString = '';
 
+    //TODO: CHECKWORDAVAILABILITY HERE.
+
     //build filelist data
     inputArray.forEach(function(elem, ind, arr){
         filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
@@ -61,7 +57,7 @@ module.exports.generateVideoSync2 = function(inputStr) {
             console.log(chalk.red('Error writing text file.'));
         } else {
             //use a readFile check before concat
-            fs.readFile(configObject.tempFolder + filehash + '.txt', function(err, data){
+            fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
                 if(err){
                     console.log(chalk.red('Error reading text file.'));
                 } else {
@@ -70,6 +66,13 @@ module.exports.generateVideoSync2 = function(inputStr) {
             });
         }
     });
+
+    return {
+        status: 'complete',
+        videoUrl: getFileName(inputString)
+    };
+
+
 };
 
 //TODO: PROMISIFY THIS.
@@ -221,9 +224,37 @@ function getFileName(inputStr) {
 
 //check DB for available word.
 
-function checkWordAvailability(word) {
-    
-}
 
+/**
+ * Compare two arrays and check for availability.
+ * @param inputArr  User input words array.
+ * @param library   Library array to compare to.
+ * @returns {{inputCount: *, libraryCount: *, rejectCount: Number, foundWords: Array, rejectedWords: Array}}    An object with information.
+ */
+function checkWordAvailability(inputArr, library) {
+
+    // found words
+    var foundArr = [];
+    // rejected words
+    var rejectedArr = [];
+    
+    inputArr.forEach(function(elem, ind, arr){
+        if(library.includes(elem)) {
+            foundArr.push(elem);
+        } else {
+            rejectedArr.push(elem);
+        }
+    });
+
+    // return data.
+    return {
+        inputCount: inputArr.length,
+        libraryCount: library.length,
+        rejectCount: rejectedArr.length,
+        foundWords: foundArr,
+        rejectedWords: rejectedArr
+    };
+
+}
 
 
