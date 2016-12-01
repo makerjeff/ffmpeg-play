@@ -26,8 +26,8 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.3b';
-var tokenLifespan   = '5m';
+var serverVersion   = 'v0.0.3c';
+var tokenLifespan   = '1h';
 
 var connectedClients = 0;
 
@@ -59,9 +59,15 @@ app.enable('trust proxy');
 //enable socket.io
 io.on('connection', function(socket){
     connectedClients++;
-    console.log(socket.id + ' connected. Total: ' + connectedClients);
+    console.log(chalk.blue(socket.id) + ' connected. Total: ' + connectedClients);
+    io.emit('userCount', connectedClients);
 
     //SOCKET events here.
+    socket.on('disconnect', function(){
+        connectedClients--;
+        console.log(chalk.red(socket.id) + ' disconnected. Total: ' + connectedClients);
+        io.emit('userCount', connectedClients);
+    });
 });
 
 
@@ -276,6 +282,7 @@ http.listen(3000, function(err){
 
         // -- TEST --
         console.log(sdb.credentials);
+        console.log('Token lifespan: ' + tokenLifespan);
     }
 });
 

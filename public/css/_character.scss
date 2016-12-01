@@ -1,0 +1,27 @@
+.characterContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    padding: 0 0 0 10px;
+
+    height: 100px;
+    width: 100%;
+
+    box-sizing: border-box;
+
+    z-index: 200;
+}
+
+.characterRoot {
+    position: relative;
+    color: blue;
+
+    width: 30px;
+    height: 100px;
+}
+
+.characterHead {
+    fill: rgb(246, 220, 172);
+}
+

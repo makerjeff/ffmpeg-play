@@ -1,8 +1,8 @@
-<h3>(video) (post to '/video')</h3>
+<h3>(video) (post to '/video') </h3>
 
 {{! ---- DEBUG ---- }}
 {{#if server}}
-    <div class="serverVersion">{{server}}</div>
+    <div class="serverVersion">{{server}} <span id="userCount" class="label label-primary thinLabel">0 users online</span></div>
 {{/if}}
 
 
@@ -12,6 +12,45 @@
 <script src="/js/overlayGen.js"></script>
 <script src="/js/videoGen.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+
+
+<!-- number of users indicator (to fill in the room)-->
+<div class="characterContainer">
+
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 350.2 882.3" style="enable-background:new 0 0 350.2 882.3;" xml:space="preserve" class="characterRoot">
+        <circle id="HEAD" class="characterHead" cx="175.1" cy="175.1" r="175.1"/>
+        <path id="BODY" d="M321.6,461.3c-1.4-54.2-58.4-69.4-70.8-69.4H99.4l0,0c-0.6,0-1.1,0-1.7,0c-12.4,0-69.4,15.3-70.8,69.4
+            c-1.4,54.2,0,187.4,0,187.4H62c0,0,0-140.6,0-174c0-32.9,19.1-44,35.7-44c0.5,0,1.1,0,1.7-0.1v112.1h151.4v-112
+            c16.6,0,35.7,11.1,35.7,44c0,33.4,0,174,0,174h35.1C321.6,648.7,323,515.4,321.6,461.3z"/>
+        <path id="LEGS" d="M99.4,526.7v355.6h56.3c-0.1-0.5-0.1-1.1-0.1-1.6v-217c0-6.6,5.4-12,12-12h15c6.6,0,12,5.4,12,12v217
+            c0,0.5-0.1,1.1-0.1,1.6h56.3V526.7H99.4z"/>
+    </svg>
+
+    <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 350.2 882.3" style="enable-background:new 0 0 350.2 882.3;" xml:space="preserve" class="characterRoot">
+        <circle id="HEAD" class="characterHead" cx="175.1" cy="175.1" r="175.1"/>
+        <path id="BODY" d="M321.6,461.3c-1.4-54.2-58.4-69.4-70.8-69.4H99.4l0,0c-0.6,0-1.1,0-1.7,0c-12.4,0-69.4,15.3-70.8,69.4
+            c-1.4,54.2,0,187.4,0,187.4H62c0,0,0-140.6,0-174c0-32.9,19.1-44,35.7-44c0.5,0,1.1,0,1.7-0.1v112.1h151.4v-112
+            c16.6,0,35.7,11.1,35.7,44c0,33.4,0,174,0,174h35.1C321.6,648.7,323,515.4,321.6,461.3z"/>
+        <path id="LEGS" d="M99.4,526.7v355.6h56.3c-0.1-0.5-0.1-1.1-0.1-1.6v-217c0-6.6,5.4-12,12-12h15c6.6,0,12,5.4,12,12v217
+            c0,0.5-0.1,1.1-0.1,1.6h56.3V526.7H99.4z"/>
+    </svg>
+
+    <!-- viewbox is required -->
+    <svg id="customLayer" class="characterRoot" viewBox="0 0 350.2 882.3">
+        <circle id="customHead" class="characterHead" cx="175.1" cy="175.1" r="175.1"/>
+        <path id="customBODY" d="M321.6,461.3c-1.4-54.2-58.4-69.4-70.8-69.4H99.4l0,0c-0.6,0-1.1,0-1.7,0c-12.4,0-69.4,15.3-70.8,69.4
+            c-1.4,54.2,0,187.4,0,187.4H62c0,0,0-140.6,0-174c0-32.9,19.1-44,35.7-44c0.5,0,1.1,0,1.7-0.1v112.1h151.4v-112
+            c16.6,0,35.7,11.1,35.7,44c0,33.4,0,174,0,174h35.1C321.6,648.7,323,515.4,321.6,461.3z"/>
+        <path id="customLEGS" d="M99.4,526.7v355.6h56.3c-0.1-0.5-0.1-1.1-0.1-1.6v-217c0-6.6,5.4-12,12-12h15c6.6,0,12,5.4,12,12v217
+            c0,0.5-0.1,1.1-0.1,1.6h56.3V526.7H99.4z"/>
+    </svg>
+
+
+
+</div>
+
 
 <!-- MAIN DIV -->
 <div class="container">
@@ -50,6 +89,9 @@
 
     var textInput = document.getElementById('input-text');
 
+    //socket.io user counter
+    var userCountIndicator = document.getElementById('userCount');
+
 
 
     // =========================
@@ -59,6 +101,7 @@
     // startup
     window.addEventListener('load', function(e){
         console.log('Ready to make America great again.');
+
     });
 
     window.addEventListener('blur', function(e){
@@ -68,6 +111,16 @@
     window.addEventListener('focus', function(e){
         document.title = 'trump with love';
     });
+
+    // ============ socket.io =============
+    socket.on('userCount', function(msg){
+        if (msg <= 1) {
+            userCountIndicator.innerHTML = msg + ' user online (you)';
+        } else {
+            userCountIndicator.innerHTML = msg + ' users online';
+        }
+    });
+    // ============ socket.io END =========
 
 
     form.addEventListener('submit', function(e){

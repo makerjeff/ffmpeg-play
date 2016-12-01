@@ -34,7 +34,7 @@ module.exports.generateVideoSync2 = function(inputStr) {
     // -------------------------------
     // PROCESS INPUT STRING ----------
     // -------------------------------
-    var status;
+    var tempStatus;
     var fileHash = shortid.generate();
     var inputString = inputStr.toLowerCase();
     var cleanText = textSanitizer.getSanitizedString(inputString);
@@ -61,7 +61,7 @@ module.exports.generateVideoSync2 = function(inputStr) {
                 if(err){
                     console.log(chalk.red('Error reading text file.'));
                 } else {
-                    concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
+                    tempStatus = concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
                 }
             });
         }
@@ -71,15 +71,16 @@ module.exports.generateVideoSync2 = function(inputStr) {
     // TODO: continue working here tonight (NOV 30th 2016)
     // =============================================================================================
 
-    //var dummyStatus = 'completed';
+    var dummyStatus = {status: 'completed', payload: {message: 'This is the payload inside the dummyStatus object.'}};
 
 
     var outputStatus;
     // status object
     // available statuses 'completed', 'failed', 'rejected' (include a rejected payload), maybe move to error ##'s?
+    // has corresponding listeners on client side.
 
 
-    switch(dummyStatus) {
+    switch(dummyStatus.status) {
         case 'completed':
             outputStatus = {status: 'completed', payload: {videoUrl: getFileName(inputString)}};
             break;
@@ -90,7 +91,7 @@ module.exports.generateVideoSync2 = function(inputStr) {
             outputStatus = {status: 'rejected', payload: {rejectedArr: ['word1', 'word2', 'word3']}};
             break;
         default:
-            outputStatus = {nothing: 'Not implemented yet.'};
+            outputStatus = {status: 'default', payload: {mesage: 'Not getting the proper status.'}};
 
     }
 
@@ -160,6 +161,7 @@ module.exports.getAvailableVideosSync = function() {
  * @param outputFileName    Output file name.
  */
 function concatVideoFile(relFilePath, outputFileName) {
+    //TODO: return some kind of info to pass on to the front end.
 
     var statusData;
 
@@ -172,15 +174,18 @@ function concatVideoFile(relFilePath, outputFileName) {
     function(err, stdout, stderr){
         if(err) {
             console.log(chalk.red('Error generating video file. ' +  err));
+            statusData = {status:'failed', payload: {message:'Video generation error on the server (video-db).'}}
         } else {
             if(stderr){
                 console.log('Successful Video Generation (but stderr)');
+                statusData = {status: 'completed', payload: {message:'Video successfully generated on the server. (video-db)'}};
             } else {
                 console.log(stdout + ' Success Message.');
             }
         }
     });
 
+    return statusData;
 
 }
 
