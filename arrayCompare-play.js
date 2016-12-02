@@ -29,7 +29,7 @@ cleandata.forEach(function(elem, ind, arr){
 });
 
 //console.log(checkWordAvailability(dummyArray, noExtData));
-console.log(checkWordAvailability(dummyArray, noExtData).rejectedWords);
+console.log(checkWordAvailability(dummyArray, noExtData));
 
 // =================
 // FUNCTIONS =======

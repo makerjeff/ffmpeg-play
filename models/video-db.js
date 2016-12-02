@@ -24,10 +24,14 @@ var configObject = {
     outputExtension: '.mp4'
 };
 
+//TODO: TEMP
+var wordLibrary = getWordLibrary();
+
+
+
 // ============================
 // EXPORT METHODS =============
 // ============================
-
 
 // NEW VERSION
 module.exports.generateVideoSync2 = function(inputStr) {
@@ -41,61 +45,99 @@ module.exports.generateVideoSync2 = function(inputStr) {
     var inputArray = cleanText.split(' ');
     var filelistString = '';
 
+    var dummyStatus;
+
     //TODO: CHECKWORDAVAILABILITY HERE.
+    var yayOrNay = checkWordAvailability(inputArray, wordLibrary);
+    console.log(yayOrNay);
 
-    //build filelist data
-    inputArray.forEach(function(elem, ind, arr){
-        filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
-    });
+    // ---------------------------------------------------------
+    //manual debug switch, 0=completed, 1=failed, 2=rejected ---
+    var manualSwitch = 0;
 
-    // -------------------------------
-    // WRITE FILE-LIST ---------------
-    // -------------------------------
-    fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
-    function (err) {
-        if(err) {
-            console.log(chalk.red('Error writing text file.'));
-        } else {
-            //use a readFile check before concat
-            fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
-                if(err){
-                    console.log(chalk.red('Error reading text file.'));
-                } else {
-                    tempStatus = concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
-                }
-            });
-        }
-    });
-
-
-    // TODO: continue working here tonight (NOV 30th 2016)
-    // =============================================================================================
-
-    var dummyStatus = {status: 'completed', payload: {message: 'This is the payload inside the dummyStatus object.'}};
-
-
-    var outputStatus;
-    // status object
-    // available statuses 'completed', 'failed', 'rejected' (include a rejected payload), maybe move to error ##'s?
-    // has corresponding listeners on client side.
-
-
-    switch(dummyStatus.status) {
-        case 'completed':
-            outputStatus = {status: 'completed', payload: {videoUrl: getFileName(inputString)}};
+    switch (manualSwitch) {
+        case 0:
+            console.log(chalk.green('MS: completed'));
+            dummyStatus = {status: 'completed', payload: 'MS: a_video_url.mp4'};
             break;
-        case 'failed':
-            outputStatus = {status: 'failed', payload: {errorObject: {data1: 'one', data2: 'two'}}};
+        case 1:
+            console.log(chalk.red('MS: failed'));
+            dummyStatus = {status: 'failed', payload: 'MS: Failed error message.'};
             break;
-        case 'rejected':
-            outputStatus = {status: 'rejected', payload: {rejectedArr: ['word1', 'word2', 'word3']}};
+        case 2:
+            console.log(chalk.yellow('MS: rejected'));
+            dummyStatus = {status: 'rejected', payload: "MS: rejectedArray:['array', 'of', 'rejected','words']"};
             break;
         default:
-            outputStatus = {status: 'default', payload: {mesage: 'Not getting the proper status.'}};
-
+            console.log(chalk.blue('MS: defaulted'));
+            dummyStatus = {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
     }
 
-    return outputStatus;
+    // manual debug switch -------------------------------------
+    // ---------------------------------------------------------
+
+    // ------------------------------
+    // BUILD FILE-LIST ------------V-
+
+    // inputArray.forEach(function(elem, ind, arr){
+    //     filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
+    // });
+
+    // BUILD FILE-LIST ------------^-
+    //-------------------------------
+
+    // -------------------------------
+    // WRITE FILE-LIST -------------v-
+
+    // fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
+    // function (err) {
+    //     if(err) {
+    //         console.log(chalk.red('Error writing text file.'));
+    //     } else {
+    //         //use a readFile check before concat
+    //         fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
+    //             if(err){
+    //                 console.log(chalk.red('Error reading text file.'));
+    //             } else {
+    //                 tempStatus = concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
+    //             }
+    //         });
+    //     }
+    // });
+    // WRITE FILE-LIST --------------^-
+    // --------------------------------
+
+
+    // TODO: continue working here tonight (NOV 30th 2016), Encapsulate Message Handling to function.
+    // =============================================================================================
+
+    // -----------------------------
+    // OUTPUT STATUS -------------V-
+
+    // var outputStatus;
+    // // status object
+    // // available statuses 'completed', 'failed', 'rejected' (include a rejected payload), maybe move to error ##'s?
+    // // has corresponding listeners on client side.
+    //
+    // switch(dummyStatus.status) {
+    //     case 'completed':
+    //         outputStatus = {status: 'completed', payload: {videoUrl: getFileName(inputString)}};
+    //         break;
+    //     case 'failed':
+    //         outputStatus = {status: 'failed', payload: {errorObject: {data1: 'one', data2: 'two'}}};
+    //         break;
+    //     case 'rejected':
+    //         outputStatus = dummyStatus;
+    //         break;
+    //     default:
+    //         outputStatus = {status: 'default', payload: {mesage: 'Not getting the proper status.'}};
+    // }
+    //
+    // return outputStatus;
+
+    return dummyStatus;
+    // OUTPUT STATUS ----------------^-
+    // --------------------------------
 
     // ==============================================================================================
 
@@ -168,8 +210,7 @@ function concatVideoFile(relFilePath, outputFileName) {
     //debug
     console.log(relFilePath);
     console.log(outputFileName);
-
-
+    
     child_process.exec('ffmpeg -y -f concat -safe 0 -i ' + relFilePath + ' -c copy ' + outputFileName, {encoding: 'utf8'},
     function(err, stdout, stderr){
         if(err) {
@@ -185,8 +226,7 @@ function concatVideoFile(relFilePath, outputFileName) {
         }
     });
 
-    return statusData;
-
+    return statusData;      // << RETURN to function that called.
 }
 
 /**
@@ -202,9 +242,6 @@ function getFileName(inputStr) {
     return inputArray.join('_') + '.mp4';
 }
 
-//check DB for available word.
-
-
 /**
  * Compare two arrays and check for availability.
  * @param inputArr  User input words array.
@@ -217,6 +254,9 @@ function checkWordAvailability(inputArr, library) {
     var foundArr = [];
     // rejected words
     var rejectedArr = [];
+
+    // info check
+    console.log(library);
     
     inputArr.forEach(function(elem, ind, arr){
         if(library.includes(elem)) {
@@ -227,7 +267,8 @@ function checkWordAvailability(inputArr, library) {
     });
 
     // return data.
-    return {
+
+    var returnObject = {
         inputCount: inputArr.length,
         libraryCount: library.length,
         rejectCount: rejectedArr.length,
@@ -235,6 +276,19 @@ function checkWordAvailability(inputArr, library) {
         rejectedWords: rejectedArr
     };
 
+    //console.log(returnObject);
+
+    return returnObject;
+}
+
+/**
+ * Get the word library, returned with a clean version without DS_Store.
+ * @returns {*} Clean array.
+ */
+function getWordLibrary(){
+    var data = fs.readdirSync(configObject.libraryFolder, {encoding: 'utf8'});
+    //console.log(data.filter(junk.not));
+    return data.filter(junk.not);
 }
 
 

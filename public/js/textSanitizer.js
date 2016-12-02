@@ -10,7 +10,8 @@ var textSanitizer = {
      * @returns {string|XML}    Cleaned output string.
      */
     getSanitizedString: function(inputStr){
-        return inputStr.replace(/[0123456789!@#$%^&*()_+{}]/g, '').replace(/\s\s+/g, ' ').replace(/[ ]+$/g, '').replace(/\[.*?\]/g,"").replace(/^[ ]/g, '');
+        // basic chars, multi-spaces, brackets, trailing spaces, leading spaces
+        return inputStr.replace(/[0123456789!@#$%^&*()_+{}]/g, '').replace(/\[.*?\]/g,"").replace(/\s\s+/g, ' ').replace(/[ ]+$/g, '').replace(/^[ ]/g, '');
     }
 };
 
