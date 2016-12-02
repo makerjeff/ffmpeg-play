@@ -32,7 +32,6 @@ var tokenLifespan   = '1h';
 var connectedClients = 0;
 
 
-
 // =========================
 // CONFIGURATION ===========
 // =========================
@@ -76,9 +75,10 @@ io.on('connection', function(socket){
 
 // MIDDLEWARE
 
-// app.use(function(req, res, next){
-//     res.header("Access-Control-Allow-Origin", "localhost");
-// });
+app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "http://localhost");
+    next();
+});
 
 // --- enable body parser ---
 app.use(bodyParser.json());
@@ -104,10 +104,6 @@ app.use(function(req,res,next){
     next();
 });
 
-// --- check for token ----
-
-
-
 // ==================
 // ROUTES ===========
 // ==================
@@ -116,9 +112,8 @@ app.use(function(req,res,next){
 const dataRoutes = require('./routes/write-data');
 app.use('/writedata', dataRoutes);
 
-
-
-
+const debugRoutes = require('./routes/debug-routes');
+app.use('/debug', debugRoutes);
 
 
 
@@ -133,19 +128,6 @@ app.get('/login', function(req, res){
     res.render('login', {layout: 'super.handlebars'});
 });
 
-// ------- experimental front-end checking ---------
-app.get('/custom', function(req, res){
-    res.render('customvalidity', {data: 'DEBUG: You\'re on the custom validity page.'});
-});
-
-app.get('/logger', function(req, res){
-    res.render('logger', {data: 'some data.'});
-});
-
-app.get('/box2d', function(req, res){
-    res.render('box2d', {data: 'Box2D experiments.'});
-});
-
 // ---- API Routes ----
 
 // get word list
@@ -155,23 +137,6 @@ app.get('/words', function(req,res){
     console.log('words grabbed.');
     res.header("Content-Type","text/plain");
     res.send(data);
-});
-
-// ---- first manual test log route ----
-// post data to the same page getter route.
-app.post('/logger', function(req,res){
-    db.writeData(req.body.datum);
-    res.json({status: 'completed', data: 'data you posted: ' + req.body.datum});
-});
-
-// dummy facebook login data
-app.get('/facebook', function(req, res){
-    res.render('facebook');
-});
-
-//frontend promise play
-app.get('/promises', function(req, res){
-    res.render('promises');
 });
 
 
@@ -192,6 +157,7 @@ app.get('/video', function(req, res){
             res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
         }
     });
+
 });
 
 // post data to /video
@@ -203,14 +169,11 @@ app.post('/video', function(req, res){
             res.send('Token expired! &nbsp; <b><a href="/">LOGIN. </a></b>');
         } else {
             console.log(decoded);
-            res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
-
-
+            var statusObject = vdb.generateVideoSync2(req.body.datum);
+            res.json(statusObject);
         }
     });
 
-    var statusObject = vdb.generateVideoSync2(req.body.datum);
-    res.json(statusObject);
 });
 
 
@@ -300,9 +263,3 @@ http.listen(port, function(err){
         console.log('Token lifespan: ' + tokenLifespan);
     }
 });
-
-
-
-// ====================
-// temp functions =====
-// ====================
