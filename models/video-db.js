@@ -24,9 +24,8 @@ var configObject = {
     outputExtension: '.mp4'
 };
 
-//TODO: TEMP
+//TODO: THIS ISNT RETURNING THE LIBRARY
 var wordLibrary = getWordLibrary();
-
 
 
 // ============================
@@ -51,30 +50,6 @@ module.exports.generateVideoSync2 = function(inputStr) {
     var yayOrNay = checkWordAvailability(inputArray, wordLibrary);
     console.log(yayOrNay);
 
-    // ---------------------------------------------------------
-    //manual debug switch, 0=completed, 1=failed, 2=rejected ---
-    var manualSwitch = 0;
-
-    switch (manualSwitch) {
-        case 0:
-            console.log(chalk.green('MS: completed'));
-            dummyStatus = {status: 'completed', payload: 'MS: a_video_url.mp4'};
-            break;
-        case 1:
-            console.log(chalk.red('MS: failed'));
-            dummyStatus = {status: 'failed', payload: 'MS: Failed error message.'};
-            break;
-        case 2:
-            console.log(chalk.yellow('MS: rejected'));
-            dummyStatus = {status: 'rejected', payload: "MS: rejectedArray:['array', 'of', 'rejected','words']"};
-            break;
-        default:
-            console.log(chalk.blue('MS: defaulted'));
-            dummyStatus = {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
-    }
-
-    // manual debug switch -------------------------------------
-    // ---------------------------------------------------------
 
     // ------------------------------
     // BUILD FILE-LIST ------------V-
@@ -114,26 +89,35 @@ module.exports.generateVideoSync2 = function(inputStr) {
     // -----------------------------
     // OUTPUT STATUS -------------V-
 
-    // var outputStatus;
-    // // status object
-    // // available statuses 'completed', 'failed', 'rejected' (include a rejected payload), maybe move to error ##'s?
-    // // has corresponding listeners on client side.
-    //
-    // switch(dummyStatus.status) {
-    //     case 'completed':
-    //         outputStatus = {status: 'completed', payload: {videoUrl: getFileName(inputString)}};
-    //         break;
-    //     case 'failed':
-    //         outputStatus = {status: 'failed', payload: {errorObject: {data1: 'one', data2: 'two'}}};
-    //         break;
-    //     case 'rejected':
-    //         outputStatus = dummyStatus;
-    //         break;
-    //     default:
-    //         outputStatus = {status: 'default', payload: {mesage: 'Not getting the proper status.'}};
-    // }
-    //
-    // return outputStatus;
+
+    // ---------------------------------------------------------
+    // auto switch: 0=completed, 1=failed, 2=rejected ---
+
+    var autoSwitch;
+
+    if (yayOrNay.rejectCount > 0) {
+        autoSwitch = 2;
+    } else {
+        autoSwitch = 0;
+    }
+
+    switch (autoSwitch) {
+        case 0:
+            console.log(chalk.green('MS: completed'));
+            dummyStatus = {status: 'completed', payload: 'MS: a_video_url.mp4'};
+            break;
+        case 1:
+            console.log(chalk.red('MS: failed'));
+            dummyStatus = {status: 'failed', payload: 'MS: Failed error message.'};
+            break;
+        case 2:
+            console.log(chalk.yellow('MS: rejected'));
+            dummyStatus = {status: 'rejected', payload: yayOrNay };
+            break;
+        default:
+            console.log(chalk.blue('MS: defaulted'));
+            dummyStatus = {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
+    }
 
     return dummyStatus;
     // OUTPUT STATUS ----------------^-
@@ -256,7 +240,7 @@ function checkWordAvailability(inputArr, library) {
     var rejectedArr = [];
 
     // info check
-    console.log(library);
+    //console.log(library);
     
     inputArr.forEach(function(elem, ind, arr){
         if(library.includes(elem)) {
@@ -282,13 +266,21 @@ function checkWordAvailability(inputArr, library) {
 }
 
 /**
- * Get the word library, returned with a clean version without DS_Store.
+ * Get the word library, returned with a clean version without DS_Store. or extensions.
  * @returns {*} Clean array.
  */
 function getWordLibrary(){
-    var data = fs.readdirSync(configObject.libraryFolder, {encoding: 'utf8'});
-    //console.log(data.filter(junk.not));
-    return data.filter(junk.not);
+
+    var inputArr = fs.readdirSync(configObject.libraryFolder, {encoding: 'utf8'}).filter(junk.not);
+    var outputArray = [];
+
+    // strip extensions
+    inputArr.forEach(function(elem, ind, arr){
+        outputArray.push(elem.split('.').shift());
+    });
+
+    // output
+    return outputArray;
 }
 
 
