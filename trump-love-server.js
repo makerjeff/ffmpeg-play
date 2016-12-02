@@ -26,7 +26,7 @@ const vdb           = require('./models/video-db');
 const trumpQuotes   = require('./models/trumpQuotes-db');
 const sdb           = require('./models/signin-db');
 
-var serverVersion   = 'v0.0.4';
+var serverVersion   = 'v0.0.4b';
 var tokenLifespan   = '1h';
 
 var connectedClients = 0;
@@ -75,6 +75,10 @@ io.on('connection', function(socket){
 
 
 // MIDDLEWARE
+
+// app.use(function(req, res, next){
+//     res.header("Access-Control-Allow-Origin", "localhost");
+// });
 
 // --- enable body parser ---
 app.use(bodyParser.json());
@@ -188,12 +192,23 @@ app.get('/video', function(req, res){
             res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
         }
     });
-
-
 });
 
 // post data to /video
 app.post('/video', function(req, res){
+
+    jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
+        if(err) {
+            console.log(chalk.red(err));
+            res.send('Token expired! &nbsp; <b><a href="/">LOGIN. </a></b>');
+        } else {
+            console.log(decoded);
+            res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
+
+
+        }
+    });
+
     var statusObject = vdb.generateVideoSync2(req.body.datum);
     res.json(statusObject);
 });

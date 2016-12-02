@@ -10,13 +10,21 @@ var passwordFile = fs.readFileSync(process.cwd() + '/password.txt', {encoding:'u
 var signingKey = fs.readFileSync(process.cwd() + '/signingkey.txt', {encoding: 'utf8'});
 var dataObject = {iss:'http://localhost', datum:'this is some data.'};
 
-
+/**
+ * Credentials Object.
+ * @type {{secret: string, password, signingkey}}
+ */
 module.exports.credentials = {
     'secret':'thisisasecret',
     'password':passwordFile,
     'signingkey': signingKey
 };
 
+/**
+ * Create a Token.
+ * @param exp   Expiration duration.
+ * @returns {*} The token.
+ */
 module.exports.createToken = function(exp){
 
     var secret = fs.readFileSync(process.cwd() + '/signingkey.txt');
