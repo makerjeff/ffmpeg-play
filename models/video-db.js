@@ -32,7 +32,11 @@ var wordLibrary = getWordLibrary();
 // EXPORT METHODS =============
 // ============================
 
-// NEW VERSION
+/**
+ * Generate video Sync 2.
+ * @param inputStr  Input a string to be processed.
+ * @returns {*} return a status object.
+ */
 module.exports.generateVideoSync2 = function(inputStr) {
     // -------------------------------
     // PROCESS INPUT STRING ----------
@@ -46,62 +50,54 @@ module.exports.generateVideoSync2 = function(inputStr) {
 
     var dummyStatus;
 
+    // ---------------------------------------------------------
+    // auto switch: 0=completed, 1=failed, 2=rejected ---
+    var outputSwitch;
+
     //TODO: CHECKWORDAVAILABILITY HERE.
     var yayOrNay = checkWordAvailability(inputArray, wordLibrary);
     console.log(yayOrNay);
 
+    if (yayOrNay.rejectCount > 0) {
+        outputSwitch = 1;   //rejected
+    } else {
+        //TODO: outputSwitch = 0 here
 
-    // ------------------------------
-    // BUILD FILE-LIST ------------V-
+        outputSwitch = 0;
 
-    // inputArray.forEach(function(elem, ind, arr){
-    //     filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
-    // });
+        // --- build filelist file ---
+        inputArray.forEach(function(elem, ind, arr){
+            filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
+        });
+        // -------------------------------
+        // WRITE FILE-LIST -------------v-
 
-    // BUILD FILE-LIST ------------^-
-    //-------------------------------
+        fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
+            function (err) {
+                if(err) {
+                    console.log(chalk.red('Error writing text file.'));
+                } else {
 
-    // -------------------------------
-    // WRITE FILE-LIST -------------v-
-
-    // fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
-    // function (err) {
-    //     if(err) {
-    //         console.log(chalk.red('Error writing text file.'));
-    //     } else {
-    //         //use a readFile check before concat
-    //         fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
-    //             if(err){
-    //                 console.log(chalk.red('Error reading text file.'));
-    //             } else {
-    //                 tempStatus = concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
-    //             }
-    //         });
-    //     }
-    // });
-    // WRITE FILE-LIST --------------^-
-    // --------------------------------
-
-
-    // TODO: continue working here tonight (NOV 30th 2016), Encapsulate Message Handling to function.
-    // =============================================================================================
+                    //use a readFile check before concat
+                    fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
+                        if(err){
+                            console.log(chalk.red('Error reading text file.'));
+                        } else {
+                            concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
+                        }
+                    });
+                }
+            });
+        // WRITE FILE-LIST --------------^-
+        // --------------------------------
+    }
 
     // -----------------------------
     // OUTPUT STATUS -------------V-
 
+    console.log('outputSwitch: ' + outputSwitch);
 
-    // ---------------------------------------------------------
-    // auto switch: 0=completed, 1=failed, 2=rejected ---
-
-    var autoSwitch;
-
-    if (yayOrNay.rejectCount > 0) {
-        autoSwitch = 2;
-    } else {
-        autoSwitch = 0;
-    }
-
-    switch (autoSwitch) {
+    switch (outputSwitch) {
         case 0:
             console.log(chalk.green('MS: completed'));
             dummyStatus = {status: 'completed', payload: 'MS: a_video_url.mp4'};
@@ -187,7 +183,6 @@ module.exports.getAvailableVideosSync = function() {
  * @param outputFileName    Output file name.
  */
 function concatVideoFile(relFilePath, outputFileName) {
-    //TODO: return some kind of info to pass on to the front end.
 
     var statusData;
 
@@ -234,14 +229,10 @@ function getFileName(inputStr) {
  */
 function checkWordAvailability(inputArr, library) {
 
-    // found words
-    var foundArr = [];
-    // rejected words
-    var rejectedArr = [];
+    var foundArr = [];          // found words array
+    var rejectedArr = [];       // rejected words array
 
-    // info check
-    //console.log(library);
-    
+    // sort through input text.
     inputArr.forEach(function(elem, ind, arr){
         if(library.includes(elem)) {
             foundArr.push(elem);
@@ -250,19 +241,13 @@ function checkWordAvailability(inputArr, library) {
         }
     });
 
-    // return data.
-
-    var returnObject = {
+    return {
         inputCount: inputArr.length,
         libraryCount: library.length,
         rejectCount: rejectedArr.length,
         foundWords: foundArr,
         rejectedWords: rejectedArr
-    };
-
-    //console.log(returnObject);
-
-    return returnObject;
+    }
 }
 
 /**
