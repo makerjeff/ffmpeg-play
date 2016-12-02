@@ -6,39 +6,39 @@
 // ========================
 // MODULES ================
 // ========================
-const express       = require('express');
-const app           = express();
-const http          = require('http').Server(app);
-const chalk         = require('chalk');
-const clear         = require('clear');
-const fs            = require('fs');
-const child_process = require('child_process');
-const hbsModule     = require('express-handlebars');
-const bodyParser    = require('body-parser');
-const cookieParser  = require('cookie-parser');
-const jwt           = require('jsonwebtoken');
-const io            = require('socket.io')(http);
+const express           = require('express');
+const app               = express();
+const http              = require('http').Server(app);
+const chalk             = require('chalk');
+const clear             = require('clear');
+const fs                = require('fs');
+const child_process     = require('child_process');
+const hbsModule         = require('express-handlebars');
+const bodyParser        = require('body-parser');
+const cookieParser      = require('cookie-parser');
+const jwt               = require('jsonwebtoken');
+const io                = require('socket.io')(http);
 
 // custom modules
-const textSanitizer = require('./modules/textSanitizer-node');
-const db            = require('./models/log-db');
-const vdb           = require('./models/video-db');
-const trumpQuotes   = require('./models/trumpQuotes-db');
-const sdb           = require('./models/signin-db');
-
-var serverVersion   = 'v0.0.4b';
-var tokenLifespan   = '1h';
-
-var connectedClients = 0;
+const textSanitizer     = require('./modules/textSanitizer-node');
+const db                = require('./models/log-db');
+const vdb               = require('./models/video-db');
+const trumpQuotes       = require('./models/trumpQuotes-db');
+const sdb               = require('./models/signin-db');
 
 
 // =========================
 // CONFIGURATION ===========
 // =========================
-const port          = process.env.PORT || 3000;
+var serverVersion       = 'v0.0.4b';
+var tokenLifespan       = '1h';
+
+var connectedClients    = 0;
+
+const port              = process.env.PORT || 3000;
 
 // -- handlebars setup --
-const handlebars    = hbsModule.create({
+const handlebars        = hbsModule.create({
     defaultLayout: 'main',
     helpers: {
         section: function(name, options) {
@@ -55,7 +55,7 @@ app.set('view engine', 'handlebars');
 // -- get user IP setup --
 app.enable('trust proxy');
 
-//enable socket.io
+//-- enable socket.io --
 io.on('connection', function(socket){
     connectedClients++;
     console.log(chalk.blue(socket.id) + ' connected. Total: ' + connectedClients);
@@ -70,11 +70,11 @@ io.on('connection', function(socket){
 });
 
 
+// ====================
+// MIDDLEWARE =========
+// ====================
 
-
-
-// MIDDLEWARE
-
+//only allow local host (for now, until NGINX is in place)
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "http://localhost");
     next();
@@ -84,16 +84,17 @@ app.use(function(req, res, next){
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+// --- enable cookie parser ---
 app.use(cookieParser('cookieparserkey'));    //add in params if signed.
 
 // --- header information ---
-
 app.use(function(req,res,next){
     res.setHeader('X-Powered-By', trumpQuotes.getTrumpQuote() + ' ' + serverVersion);
     next();
 });
 
 // --- basic logger ---
+// TODO: switch to Morgan, or encapsulate into module
 app.use(function(req,res,next){
     console.log(new Date() + ' ' + req.method + ' ' + req.url + ' ');
 
@@ -157,7 +158,6 @@ app.get('/video', function(req, res){
             res.render('video', {status:'success', message: 'You\'re on the video page.', server: serverVersion});
         }
     });
-
 });
 
 // post data to /video
@@ -186,9 +186,9 @@ videomakerRoutes.get('/', function(req, res){
     res.send('Hello! Welcome to the best API in Sol!');
 });
 
-// ---- video maker -----
+// --- video maker ---
 
-//TODO: EXTRACT THIS AND MAKE IT GLOBAL.
+//TODO: EXTRACT AUTH and make it GLOBAL.
 videomakerRoutes.get('/data', function(req, res){
 
     jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
@@ -203,12 +203,12 @@ videomakerRoutes.get('/data', function(req, res){
     });
 });
 
-// ---- get authenticate page ----
+// --- get authenticate page --- TODO: check for usage, if not in use, delete.
 videomakerRoutes.get('/authenticate', function(req, res){
     res.render('login', {layout: 'super.handlebars'});
 });
 
-// ---- authenticate ----
+// --- authenticate ---
 videomakerRoutes.post('/authenticate', function(req,res){
     // check credentials
     if(req.body.password == sdb.credentials.password) {
@@ -225,7 +225,6 @@ videomakerRoutes.post('/authenticate', function(req,res){
 
 // activate routes
 app.use('/vm', videomakerRoutes);
-
 
 
 // ========================

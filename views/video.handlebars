@@ -14,7 +14,6 @@
 <script src="/js/charCreator.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
-
 <!-- number of users indicator (to fill in the room)-->
 <div class="characterContainer"> </div>
 
@@ -28,7 +27,6 @@
             <input type="text" class="form-control" id="input-text" name="input_data" required autocomplete="off" autofocus maxlength="200">
 
         </div>
-
         <button type="submit" alt="Submit" class="btn btn-default pull-right">Make Video</button> <br>
     </form>
 
@@ -42,22 +40,14 @@
     <div id="resultDiv"></div>
 </div>
 
-
-
 <script>
-    var socket = io();
-
-    var resultDiv = document.getElementById('resultDiv');
-    var form = document.getElementById('main-form');
-    var wordListButton = document.getElementById('wordListButton');
-
-    //create loadVideoButton on the fly
-    //var loadVideoButton = document.getElementById('loadVideoButton');
-
-    var textInput = document.getElementById('input-text');
-
-    //socket.io user counter
-    var userCountIndicator = document.getElementById('userCount');
+    // grab all elements
+    var socket = io();                                                  //socket.io, initiated!
+    var resultDiv = document.getElementById('resultDiv');               //DEBUG multipurpose stage.
+    var form = document.getElementById('main-form');                    //main submit form, may use a custom textbox instead.
+    var wordListButton = document.getElementById('wordListButton');     //gets word list from server, make auto.
+    var textInput = document.getElementById('input-text');              //main form input field
+    var userCountIndicator = document.getElementById('userCount');      //socket.io user counter area
 
 
 
@@ -70,13 +60,14 @@
         console.log('Ready to make America great again.');
         //charCreator.createChar();
         charCreator.createImgChar(0);
-
     });
 
+    // clicking elsewhere
     window.addEventListener('blur', function(e){
         document.title = 'Hey come back!';
     });
 
+    // back to page
     window.addEventListener('focus', function(e){
         document.title = 'trump with love';
     });
@@ -91,39 +82,35 @@
             userCountIndicator.innerHTML = msg + ' users online';
         }
     });
-    // ============ socket.io END =========
 
-
+    // ============ MAIN FORM SUBMISSION ============
     form.addEventListener('submit', function(e){
-        overlayGen.createWaitOverlay();
-        pingerTool.pingStart(); // start ping
+        overlayGen.createWaitOverlay();             // create wait overlay
+        pingerTool.pingStart();                     // start pinger
+        e.preventDefault();                         // prevent page refresh
 
-        e.preventDefault();
+        var grabbedData = document.getElementById('input-text');    //input-text data
 
-        var grabbedData = document.getElementById('input-text');
-
+        // TODO: clean up into an TWL client side API.
         //AJAX call to API
         $.ajax({
             url: '/video',
             type:'POST',
             data:{datum: grabbedData.value},
             success: function(data, textStatus, jqXHR){
-
                 var stringData = JSON.stringify(data);
-
-                console.log('data returned from server: ' + stringData);
+                console.log('data returned from server: ' + stringData);    //DEBUG to console
 
                 // add to results div
                 resultDiv.innerHTML = stringData;
 
                 //put on the veil
-                overlayGen.removeWaitOverlay();
-                pingerTool.pingEnd();   //display end
+                overlayGen.removeWaitOverlay();             // remove the wait overlay
+                pingerTool.pingEnd();   //display end       // stop pinger
 
-                //print data
-                console.log(data);
+                console.log(data);      // print raw data (?)
 
-                // ===== CHECK FOR STATUS =====
+                // ===== CHECK FOR SERVER RETURN STATUS =====
                 switch (data.status) {
                     case 'completed': createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
                         break;
@@ -140,17 +127,16 @@
                 resultDiv.innerHTML = 'Horrible error occurred: ' + textStatus;
             }
         });
-        grabbedData.value = '';
+        grabbedData.value = '';     // reset text input field.
     });
 
 
 
     //grab word list
     wordListButton.addEventListener('click', function(e){
-        resultDiv.innerHTML = '';
-
-        overlayGen.createWaitOverlay();
-        getWords();
+        resultDiv.innerHTML = '';           // clear anything in the result div
+        overlayGen.createWaitOverlay();     // create wait overlay
+        getWords();                         // get available words from server
     });
 
 
@@ -162,7 +148,7 @@
     // =========================
 
     /**
-     * Creates a video button, that creates a video element.
+     * Creates a video button, that creates a video element. (will be removed)
      * @param targetDiv Where to append the video element.
      * @param data Data to ingest.
      */
@@ -180,7 +166,6 @@
 
         targetDiv.appendChild(loadVideoButton);
 
-
         // add events
         loadVideoButton.addEventListener('click', function(e){
 
@@ -193,14 +178,16 @@
             video.setAttribute('autoplay', true);
             video.setAttribute('controls', true);
 
-            //video.setAttribute('muted', true);    //for android mobile
+            //video.setAttribute('muted', true);    //for mobile auto play, but audio won't play regardless.
 
             resultDiv.appendChild(video);
 
+            // if it can play through, start playing.
             video.addEventListener('canplaythrough', function(e){
                 this.play();
             });
 
+            // when the user clicks, the video will play again if it's stopped.
             video.addEventListener('click', function(e){
                 if(this.paused) {
                     this.play();
