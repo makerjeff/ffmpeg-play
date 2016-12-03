@@ -59,6 +59,8 @@ form.addEventListener('submit', function(e){
         type:'POST',
         data:{datum: grabbedData.value},
         success: function(data, textStatus, jqXHR){
+
+            //TODO: encapsulate
             var stringData = JSON.stringify(data);
             console.log('data returned from server: ' + stringData);    //DEBUG to console
 
@@ -73,19 +75,23 @@ form.addEventListener('submit', function(e){
 
             // ===== CHECK FOR SERVER RETURN STATUS =====
             switch (data.status) {
-                case 'completed': createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                case 'completed':
+                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
                     break;
-                case 'failed': console.log('Video creation failed on the server.');
+                case 'failed':
+                    console.log('Video creation failed on the server.');
                     break;
-                case 'rejected': console.log('Video creation rejected, not all words available.');
+                case 'rejected':
+                    console.log('Video creation rejected, not all words available.');
+                    console.log('Found Words: ' + data.payload.foundWords);
+                    console.log('Rejected words: ' + data.payload.rejectedWords);
                     break;
                 default: console.log("from server: " + data.payload);
             }
-
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Horrible AJAX error occurred: ' + textStatus);
-            resultDiv.innerHTML = 'Horrible error occurred: ' + textStatus;
+            resultDiv.innerHTML = 'Horrible AJAX error occurred: ' + textStatus;
         }
     });
     grabbedData.value = '';     // reset text input field.

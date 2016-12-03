@@ -1,0 +1,92 @@
+<h3>(promise videos)</h3>
+
+<script src="/js/overlayGen.js"></script>
+<script src="/js/pingerTool.js"></script>
+
+<button id="loadVideoButton" class="btn btn-success"> load buttons </button>
+
+<div id="resultDiv"></div>
+
+
+<script>
+
+    var button = document.getElementsByTagName('button')[0];
+    var resultDiv = document.getElementById('resultDiv');
+
+    window.addEventListener('load', function(e){
+
+    });
+
+
+
+    // button event listener
+    button.addEventListener('click', function(e){
+        resultDiv.innerHTML = '';
+
+        var aButton = new Button('android', '/veedeeoh', resultDiv);
+        var bButton = new Button('apple', '/veedeeoh', resultDiv);
+        var cButton = new Button('OSX', '/veedeeoh', resultDiv);
+
+        aButton.createButton();
+        bButton.createButton();
+        cButton.createButton();
+
+    });
+
+    // ---- methods ----
+    function processData(dataObject){
+
+        switch(dataObject.status){
+            case 'completed':
+                console.log(dataObject.payload.videoUrl);
+                resultDiv.innerHTML = dataObject.payload.videoUrl;
+                break;
+            case 'rejected':
+                console.log(dataObject.payload.rejectedArr);
+                    resultDiv.innerHTML = dataObject.payload.rejectedArr;
+                break;
+            default:
+                console.log('Invalid data, defaulting.');
+        }
+
+    }
+
+    // =================
+    // CONSTRUCTORS ====
+
+    // TODO: constructors to build new buttons quickly
+    var Button = function(name, url, rDiv) {
+
+        this.createButton = function() {
+
+            var button = document.createElement('button');
+            var buttonText = document.createTextNode(name+ ' button');
+            button.classList.add('btn');
+            button.classList.add('btn-primary');
+
+            button.appendChild(buttonText);
+            rDiv.appendChild(button);
+
+            button.addEventListener('click', function(e){
+                overlayGen.createWaitOverlay();
+
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(data, status, jqXHR) {
+                        overlayGen.removeWaitOverlay();
+                        console.log(name + ' button pressed.');
+                        console.log(data);
+                        processData(data);
+                    },
+                    error: function(jqXHR, status, err) {
+                        console.log(err);
+                    }
+                });
+            });
+        };
+
+        console.log(name + ' button was created. ');
+    }
+</script>

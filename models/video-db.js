@@ -24,9 +24,7 @@ var configObject = {
     outputExtension: '.mp4'
 };
 
-//TODO: THIS ISNT RETURNING THE LIBRARY
 var wordLibrary = getWordLibrary();
-
 
 // ============================
 // EXPORT METHODS =============
@@ -59,7 +57,7 @@ module.exports.generateVideoSync2 = function(inputStr) {
     console.log(yayOrNay);
 
     if (yayOrNay.rejectCount > 0) {
-        outputSwitch = 1;   //rejected
+        outputSwitch = 2;   //rejected
     } else {
         //TODO: outputSwitch = 0 here
 
@@ -99,19 +97,19 @@ module.exports.generateVideoSync2 = function(inputStr) {
 
     switch (outputSwitch) {
         case 0:
-            console.log(chalk.green('MS: completed'));
-            dummyStatus = {status: 'completed', payload: 'MS: a_video_url.mp4'};
+            console.log(chalk.green('checker: completed'));
+            dummyStatus = {status: 'completed', payload:{videoUrl:getFileName(inputStr)}};
             break;
         case 1:
-            console.log(chalk.red('MS: failed'));
+            console.log(chalk.red('checker: failed'));
             dummyStatus = {status: 'failed', payload: 'MS: Failed error message.'};
             break;
         case 2:
-            console.log(chalk.yellow('MS: rejected'));
+            console.log(chalk.yellow('checker: rejected'));
             dummyStatus = {status: 'rejected', payload: yayOrNay };
             break;
         default:
-            console.log(chalk.blue('MS: defaulted'));
+            console.log(chalk.blue('checker: defaulted'));
             dummyStatus = {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
     }
 

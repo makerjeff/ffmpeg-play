@@ -156,6 +156,9 @@ html, body {
   font-family: 'visitor', sans-serif;
   font-size: 16px; }
 
+#resultDiv {
+  font-family: arial, sans-serif; }
+
 /* dynamically generated */
 #videoElement {
   width: 100% !important;
