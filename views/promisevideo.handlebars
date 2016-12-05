@@ -10,30 +10,86 @@
 
 <script>
 
-    var button = document.getElementsByTagName('button')[0];
-    var resultDiv = document.getElementById('resultDiv');
 
+
+    // -- ONLOAD --
     window.addEventListener('load', function(e){
-
+        init();
+        loader.loadImage('/vectors/balloon.svg');
     });
 
 
 
-    // button event listener
-    button.addEventListener('click', function(e){
-        resultDiv.innerHTML = '';
 
-        var aButton = new Button('android', '/veedeeoh', resultDiv);
-        var bButton = new Button('apple', '/veedeeoh', resultDiv);
-        var cButton = new Button('OSX', '/veedeeoh', resultDiv);
+    // =================
+    // LOADER ==========
 
-        aButton.createButton();
-        bButton.createButton();
-        cButton.createButton();
+    var loader = {
+        loaded: true,
+        loadedCount: 0,
+        totalCount: 0,
 
-    });
+        init: function(){},
 
-    // ---- methods ----
+        loadImage: function(url){
+            this.totalCount++;
+            this.loaded = false;
+            overlayGen.createWaitOverlay();
+            var image = new Image();
+            image.src = url;
+            image.onload = loader.itemLoaded;
+            return image;
+        },
+
+        itemLoaded: function(){
+            loader.loadedCount++;
+
+            if(loader.loadedCount === loader.totalCount){
+                //load is fully loaded...
+                loader.loaded = true;
+                // hide the load screen.
+                overlayGen.removeWaitOverlay();
+                // and call the loader.onload method if it exists (why?)
+                if(loader.onload) {
+                    loader.onload();
+                    loader.onload = undefined;  //use and reset(?)
+                }
+            }
+        },
+
+        onload: function(){
+            console.log('everthing is loaded, callback firing!');
+        }
+    };
+
+
+    // =================
+    // FUNCTIONS =======
+
+    function init() {
+
+        // -- variables --
+        var button = document.getElementsByTagName('button')[0];
+        var resultDiv = document.getElementById('resultDiv');
+
+        // button event listener
+        button.addEventListener('click', function(e){
+            resultDiv.innerHTML = '';
+
+            var aButton = new Button('android', '/veedeeoh', resultDiv);
+            var bButton = new Button('apple', '/veedeeoh', resultDiv);
+            var cButton = new Button('OSX', '/veedeeoh', resultDiv);
+
+            aButton.createButton();
+            bButton.createButton();
+            cButton.createButton();
+
+        });
+
+        console.log('App initialized.');
+    }
+
+
     function processData(dataObject){
 
         switch(dataObject.status){
@@ -54,7 +110,14 @@
     // =================
     // CONSTRUCTORS ====
 
-    // TODO: constructors to build new buttons quickly
+
+    /**
+     * Button Constructor.
+     * @param name  Name of the button.
+     * @param url   Route to AJAX.
+     * @param rDiv  Result Div to populate.
+     * @constructor
+     */
     var Button = function(name, url, rDiv) {
 
         this.createButton = function() {
@@ -63,6 +126,7 @@
             var buttonText = document.createTextNode(name+ ' button');
             button.classList.add('btn');
             button.classList.add('btn-primary');
+            button.classList.add('buttonSpace');
 
             button.appendChild(buttonText);
             rDiv.appendChild(button);

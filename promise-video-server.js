@@ -47,6 +47,7 @@ app.get('/', function(req,res){
     res.render('promisevideo');
 });
 
+// --- get video route ---
 app.get('/veedeeoh', function(req, res){
 
     //TODO: NOTE: Then-ing should be done at this level.
@@ -58,7 +59,11 @@ app.get('/veedeeoh', function(req, res){
         console.log(reason);
         res.json(reason);
     });
+});
 
+// --- get script ---
+app.get('/script', function(req, res) {
+    
 });
 
 // ============= CATCH-ALL MIDDLEWARE =============
