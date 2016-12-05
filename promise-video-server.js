@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // --- silly headers ---
 app.use(function(req, res, next){
-    res.setHeader('X-Powered-By', 'Sugar and spice.');
+    res.setHeader('X-Powered-By', 'Sugar and spice, v0.0.1');
     next();
 });
 
@@ -61,10 +61,6 @@ app.get('/veedeeoh', function(req, res){
     });
 });
 
-// --- get script ---
-app.get('/script', function(req, res) {
-    
-});
 
 // ============= CATCH-ALL MIDDLEWARE =============
 // static files

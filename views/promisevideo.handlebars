@@ -16,6 +16,7 @@
     window.addEventListener('load', function(e){
         init();
         loader.loadImage('/vectors/balloon.svg');
+        loader.loadImage('/images/large_image.jpg');
     });
 
 
@@ -32,6 +33,9 @@
         init: function(){},
 
         loadImage: function(url){
+
+            console.log(url + ' loading.');
+
             this.totalCount++;
             this.loaded = false;
             overlayGen.createWaitOverlay();
@@ -58,7 +62,8 @@
         },
 
         onload: function(){
-            console.log('everthing is loaded, callback firing!');
+            overlayGen.removeWaitOverlay();
+            console.log('Everything has loaded, callback firing!');
         }
     };
 
