@@ -109,7 +109,7 @@
   z-index: 100; }
 
 .loginAcceptedIcon {
-  width: 100px;
+  width: calc(100% - 100px);
   height: 100px;
   display: flex;
   font-size: 24px;

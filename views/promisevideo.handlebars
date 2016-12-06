@@ -3,27 +3,29 @@
 <script src="/js/overlayGen.js"></script>
 <script src="/js/pingerTool.js"></script>
 
-<button id="loadVideoButton" class="btn btn-success"> load buttons </button>
+
+
+<button id="loadButtons" class="btn btn-success"> load buttons </button>
 
 <div id="resultDiv"></div>
 
 
 <script>
 
-
+    var resultDiv = document.getElementById('resultDiv');
 
     // -- ONLOAD --
     window.addEventListener('load', function(e){
-        init();
+        //init();
         loader.loadImage('/vectors/balloon.svg');
         loader.loadImage('/images/large_image.jpg');
+
     });
-
-
-
 
     // =================
     // LOADER ==========
+
+    // TODO: method to spawn single veil versus one-per-file load.
 
     var loader = {
         loaded: true,
@@ -64,6 +66,7 @@
         onload: function(){
             overlayGen.removeWaitOverlay();
             console.log('Everything has loaded, callback firing!');
+            init();
         }
     };
 
@@ -94,7 +97,7 @@
         console.log('App initialized.');
     }
 
-
+    //PROCESS DATA
     function processData(dataObject){
 
         switch(dataObject.status){
@@ -109,7 +112,6 @@
             default:
                 console.log('Invalid data, defaulting.');
         }
-
     }
 
     // =================
@@ -137,17 +139,20 @@
             rDiv.appendChild(button);
 
             button.addEventListener('click', function(e){
-                overlayGen.createWaitOverlay();
 
+                console.log(name + ' button pressed.');
+                pingerTool.pingStart();
+                overlayGen.createNamedWaitOverlay('loading...');
 
                 $.ajax({
                     url: url,
                     method: 'GET',
                     success: function(data, status, jqXHR) {
                         overlayGen.removeWaitOverlay();
-                        console.log(name + ' button pressed.');
                         console.log(data);
                         processData(data);
+                        pingerTool.pingEnd();
+
                     },
                     error: function(jqXHR, status, err) {
                         console.log(err);
@@ -157,5 +162,8 @@
         };
 
         console.log(name + ' button was created. ');
-    }
+    };
+
+
+
 </script>
