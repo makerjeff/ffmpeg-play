@@ -39,7 +39,7 @@
 
             this.totalCount++;
             this.loaded = false;
-            overlayGen.createWaitOverlay();
+            //CREATE LOAD SCREEN HERE
             var image = new Image();
             image.src = url;
             image.onload = loader.itemLoaded;
@@ -52,8 +52,7 @@
             if(loader.loadedCount === loader.totalCount){
                 //load is fully loaded...
                 loader.loaded = true;
-                // hide the load screen.
-                overlayGen.removeWaitOverlay();
+                // TODO: REMOVE LOAD SCREEN HERE
                 // and call the loader.onload method if it exists (why?)
                 if(loader.onload) {
                     loader.onload();
