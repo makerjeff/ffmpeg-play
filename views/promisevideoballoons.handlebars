@@ -5,24 +5,72 @@
 
 
 
-<button id="loadButtons" class="btn btn-success"> load buttons </button>
+<button id="button" class="btn btn-success"> create a balloon </button>
 
 <div id="resultDiv"></div>
 
+<div class="balloon"></div>
+
+
 <script>
 
+    var button = document.getElementById('button');
     var resultDiv = document.getElementById('resultDiv');
 
     // -- ONLOAD --
     window.addEventListener('load', function(e){
-        //init();
+
         loader.loadImage('/vectors/balloon.svg');
-        loader.loadImage('/images/large_image.jpg');
 
     });
 
-    // =================
-    // LOADER ==========
+    // create a balloon
+    button.addEventListener('click', function(e){
+        createBalloon();
+    });
+
+
+
+    // ======================================
+    // BALLOON PLAY =========================
+
+    //temp function
+    function createBalloon() {
+        // find the size of the window
+        var windowWidth = window.innerWidth;
+        var windowHeight = window.innerHeight;
+
+        console.log('Current window size ' + windowWidth + ' x ' + windowHeight);
+
+        //temporarily create balloon centered at the extremities
+
+        var balloon1 = document.createElement('div');
+        balloon1.src = '/vectors/balloon.svg';
+        balloon1.id = 'balloon1';
+
+        balloon1.classList.add('balloon');
+        balloon1.style.top = (windowHeight) + 'px';
+
+        document.body.appendChild(balloon1);
+    }
+
+
+    //TODO: CONTINUE WORKING ON THIS.
+
+
+
+
+
+
+
+
+    // BALOON PLAY =========================
+    // =====================================
+
+
+
+    // ================================================
+    // LOADER =========================================
 
     // TODO: method to spawn single veil versus one-per-file load.
 
@@ -39,7 +87,6 @@
 
             this.totalCount++;
             this.loaded = false;
-            overlayGen.createWaitOverlay();
             var image = new Image();
             image.src = url;
             image.onload = loader.itemLoaded;
@@ -53,7 +100,6 @@
                 //load is fully loaded...
                 loader.loaded = true;
                 // hide the load screen.
-                overlayGen.removeWaitOverlay();
                 // and call the loader.onload method if it exists (why?)
                 if(loader.onload) {
                     loader.onload();
@@ -63,9 +109,8 @@
         },
 
         onload: function(){
-            overlayGen.removeWaitOverlay();
             console.log('Everything has loaded, callback firing!');
-            init();
+            //init();
         }
     };
 

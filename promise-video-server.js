@@ -43,8 +43,15 @@ app.use(function(req, res, next){
 });
 
 // ============= INTERNAL ROUTES ==============
+
+// --- default route ---
 app.get('/', function(req,res){
     res.render('promisevideo');
+});
+
+// --- balloon generator route ---
+app.get('/balloons', function(req, res){
+    res.render('promisevideoballoons');
 });
 
 // --- get video route ---

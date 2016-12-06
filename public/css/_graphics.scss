@@ -1,0 +1,15 @@
+.balloon {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  width: 100px;
+  height: 250px;
+
+  background: url('/vectors/balloon.svg');
+
+  background-size: 250px 250px;
+  background-repeat: repeat;
+  background-position: -75px 0;
+
+}
