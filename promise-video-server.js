@@ -20,6 +20,8 @@ const cookieParser  = require('cookie-parser');
 const port          = process.env.PORT || 3000;
 const handlebars    = hbsModule.create({defaultLayout: 'main'});
 
+const junk          = require('junk');
+
 // =========== CONFIGURATION ===========
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -57,7 +59,7 @@ app.get('/balloons', function(req, res){
 // --- get video route ---
 app.get('/veedeeoh', function(req, res){
 
-    //TODO: NOTE: Then-ing should be done at this level.
+    //TODO: NOTE: Then-ing and Control-Flow should be done at this level.
     getVideoPromise().then(function(val){
         console.log(val);
         res.json(val);
@@ -117,15 +119,33 @@ function getVideoPromise(){
     });
 }
 
+//TODO: make this into getWordLibraryPromise if it works.
 function readDirPromise(){
-    var decision = 0;
 
     return new Promise(function(resolve, reject){
-        if(decision === 0) {
-            resolve({status: 'completed', payload: 'a completed payload' });
-        }
-        else if(decision === 1) {
-            reject({status: 'rejected', payload: 'rejected payload.'})
-        }
+        // async logic goes here.
+        fs.readdir(process.cwd() + '/video_source', {encoding: 'utf8'}, function( err, files){
+            if (err) {
+                reject({status: 'failed', payload: {message: ' Error reading file directory. '}});
+            } else {
+
+                resolve({
+                    status: 'completed',
+                    payload: {fileArr: stripArrayExtensions(files.filter(junk.not))}
+                });
+            }
+        });
     });
+
+}
+
+// =====================
+// UTILITY FUNCTIONS ===
+
+function stripArrayExtensions(dirtyArr) {
+    var cleanArray = [];
+    dirtyArr.forEach(function(elem, ind, arr){
+        cleanArray.push(elem.split('.').shift());
+    });
+    return cleanArray;
 }

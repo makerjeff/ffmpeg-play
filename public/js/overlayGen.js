@@ -16,21 +16,9 @@ var overlayGen = {
         containerDiv.appendChild(div);
         document.body.appendChild(containerDiv);
     },
-    createNamedWaitOverlay: function(msg) {
-        var containerDiv = document.createElement('div');
-        var div = document.createElement('div');
-
-        containerDiv.id = 'overlayWait';
-
-        containerDiv.classList.add('loginAcceptedContainer');
-        div.classList.add('loginAcceptedIcon');
-        div.innerHTML = msg;
-
-        containerDiv.appendChild(div);
-        document.body.appendChild(containerDiv);
-    },
 
     removeWaitOverlay: function() {
         document.body.removeChild(document.getElementById('overlayWait'));
+        //document.body.removeChild(contDiv);
     }
 };

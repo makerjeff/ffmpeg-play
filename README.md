@@ -50,6 +50,24 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [REGEX W3Schools reference](http://www.w3schools.com/jsref/jsref_obj_regexp.asp)
     - Remove trailing white space:    var string4 = string3.replace(/[ \t]+$/g, '');
     - Remove leading white space:    var string5 = string4.replace(/^[ \t]/g, '');
+    - Find an email:    var emailRegExp = /[A-Za-z0-9._-]+@[A-Za-z0-9._-]+\.[A-Za-z]{2,4}/;
+    - '.' (period) represents any 1 character, not new line.
+    - [0-9] any number, [^0-9] anything NOT a number.
+    - \w A-Z, a-z, 0-9 or _
+    - \W anything NOT \w
+    - \s spaces, \S not spaces.
+    - \d any number, \D anything not a number.
+    - \b word boundary (a space with something before and after it), \B anything not a word boundary.
+    - [0-9]? = one number
+    - [0-9]+ = one or more number
+    - [0-9]* = zero or more (doesn't have to exist)
+    - [Aa] = one 'A', or one 'a'
+    - ^ beginning of the string.
+    - $ end of a string.
+    - g = global.
+    - i = case insensitive.
+
+
 - [Foolproof HTML Escaping in JS](http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/)
 
 
