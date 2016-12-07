@@ -1,6 +1,6 @@
 .characterContainer {
     //FLEX overrides the gaping space in SVGs.
-    display: none;
+    display: flex;
     flex-direction: row;
 
     position: fixed;

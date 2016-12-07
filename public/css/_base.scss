@@ -52,8 +52,19 @@ html, body {
     font-family: 'apple2', sans-serif;
 }
 
+input {
+    outline: none;
+    -webkit-appearance: none;
+}
 input[type=text]{
+
     height: 100px;
     font-size: 3em;
+
+    outline: none;
+}
+
+input[type=text]:focus {
+    outline: none;
 }
 

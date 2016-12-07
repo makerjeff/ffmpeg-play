@@ -128,7 +128,7 @@
   animation-duration: 0.25s; }
 
 .characterContainer {
-  display: none;
+  display: flex;
   flex-direction: row;
   position: fixed;
   bottom: 0;
@@ -205,8 +205,16 @@ html, body {
   font-size: 11px;
   font-family: 'apple2', sans-serif; }
 
+input {
+  outline: none;
+  -webkit-appearance: none; }
+
 input[type=text] {
   height: 100px;
-  font-size: 3em; }
+  font-size: 3em;
+  outline: none; }
+
+input[type=text]:focus {
+  outline: none; }
 
 /*# sourceMappingURL=style.css.map */
