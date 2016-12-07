@@ -77,44 +77,9 @@ form.addEventListener('submit', function(e){
             switch (data.status) {
                 case 'completed':
 
-                    //createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+                    //TODO promisify video creation and load here.
 
-                    // =============================
-                    //TODO: MAKE VIDEO FUNCTION ====
-                    var video = document.createElement('video');
-                    video.id = 'videoElement';
-                    video.src = '/videos/' + data.payload.videoUrl;
-
-                    video.setAttribute('autoplay', true);
-
-                    resultDiv.appendChild(video);
-
-                    // if it can play through, start playing.
-                    video.addEventListener('canplaythrough', function(e){
-                        this.play();
-                    });
-
-                    // when the user clicks, the video will play again if it's stopped.
-                    video.addEventListener('click', function(e){
-                        if(this.paused) {
-                            this.play();
-                        }
-                    });
-
-                    //remove button
-                    this.parentNode.removeChild(this);
-
-
-                    // --- create download button ---
-                    var dlb = document.createElement('a');
-                    dlb.href = '/videos/' + data.payload.videoUrl;
-                    dlb.setAttribute('download', data.payload.videoUrl);    //sets the download file name, can be customized.
-                    dlb.innerHTML = 'download';
-                    dlb.classList.add('pull-right');
-                    resultDiv.appendChild(dlb);
-
-                    // MAKE VIDEO FUNCTION ========
-                    // ============================
                     break;
                 case 'failed':
                     console.log('Video creation failed on the server.');

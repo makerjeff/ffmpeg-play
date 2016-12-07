@@ -128,7 +128,7 @@
   animation-duration: 0.25s; }
 
 .characterContainer {
-  display: flex;
+  display: none;
   flex-direction: row;
   position: fixed;
   bottom: 0;
@@ -216,5 +216,14 @@ input[type=text] {
 
 input[type=text]:focus {
   outline: none; }
+
+.simplebox {
+  outline: none;
+  border: 2px solid #c8c8c8;
+  text-align: center;
+  border-radius: 3px;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important; }
 
 /*# sourceMappingURL=style.css.map */

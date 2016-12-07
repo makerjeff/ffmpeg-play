@@ -68,3 +68,19 @@ input[type=text]:focus {
     outline: none;
 }
 
+//override bootstrap glows
+.simplebox {
+    outline: none;
+    //border: none !important;
+    border: 2px solid rgba(200,200,200,1.0);
+
+    text-align: center;
+
+
+    border-radius: 3px;
+
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
