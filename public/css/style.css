@@ -239,6 +239,11 @@ input[type=text] {
 input[type=text]:focus {
   outline: none; }
 
+textarea {
+  height: 100px;
+  font-size: 3em;
+  outline: none; }
+
 .simplebox {
   outline: none;
   border: 2px solid #c8c8c8;

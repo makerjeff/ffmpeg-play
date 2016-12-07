@@ -1,4 +1,4 @@
-/** Video DB Module v2
+/** Video DB Module v3
  * Get File names, etc.
  * Created by jefferson.wu on 11/21/16.
  */
@@ -30,6 +30,10 @@ var wordLibrary = getWordLibrary();
 // ============================
 // EXPORT METHODS =============
 // ============================
+
+module.exports.generateVideoPromise = function (inputStr) {
+    //process input string.
+};
 
 /**
  * Generate video Sync 2.
@@ -120,14 +124,6 @@ module.exports.generateVideoSync2 = function(inputStr) {
 
 };
 
-
-/**
- * Gets the configObject of video-db.
- * @returns {{libraryFolder: string, tempFolder: string, outputFolder: string, outputExtension: string}} Config Object.
- */
-module.exports.getAllDirectories = function() {
-    return configObject;
-};
 
 /**
  * Get Available Videos ASYNC (TODO: promisify)

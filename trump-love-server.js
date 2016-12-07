@@ -182,10 +182,10 @@ app.post('/video', function(req, res){
             console.log(decoded);
             var statusObject = vdb.generateVideoSync2(req.body.datum);
 
-            //TODO: delay this until video gen has been verified.
+
+            //TODO: PROMISIFY
             res.json(statusObject);
 
-            // TODO: response logic here?
         }
     });
 

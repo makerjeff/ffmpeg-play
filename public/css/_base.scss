@@ -68,6 +68,12 @@ input[type=text]:focus {
     outline: none;
 }
 
+textarea {
+    height: 100px;
+    font-size: 3em;
+    outline: none;
+}
+
 //override bootstrap glows
 .simplebox {
     outline: none;
