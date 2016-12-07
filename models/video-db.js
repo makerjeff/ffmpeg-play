@@ -60,35 +60,33 @@ module.exports.generateVideoSync2 = function(inputStr) {
     if (yayOrNay.rejectCount > 0) {
         outputSwitch = 2;   //rejected
     } else {
-        //TODO: outputSwitch = 0 here
-
         outputSwitch = 0;
 
         // --- build filelist file ---
         inputArray.forEach(function(elem, ind, arr){
             filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
         });
-        // -------------------------------
-        // WRITE FILE-LIST -------------v-
 
+
+        // --- write file list ---
         fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
             function (err) {
                 if(err) {
                     console.log(chalk.red('Error writing text file.'));
                 } else {
 
-                    //use a readFile check before concat
+                    // --- check file list ---
                     fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
                         if(err){
                             console.log(chalk.red('Error reading text file.'));
                         } else {
+
+                            // --- if text file exists, concat video. ---
                             concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
                         }
                     });
                 }
             });
-        // WRITE FILE-LIST --------------^-
-        // --------------------------------
     }
 
     // -----------------------------
@@ -122,15 +120,6 @@ module.exports.generateVideoSync2 = function(inputStr) {
 
 };
 
-
-/**
- * DEBUG: Get local directory.
- * @returns {*|String} Node process.cwd();
- */
-module.exports.getLocalDirectory = function(){
-    console.log(process.cwd());
-    return process.cwd();
-};
 
 /**
  * Gets the configObject of video-db.

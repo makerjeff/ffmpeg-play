@@ -133,13 +133,14 @@ app.get('/login', function(req, res){
 
 // get word list
 app.get('/words', function(req,res){
-    var data = vdb.getAvailableVideosSync();    //TODO: SEMI-SOLVED: Currently SYNC operation, need to PROMISIFY
+    var data = vdb.getAvailableVideosSync();
     //console.log(data);
     console.log('words grabbed.');
     res.header("Content-Type","text/plain");
     res.send(data);
 });
 
+// get async word list
 app.get('/wordspromise', function(req, res){
     vdb.getWordLibraryPromise().then(function(val){
         console.log(val);
@@ -149,20 +150,6 @@ app.get('/wordspromise', function(req, res){
         res.json(reason);
     });
 });
-
-/*
-app.get('/words', function(req, res){
-
-    getWordLibraryPromise().then(function(val){
-        console.log(val);
-        res.json(val);
-
-    }).catch(function(reason){
-        console.log(reason);
-        res.json(reason);
-    });
-});
-*/
 
 
 // ==================== BASE VIDEO ROUTES =====================
@@ -251,7 +238,7 @@ videomakerRoutes.post('/authenticate', function(req,res){
     }
 });
 
-// activate routes
+// activate videoMaker routes
 app.use('/vm', videomakerRoutes);
 
 
