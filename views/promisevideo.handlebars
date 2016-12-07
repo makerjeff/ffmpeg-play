@@ -15,9 +15,9 @@
 
     // -- ONLOAD --
     window.addEventListener('load', function(e){
-        //init();
-        loader.loadImage('/vectors/balloon.svg');
-        loader.loadImage('/images/large_image.jpg');
+        init();
+        console.log('ready to make the universe great again, with these words: ');
+        console.log(wordLibrary);
 
     });
 
@@ -38,31 +38,76 @@
             var aButton = new Button('android', '/veedeeoh', resultDiv);
             var bButton = new Button('apple', '/veedeeoh', resultDiv);
             var cButton = new Button('OSX', '/veedeeoh', resultDiv);
+            var dButton = new Button('word library', '/words', resultDiv);
 
             aButton.createButton();
             bButton.createButton();
             cButton.createButton();
+            dButton.createButton();
 
         });
 
         console.log('App initialized.');
+
     }
 
     //PROCESS DATA
     function processData(dataObject){
 
         switch(dataObject.status){
+            // -- COMPLETED CASES --
             case 'completed':
-                console.log(dataObject.payload.videoUrl);
-                resultDiv.innerHTML = dataObject.payload.videoUrl;
+                    if (dataObject.payload.videoUrl) {
+                        console.log(dataObject.payload.videoUrl);
+                        resultDiv.innerHTML = dataObject.payload.videoUrl;
+                    }
+
+                    else if(dataObject.payload.fileArr) {
+                        console.log(dataObject.payload.fileArr);
+
+                        var resultArr = [];
+
+                        dataObject.payload.fileArr.forEach(function(elem, ind, arr){
+                            resultArr.push(elem);
+                        });
+
+                        resultDiv.innerHTML = resultArr;
+                    } else {
+                        console.log('data not grabbed.');
+                        resultDiv.innerHTML = 'data not grabbed.';
+                    }
+
                 break;
+
+            // -- REJECTED CASES --
             case 'rejected':
                 console.log(dataObject.payload.rejectedArr);
                     resultDiv.innerHTML = dataObject.payload.rejectedArr;
                 break;
+
+            // -- DEFAULTED --
             default:
                 console.log('Invalid data, defaulting.');
         }
+    }
+
+    //TODO: need to make this ASYNC, otherwise it's not going to work.
+    function getWordLibrary(){
+        var wordLib = [];
+
+        $.ajax({
+            url: '/words',
+            method: 'GET',
+            success: function(data, status, jqXHR){
+                wordLib = data.payload.fileArr;
+                return wordLib;
+            },
+
+            error: function(jqXHR, status, err){
+                console.log('grabWordLibrary: AJAX Error: ' + err);
+                return 'grabWordLibrary: AJAX Error: ' + err;
+            }
+        });
     }
 
     // =================
@@ -102,7 +147,7 @@
 
                         overlayGen.removeWaitOverlay();
 
-                        console.log(data);
+                        console.log('Ajax okay.');
                         processData(data);
                         pingerTool.pingEnd();
 

@@ -70,6 +70,19 @@ app.get('/veedeeoh', function(req, res){
     });
 });
 
+// --- get async library words ---
+app.get('/words', function(req, res){
+
+    getWordLibraryPromise().then(function(val){
+        console.log(val);
+        res.json(val);
+
+    }).catch(function(reason){
+        console.log(reason);
+        res.json(reason);
+    });
+});
+
 
 // ============= CATCH-ALL MIDDLEWARE =============
 // static files
@@ -120,9 +133,10 @@ function getVideoPromise(){
 }
 
 //TODO: make this into getWordLibraryPromise if it works.
-function readDirPromise(){
+function getWordLibraryPromise(){
 
     return new Promise(function(resolve, reject){
+
         // async logic goes here.
         fs.readdir(process.cwd() + '/video_source', {encoding: 'utf8'}, function( err, files){
             if (err) {
@@ -136,7 +150,6 @@ function readDirPromise(){
             }
         });
     });
-
 }
 
 // =====================
