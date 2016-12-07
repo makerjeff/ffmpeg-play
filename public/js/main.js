@@ -141,9 +141,9 @@ function createLoadVideoButton(targetDiv, data){
         video.id = 'videoElement';
         video.src = '/videos/' + data.payload.videoUrl;
 
-        video.setAttribute('preload', true);
+        //video.setAttribute('preload', true);
         video.setAttribute('autoplay', true);
-        video.setAttribute('controls', true);
+        //video.setAttribute('controls', true);
 
         //video.setAttribute('muted', true);    //for mobile auto play, but audio won't play regardless.
 

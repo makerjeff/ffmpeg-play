@@ -17,7 +17,6 @@
     window.addEventListener('load', function(e){
         init();
         console.log('ready to make the universe great again, with these words: ');
-        console.log(wordLibrary);
 
     });
 
@@ -57,25 +56,25 @@
         switch(dataObject.status){
             // -- COMPLETED CASES --
             case 'completed':
-                    if (dataObject.payload.videoUrl) {
-                        console.log(dataObject.payload.videoUrl);
-                        resultDiv.innerHTML = dataObject.payload.videoUrl;
-                    }
+                if (dataObject.payload.videoUrl) {
+                    console.log(dataObject.payload.videoUrl);
+                    resultDiv.innerHTML = dataObject.payload.videoUrl;
+                }
 
-                    else if(dataObject.payload.fileArr) {
-                        console.log(dataObject.payload.fileArr);
+                else if(dataObject.payload.fileArr) {
+                    console.log(dataObject.payload.fileArr);
 
-                        var resultArr = [];
+                    var resultArr = [];
 
-                        dataObject.payload.fileArr.forEach(function(elem, ind, arr){
-                            resultArr.push(elem);
-                        });
+                    dataObject.payload.fileArr.forEach(function(elem, ind, arr){
+                        resultArr.push(elem);
+                    });
 
-                        resultDiv.innerHTML = resultArr;
-                    } else {
-                        console.log('data not grabbed.');
-                        resultDiv.innerHTML = 'data not grabbed.';
-                    }
+                    resultDiv.innerHTML = resultArr;
+                } else {
+                    console.log('data not grabbed.');
+                    resultDiv.innerHTML = 'data not grabbed.';
+                }
 
                 break;
 
@@ -163,6 +162,8 @@
         console.log(name + ' button was created. ');
     };
 
+    // CONSTRUCTORS ===============
+    // ============================
 
 
 </script>
