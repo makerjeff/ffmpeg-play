@@ -17,10 +17,7 @@
   100% {transform: scale(1.0)}
 }
 
-
-
 #box {
-
   display: flex;
   height: 100px;
   width: 100px;
@@ -57,5 +54,49 @@
   animation-fill-mode: forwards;
 }
 
+
+// ========================
+// spinner animations =====
+
+@keyframes spinIcon {
+  0% {
+    transform: rotate(0deg);
+    border-top: 30px solid blue;
+  }
+
+  50% {
+    border-top: 10px solid red;
+
+  }
+
+  100% {
+    transform: rotate(360deg);
+    border-top: 30px solid blue;
+  }
+}
+
+.spin {
+  animation: spinIcon 1s ease infinite;
+}
+
+.spinStyle {
+  position: absolute;
+
+  display: block;
+
+  top: 400px;
+  left: 400px;
+
+  width: 100px;
+  height: 100px;
+  //border: 10px solid rgba(0,0,0,0);
+  border-top: 10px solid blue;
+  //border-right: 10px solid blue;
+
+  border-radius: 100%;
+}
+
+// spinner animations =====
+// ========================
 
 
