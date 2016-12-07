@@ -76,7 +76,45 @@ form.addEventListener('submit', function(e){
             // ===== CHECK FOR SERVER RETURN STATUS =====
             switch (data.status) {
                 case 'completed':
-                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+
+                    //createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+
+                    // =============================
+                    //TODO: MAKE VIDEO FUNCTION ====
+                    var video = document.createElement('video');
+                    video.id = 'videoElement';
+                    video.src = '/videos/' + data.payload.videoUrl;
+
+                    video.setAttribute('autoplay', true);
+
+                    resultDiv.appendChild(video);
+
+                    // if it can play through, start playing.
+                    video.addEventListener('canplaythrough', function(e){
+                        this.play();
+                    });
+
+                    // when the user clicks, the video will play again if it's stopped.
+                    video.addEventListener('click', function(e){
+                        if(this.paused) {
+                            this.play();
+                        }
+                    });
+
+                    //remove button
+                    this.parentNode.removeChild(this);
+
+
+                    // --- create download button ---
+                    var dlb = document.createElement('a');
+                    dlb.href = '/videos/' + data.payload.videoUrl;
+                    dlb.setAttribute('download', data.payload.videoUrl);    //sets the download file name, can be customized.
+                    dlb.innerHTML = 'download';
+                    dlb.classList.add('pull-right');
+                    resultDiv.appendChild(dlb);
+
+                    // MAKE VIDEO FUNCTION ========
+                    // ============================
                     break;
                 case 'failed':
                     console.log('Video creation failed on the server.');
@@ -136,16 +174,13 @@ function createLoadVideoButton(targetDiv, data){
     // add events
     loadVideoButton.addEventListener('click', function(e){
 
-        //TODO: make a function.
+        // =============================
+        //TODO: MAKE VIDEO FUNCTION ====
         var video = document.createElement('video');
         video.id = 'videoElement';
         video.src = '/videos/' + data.payload.videoUrl;
 
-        //video.setAttribute('preload', true);
         video.setAttribute('autoplay', true);
-        //video.setAttribute('controls', true);
-
-        //video.setAttribute('muted', true);    //for mobile auto play, but audio won't play regardless.
 
         resultDiv.appendChild(video);
 
@@ -165,7 +200,6 @@ function createLoadVideoButton(targetDiv, data){
         this.parentNode.removeChild(this);
 
 
-
         // --- create download button ---
         var dlb = document.createElement('a');
         dlb.href = '/videos/' + data.payload.videoUrl;
@@ -174,9 +208,18 @@ function createLoadVideoButton(targetDiv, data){
         dlb.classList.add('pull-right');
         resultDiv.appendChild(dlb);
 
+        // MAKE VIDEO FUNCTION ========
+        // ============================
+
 
     });
 }
+
+// create video function, TODO: reorganize.
+function createVideo(rDiv, data) {
+
+}
+
 
 /**
  * Custom conditional AJAX method.
