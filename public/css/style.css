@@ -4,6 +4,9 @@
 @font-face {
   font-family: 'apple2';
   src: url("../fonts/apple2.ttf"); }
+@font-face {
+  font-family: 'din-black';
+  src: url("../fonts/din-black.ttf"); }
 /* ====== ANIMATIONS ======*/
 @keyframes redToBlack {
   0% {
@@ -59,7 +62,7 @@
 
 .jumbotron {
   margin: 0;
-  font-family: 'visitor', sans-serif;
+  font-family: 'din-black', sans-serif;
   text-transform: uppercase;
   background: #000064;
   color: white; }
@@ -125,7 +128,7 @@
   animation-duration: 0.25s; }
 
 .characterContainer {
-  display: flex;
+  display: none;
   flex-direction: row;
   position: fixed;
   bottom: 0;
@@ -164,7 +167,7 @@
 html, body {
   width: 100%;
   height: 100%;
-  font-family: 'visitor', sans-serif;
+  font-family: 'din-black', sans-serif;
   font-size: 16px; }
 
 #resultDiv {
@@ -176,7 +179,8 @@ html, body {
   height: auto !important; }
 
 .buttonSpace {
-  font-family: 'apple2', sans-serif;
+  font-family: 'din-black', sans-serif;
+  font-size: 1.5em;
   margin: 2px 2px 2px 2px; }
 
 /*====== SPINNERS =======*/
@@ -200,5 +204,9 @@ html, body {
   font-weight: 100;
   font-size: 11px;
   font-family: 'apple2', sans-serif; }
+
+input[type=text] {
+  height: 100px;
+  font-size: 3em; }
 
 /*# sourceMappingURL=style.css.map */

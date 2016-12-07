@@ -164,6 +164,17 @@ function createLoadVideoButton(targetDiv, data){
         //remove button
         this.parentNode.removeChild(this);
 
+
+
+        // --- create download button ---
+        var dlb = document.createElement('a');
+        dlb.href = '/videos/' + data.payload.videoUrl;
+        dlb.setAttribute('download', data.payload.videoUrl);    //sets the download file name, can be customized.
+        dlb.innerHTML = 'download';
+        dlb.classList.add('pull-right');
+        resultDiv.appendChild(dlb);
+
+
     });
 }
 
@@ -176,7 +187,7 @@ function getWords() {
     pingerTool.pingStart();
 
     $.ajax({
-        url: '/words',
+        url: '/wordspromise',
         type: 'GET',
         success: function(data, status, jqXHR){
 
@@ -195,6 +206,8 @@ function getWords() {
     });
 }
 
+
+
 /**
  * Updates the results div.
  * @param rDiv  result div object.
@@ -202,19 +215,19 @@ function getWords() {
  */
 function updateResultDiv(rDiv, data){
 
-    // parse AJAX'd data
-    var parsedData = JSON.parse(data);
+    // grab relevant data
+    var wordData = data.payload.fileArr;
 
     // print AJAX'd data to console
-    console.log(parsedData);
+    console.log(wordData);
 
     // create a button for each of the array
-    parsedData.forEach(function(elem, ind, arr){
+    wordData.forEach(function(elem, ind, arr){
 
-        var inputWord = elem.split('.').shift();
-
+        //var inputWord = elem.split('.').shift();
         var button = document.createElement('button');
-        var buttonText = document.createTextNode(inputWord);
+        //var buttonText = document.createTextNode(inputWord);
+        var buttonText = document.createTextNode(elem);
 
         button.appendChild(buttonText);
         button.setAttribute('class','btn btn-success');
@@ -228,8 +241,4 @@ function updateResultDiv(rDiv, data){
     });
 }
 
-
-
-
-//ref:  <circle id="HEAD" class="characterHead" cx="175.1" cy="175.1" r="175.1"/>
 

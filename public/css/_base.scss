@@ -3,7 +3,8 @@
 html, body {
     width: 100%;
     height: 100%;
-    font-family: 'visitor', sans-serif;
+    //font-family: 'visitor', sans-serif;
+    font-family: 'din-black', sans-serif;
     font-size: 16px;
 }
 
@@ -18,7 +19,8 @@ html, body {
 }
 
 .buttonSpace {
-    font-family: 'apple2', sans-serif;
+    font-family: 'din-black', sans-serif;
+    font-size: 1.5em;
     margin: 2px 2px 2px 2px;
 }
 
@@ -48,5 +50,10 @@ html, body {
     font-weight: 100;
     font-size: 11px;
     font-family: 'apple2', sans-serif;
+}
+
+input[type=text]{
+    height: 100px;
+    font-size: 3em;
 }
 

@@ -24,6 +24,7 @@ var configObject = {
     outputExtension: '.mp4'
 };
 
+//synchronous file grab
 var wordLibrary = getWordLibrary();
 
 // ============================
@@ -171,6 +172,8 @@ module.exports.getAvailableVideosSync = function() {
     return cleandata;
 };
 
+module.exports.getWordLibraryPromise = getWordLibraryPromise;
+
 // ============================
 // INTERNAL FUNCTIONS =========
 // ============================
@@ -196,7 +199,8 @@ function concatVideoFile(relFilePath, outputFileName) {
         } else {
             if(stderr){
                 console.log(chalk.green('Successful Video Generation (but stderr)'));
-                statusData = {status: 'completed', payload: {message:'Video successfully generated on the server. (video-db)'}};
+                //TODO: replace placeholder with actual file name.
+                statusData = {status: 'completed', payload: {message:'Video successfully generated on the server. (video-db)', videoUrl: outputFileName}};
             } else {
                 console.log(stdout + ' Success Message.');
             }
@@ -266,4 +270,43 @@ function getWordLibrary(){
     return outputArray;
 }
 
+/**
+ * Get the words library as a Promise, using the new utility library that stripsArrayExtensions.
+ * @returns {Promise<T>|Promise}
+ */
+function getWordLibraryPromise(){
 
+    return new Promise(function(resolve, reject){
+
+        // async logic goes here.
+        fs.readdir(process.cwd() + '/video_source', {encoding: 'utf8'}, function( err, files){
+            if (err) {
+                reject({status: 'failed', payload: {message: ' Error reading file directory. '}});
+            } else {
+
+                resolve({
+                    status: 'completed',
+                    payload: {fileArr: stripArrayExtensions(files.filter(junk.not))}
+                });
+            }
+        });
+    });
+}
+
+
+
+// =====================
+// UTILITY FUNCTIONS ===
+
+/**
+ * Strips away the file name extensions in the array, to be used on the front-end.
+ * @param dirtyArr  Raw array with extensions.
+ * @returns {Array} Clean array with no extensions.
+ */
+function stripArrayExtensions(dirtyArr) {
+    var cleanArray = [];
+    dirtyArr.forEach(function(elem, ind, arr){
+        cleanArray.push(elem.split('.').shift());
+    });
+    return cleanArray;
+}

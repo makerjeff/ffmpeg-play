@@ -30,7 +30,7 @@ const sdb               = require('./models/signin-db');
 // =========================
 // CONFIGURATION ===========
 // =========================
-var serverVersion       = 'v0.0.5';
+var serverVersion       = 'v0.0.5b';
 var tokenLifespan       = '1h';
 
 var connectedClients    = 0;
@@ -139,6 +139,30 @@ app.get('/words', function(req,res){
     res.header("Content-Type","text/plain");
     res.send(data);
 });
+
+app.get('/wordspromise', function(req, res){
+    vdb.getWordLibraryPromise().then(function(val){
+        console.log(val);
+        res.json(val);
+    }).catch(function(reason){
+        console.log(reason);
+        res.json(reason);
+    });
+});
+
+/*
+app.get('/words', function(req, res){
+
+    getWordLibraryPromise().then(function(val){
+        console.log(val);
+        res.json(val);
+
+    }).catch(function(reason){
+        console.log(reason);
+        res.json(reason);
+    });
+});
+*/
 
 
 // ==================== BASE VIDEO ROUTES =====================
