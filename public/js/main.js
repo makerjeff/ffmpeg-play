@@ -252,7 +252,14 @@ function updateResultDiv(rDiv, data){
             });
             rDiv.appendChild(button);
         });
-    } else {
+    }
+
+    else if(data.payload.videoUrl){
+        //if there's a videoUrl, hide stuff.
+        rDiv.innerHTML = '<br><b>Video created: </b>' + data.payload.videoUrl;
+    }
+
+    else {
         //for string data output on rejection
         var found = data.payload.foundWords;
         var notFound = data.payload.notFoundWords;
