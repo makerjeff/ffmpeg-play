@@ -69,5 +69,7 @@ Experimenting with FFMPEG and FFMPEG node modules.
 
 
 - [Foolproof HTML Escaping in JS](http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/)
+- [NPM: Swear Jar: profanity detection and filtering (maybe use? most likely will roll my own)](https://www.npmjs.com/package/swearjar)
+- [NPM: BadWords: Starter list of bad words.](https://github.com/MauriceButler/badwords)
 
 

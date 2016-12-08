@@ -27,12 +27,31 @@ var configObject = {
 //synchronous file grab
 var wordLibrary = getWordLibrary();
 
+//TODO: getBadWordsLibrary()
+
+var badwords = require('../models/badwords-library');
+console.log(badwords);
+
 // ============================
 // EXPORT METHODS =============
 // ============================
-
+//TODO: work here.
 module.exports.generateVideoPromise = function (inputStr) {
     //process input string.
+
+    var tempStatus; // ???
+    var fileHash = shortid.generate();
+    var cleanText = textSanitizer.getSanitizedString(inputStr.toLowerCase());
+    var inputArray = cleanText.split(' ');
+    var filelistString = '';
+
+    var dummyStatus;    //output status object
+    var outputSwitch;   //needed?
+
+    // -- check word availability --
+    var yayOrNay = checkWordAvailability(inputArray, wordLibrary, badwords);
+
+
 };
 
 /**
@@ -58,39 +77,15 @@ module.exports.generateVideoSync2 = function(inputStr) {
     var outputSwitch;
 
     //TODO: CHECKWORDAVAILABILITY HERE.
-    var yayOrNay = checkWordAvailability(inputArray, wordLibrary);
+    var yayOrNay = checkWordAvailability(inputArray, wordLibrary, badwords);
     console.log(yayOrNay);
 
-    if (yayOrNay.rejectCount > 0) {
+    if (yayOrNay.notFoundWords.length > 0 || yayOrNay.badWords.length > 0) {
         outputSwitch = 2;   //rejected
     } else {
-        outputSwitch = 0;
+        outputSwitch = 0;   //
+        makeVideoSync(inputArray, fileHash, filelistString, cleanText);
 
-        // --- build filelist file ---
-        inputArray.forEach(function(elem, ind, arr){
-            filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
-        });
-
-
-        // --- write file list ---
-        fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
-            function (err) {
-                if(err) {
-                    console.log(chalk.red('Error writing text file.'));
-                } else {
-
-                    // --- check file list ---
-                    fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
-                        if(err){
-                            console.log(chalk.red('Error reading text file.'));
-                        } else {
-
-                            // --- if text file exists, concat video. ---
-                            concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
-                        }
-                    });
-                }
-            });
     }
 
     // -----------------------------
@@ -163,6 +158,43 @@ module.exports.getWordLibraryPromise = getWordLibraryPromise;
 // INTERNAL FUNCTIONS =========
 // ============================
 
+//TODO: need to clean this up.
+/**
+ * Make Video (Sync)
+ * @param inputArray    The inputArray to check.
+ * @param fileHash      Hash for filelist filename generation.
+ * @param filelistString    The finished file list string to output.
+ * @param cleanText     Clean text to concat video files with.
+ */
+function makeVideoSync(inputArray, fileHash, filelistString, cleanText) {
+    // --- build filelist file ---
+    inputArray.forEach(function(elem, ind, arr){
+        filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
+    });
+
+
+    // --- write file list ---
+    fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding:'utf8'},
+        function (err) {
+            if(err) {
+                console.log(chalk.red('Error writing text file.'));
+            } else {
+
+                // --- check file list ---
+                fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
+                    if(err){
+                        console.log(chalk.red('Error reading text file.'));
+                    } else {
+
+                        // --- if text file exists, concat video. ---
+                        concatVideoFile(configObject.tempFolder + fileHash + '.txt', configObject.outputFolder + getFileName(cleanText));
+                    }
+                });
+            }
+        });
+}
+
+
 /**
  * Concatenate videos using FFMPEG.
  * @param relFilePath   File path.
@@ -212,28 +244,49 @@ function getFileName(inputStr) {
  * Compare two arrays and check for availability.
  * @param inputArr  User input words array.
  * @param library   Library array to compare to.
+ * @param badLibrary Library of bad words to compare to.
  * @returns {{inputCount: *, libraryCount: *, rejectCount: Number, foundWords: Array, rejectedWords: Array}}    An object with information.
  */
-function checkWordAvailability(inputArr, library) {
+function checkWordAvailability(inputArr, library, badLibrary) {
 
     var foundArr = [];          // found words array
-    var rejectedArr = [];       // rejected words array
+    var notFoundArr = [];       // not found words array
+    var badArr = [];
 
     // sort through input text.
     inputArr.forEach(function(elem, ind, arr){
-        if(library.includes(elem)) {
-            foundArr.push(elem);
+
+        // TODO: if else isn't working, about to try switchCase.
+        // // if it's in the library...
+        // if(library.includes(elem)) {
+        //     //add to found array
+        //     foundArr.push(elem);
+        // } else {
+        //     // if not found and not a bad word, add to notFound array.
+        //     notFoundArr.push(elem);
+        // }
+
+
+        //if badword
+        if(badLibrary.includes(elem)){
+            badArr.push(elem);
         } else {
-            rejectedArr.push(elem);
+            if(library.includes(elem)) {
+                foundArr.push(elem)
+            } else {
+                notFoundArr.push(elem);
+            }
         }
+
+
     });
 
     return {
         inputCount: inputArr.length,
         libraryCount: library.length,
-        rejectCount: rejectedArr.length,
         foundWords: foundArr,
-        rejectedWords: rejectedArr
+        notFoundWords: notFoundArr,
+        badWords: badArr
     }
 }
 

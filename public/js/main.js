@@ -64,8 +64,10 @@ form.addEventListener('submit', function(e){
             var stringData = JSON.stringify(data);
             console.log('data returned from server: ' + stringData);    //DEBUG to console
 
+
+            console.log(stringData);
             // add to results div
-            resultDiv.innerHTML = stringData;
+            updateResultDiv(resultDiv, data);
 
             //put on the veil
             overlayGen.removeWaitOverlay();             // remove the wait overlay
@@ -86,8 +88,7 @@ form.addEventListener('submit', function(e){
                     break;
                 case 'rejected':
                     console.log('Video creation rejected, not all words available.');
-                    console.log('Found Words: ' + data.payload.foundWords);
-                    console.log('Rejected words: ' + data.payload.rejectedWords);
+                    console.log(data.payload);
                     break;
                 default: console.log("from server: " + data.payload);
             }
@@ -223,30 +224,43 @@ function getWords() {
  */
 function updateResultDiv(rDiv, data){
 
-    // grab relevant data
-    var wordData = data.payload.fileArr;
+    //if payload includes a fileArray
+    if(data.payload.fileArr) {
 
-    // print AJAX'd data to console
-    console.log(wordData);
+        // --- FOR WORD LIST ---
+        // grab relevant data
+        var wordData = data.payload.fileArr;
 
-    // create a button for each of the array
-    wordData.forEach(function(elem, ind, arr){
+        // print AJAX'd data to console
+        console.log(wordData);
 
-        //var inputWord = elem.split('.').shift();
-        var button = document.createElement('button');
-        //var buttonText = document.createTextNode(inputWord);
-        var buttonText = document.createTextNode(elem);
+        // create a button for each of the array
+        wordData.forEach(function(elem, ind, arr){
 
-        button.appendChild(buttonText);
-        button.setAttribute('class','btn btn-success');
+            //var inputWord = elem.split('.').shift();
+            var button = document.createElement('button');
+            //var buttonText = document.createTextNode(inputWord);
+            var buttonText = document.createTextNode(elem);
 
-        button.classList.add('buttonSpace');
+            button.appendChild(buttonText);
+            button.setAttribute('class','btn btn-success');
 
-        button.addEventListener('click', function(e){
-            textInput.value += ' ' + elem.split('.').shift();
+            button.classList.add('buttonSpace');
+
+            button.addEventListener('click', function(e){
+                textInput.value += ' ' + elem.split('.').shift();
+            });
+            rDiv.appendChild(button);
         });
-        rDiv.appendChild(button);
-    });
-}
+    } else {
+        //for string data output on rejection
+        var found = data.payload.foundWords;
+        var notFound = data.payload.notFoundWords;
+        var bad = data.payload.badWords;
 
+        rDiv.innerHTML = '<br><p><b>Found:</b> ' + found + '</p> <p><b>Not found: </b>' + notFound + '</p>' + '<p> <b>Bad: </b>' + bad + '</p>';
+    }
+
+
+}
 
