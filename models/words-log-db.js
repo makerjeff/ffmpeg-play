@@ -25,4 +25,10 @@
 
 
 
-//TODO: pseudo-code
+//TODO: pseudo-code for Module
+
+// check if word is in DB
+
+// if yes, run increment function (++)
+
+// if no, add to db with value of 1.
