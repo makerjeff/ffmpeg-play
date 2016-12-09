@@ -27,6 +27,38 @@
 
 //TODO: pseudo-code for Module
 
+var fs          = require('fs');
+var mongoose    = require('mongoose');
+
+var wordSchema = mongoose.Schema({
+    word: String,
+    counts: Number
+});
+
+/**
+ * return the word and count.
+ */
+wordSchema.methods.getCount = function() {
+    var word = this.word;
+    var count = this.counts;
+    console.log(word + ': ' + count);
+};
+
+/**
+ * increase word count.
+ */
+wordSchema.methods.increment = function(){
+    this.count = this.count + 1;
+    console.log(this.word + ' incremented to: ' + this,count);
+};
+
+
+
+// compile model and export
+var Word = mongoose.model('Word', wordSchema);
+
+module.exports = Word;
+
 // check if word is in DB
 
 // if yes, run increment function (++)

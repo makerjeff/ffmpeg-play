@@ -1,0 +1,67 @@
+<h3>(mongoose play)</h3>
+
+<script src="/js/overlayGen.js"></script>
+<script src="/js/pingerTool.js"></script>
+
+
+<!-- MAIN FORM -->
+<form id="main-form" class="">
+    <div class="form-group">
+        <label for="input-text">Enter EXACT text only. </label>
+        <input type="text" class="form-control simplebox" id="input-text" name="input_data" required autocomplete="off" autofocus maxlength="200">
+        <!--<textarea class="form-control simplebox" id="input-text" name="input_data" required autocomplete="off" autofocus maxlength="200"></textarea>-->
+
+
+    </div>
+    <button type="submit" alt="Submit" class="btn btn-default pull-right">Submit word</button> <br>
+</form>
+
+<!-- DEBUG CONTROLS -->
+<div id="debugControlsDiv">
+    <!--Add Word Button-->
+    <button id="debugButton" class="btn btn-default pull-left">Debug: Add Word</button>
+</div>
+
+<!--Results Div-->
+<div id="resultDiv"></div>
+
+
+
+<script>
+
+    var form = document.getElementById('main-form');
+    var resultDiv = document.getElementById('resultDiv');
+    var inputText = document.getElementById('input-text');
+    var debugButton = document.getElementById('debugButton');
+
+    // -- ONLOAD --
+    window.addEventListener('load', function(e){
+
+    });
+
+
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: '/checkword',
+            type: 'POST',
+            data: {datum:inputText.value},
+            success: function(data, status, jqXHR){
+                console.log(data);
+
+            },
+            error: function(jqXHR, status, err){
+
+            }
+        });
+
+
+        console.log('Words submitted: ' + inputText.value);
+        inputText.value = '';
+    });
+
+
+
+
+</script>
