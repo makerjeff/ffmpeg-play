@@ -51,6 +51,32 @@ module.exports.generateVideoPromise = function (inputStr) {
     // -- check word availability --
     var yayOrNay = checkWordAvailability(inputArray, wordLibrary, badwords);
 
+    if(yayOrNay.notFoundWords.length > 0 || yayOrNay.badWords.length > 0) {
+        outputSwitch = 2;   //reject
+    } else {
+        outputSwitch = 0;   //resolve
+        makeVideoSync (inputArray, fileHash, filelistString, cleanText);
+    }
+
+    // --- output status ---
+    switch (outputSwitch) {
+        case 0:
+            console.log(chalk.green('checker: completed'));
+            return {status: 'completed', payload:{videoUrl:getFileName(inputStr)}};
+            break;
+        case 1:
+            console.log(chalk.red('checker: failed'));
+            return {status: 'failed', payload: 'MS: Failed error message.'};
+            break;
+        case 2:
+            console.log(chalk.yellow('checker: rejected'));
+            return {status: 'rejected', payload: yayOrNay };
+            break;
+        default:
+            console.log(chalk.blue('checker: defaulted'));
+            return {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
+    }
+    
 
 };
 
@@ -112,44 +138,10 @@ module.exports.generateVideoSync2 = function(inputStr) {
     }
 
     return dummyStatus;
-    // OUTPUT STATUS ----------------^-
+    // OUTPUT -----------------------^-
     // --------------------------------
 
-    // ==============================================================================================
 
-};
-
-
-/**
- * Get Available Videos ASYNC (TODO: promisify)
- */
-module.exports.getAvailableVideos = function() {
-
-    var availData;
-
-    fs.readdir(configObject.libraryFolder, function(err, files){
-
-        if(err){
-            console.log(Error('Error occured: ' + err));
-        } else {
-            //console.log(files);
-            availData = files;
-        }
-    });
-
-    return availData;   //TODO: return promise instead of actual object.
-};
-
-/**
- * Get Available Videos SYNC.
- * @returns {Array.<T>|*|{PSEUDO, CHILD, ID, TAG, CLASS, ATTR, POS}}
- */
-module.exports.getAvailableVideosSync = function() {
-    var data;
-    var cleandata;
-    data = fs.readdirSync(configObject.libraryFolder);
-    cleandata = data.filter(junk.not);
-    return cleandata;
 };
 
 module.exports.getWordLibraryPromise = getWordLibraryPromise;
@@ -256,31 +248,22 @@ function checkWordAvailability(inputArr, library, badLibrary) {
     // sort through input text.
     inputArr.forEach(function(elem, ind, arr){
 
-        // TODO: if else isn't working, about to try switchCase.
-        // // if it's in the library...
-        // if(library.includes(elem)) {
-        //     //add to found array
-        //     foundArr.push(elem);
-        // } else {
-        //     // if not found and not a bad word, add to notFound array.
-        //     notFoundArr.push(elem);
-        // }
-
-
         //if badword
         if(badLibrary.includes(elem)){
             badArr.push(elem);
         } else {
+            // if found
             if(library.includes(elem)) {
                 foundArr.push(elem)
             } else {
+                // not found
                 notFoundArr.push(elem);
             }
         }
 
-
     });
 
+    // return object.
     return {
         inputCount: inputArr.length,
         libraryCount: library.length,

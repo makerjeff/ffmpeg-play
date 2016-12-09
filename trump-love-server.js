@@ -30,7 +30,7 @@ const sdb               = require('./models/signin-db');
 // =========================
 // CONFIGURATION ===========
 // =========================
-var serverVersion       = 'v0.0.6b';
+var serverVersion       = 'v0.0.6c';
 var tokenLifespan       = '1h';
 
 var connectedClients    = 0;
@@ -55,7 +55,8 @@ app.set('view engine', 'handlebars');
 // -- get user IP setup --
 app.enable('trust proxy');
 
-//-- enable socket.io --
+//------------------------
+//--- enable socket.io ---
 io.on('connection', function(socket){
     connectedClients++;
     console.log(chalk.blue(socket.id) + ' connected. Total: ' + connectedClients);
@@ -101,7 +102,7 @@ app.use(function(req,res,next){
     if(req.body.password) {
         console.log(' ----- Attempted password: ' + req.body.password);
     }
-
+    
     next();
 });
 
@@ -117,7 +118,6 @@ const debugRoutes = require('./routes/debug-routes');
 app.use('/debug', debugRoutes);
 
 
-
 // TEMP ROUTES
 app.get('/', function(req, res){
     res.cookie('lgna', 0, {signed:true});
@@ -130,15 +130,6 @@ app.get('/login', function(req, res){
 });
 
 // ---- API Routes ----
-
-// get word list
-app.get('/words', function(req,res){
-    var data = vdb.getAvailableVideosSync();
-    //console.log(data);
-    console.log('words grabbed.');
-    res.header("Content-Type","text/plain");
-    res.send(data);
-});
 
 // get async word list
 app.get('/wordspromise', function(req, res){
@@ -171,7 +162,7 @@ app.get('/video', function(req, res){
     });
 });
 
-// post data to /video
+// post data to /video (sync)
 app.post('/video', function(req, res){
 
     jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
@@ -180,15 +171,28 @@ app.post('/video', function(req, res){
             res.send('Token expired! &nbsp; <b><a href="/">LOGIN. </a></b>');
         } else {
             console.log(decoded);
+
+            // TODO: ========== ASYNC HERE ===============
             var statusObject = vdb.generateVideoSync2(req.body.datum);
 
-
-            //TODO: PROMISIFY
+            //TODO: promisify
             res.json(statusObject);
 
         }
     });
+});
 
+// post data to video (promisified)
+app.post('/videopromise', function(req, res){
+    jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
+        if(err){
+            console.log(chalk.red(err));
+            res.send('Token expired! &nbsp; <b><a href="/">LOGIN. </a> </b>');
+        } else {
+            console.log(decoded);
+            var statusObject = vdb.generateVideoPromise(req.body.datum);
+        }
+    });
 });
 
 
@@ -218,7 +222,7 @@ videomakerRoutes.get('/data', function(req, res){
     });
 });
 
-// --- get authenticate page --- TODO: check for usage, if not in use, delete.
+// --- get authenticate page ---
 videomakerRoutes.get('/authenticate', function(req, res){
     res.render('login', {layout: 'super.handlebars'});
 });
