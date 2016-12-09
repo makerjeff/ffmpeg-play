@@ -81,7 +81,6 @@ form.addEventListener('submit', function(e){
 
                     createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
                     //TODO promisify video creation and load here.
-
                     break;
                 case 'error':
                     console.log('Server error: ' + data.payload.message);
@@ -117,6 +116,19 @@ wordListButton.addEventListener('click', function(e){
 // =========================
 // FUNCTION DEFINITIONS ====
 // =========================
+
+//TODO: CREATE ASYNC VIDEO GENERATION
+
+function createVideoPromise() {
+    return new Promise(function(resolve, reject){
+        //resolve condition
+
+        //reject condition
+    });
+}
+
+//TODO: create 140 character limit.
+
 
 /**
  * Creates a video button, that creates a video element. (will be removed)
