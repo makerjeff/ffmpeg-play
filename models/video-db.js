@@ -35,49 +35,92 @@ console.log(badwords);
 // ============================
 // EXPORT METHODS =============
 // ============================
-//TODO: work here.
 module.exports.generateVideoPromise = function (inputStr) {
-    //process input string.
-
-    var tempStatus; // ???
-    var fileHash = shortid.generate();
-    var cleanText = textSanitizer.getSanitizedString(inputStr.toLowerCase());
-    var inputArray = cleanText.split(' ');
-    var filelistString = '';
-
-    var dummyStatus;    //output status object
-    var outputSwitch;   //needed?
-
-    // -- check word availability --
-    var yayOrNay = checkWordAvailability(inputArray, wordLibrary, badwords);
-
-    if(yayOrNay.notFoundWords.length > 0 || yayOrNay.badWords.length > 0) {
-        outputSwitch = 2;   //reject
-    } else {
-        outputSwitch = 0;   //resolve
-        makeVideoSync (inputArray, fileHash, filelistString, cleanText);
-    }
-
-    // --- output status ---
-    switch (outputSwitch) {
-        case 0:
-            console.log(chalk.green('checker: completed'));
-            return {status: 'completed', payload:{videoUrl:getFileName(inputStr)}};
-            break;
-        case 1:
-            console.log(chalk.red('checker: failed'));
-            return {status: 'failed', payload: 'MS: Failed error message.'};
-            break;
-        case 2:
-            console.log(chalk.yellow('checker: rejected'));
-            return {status: 'rejected', payload: yayOrNay };
-            break;
-        default:
-            console.log(chalk.blue('checker: defaulted'));
-            return {status: 'defaulted', payload: 'MS: DEFAULT-FACED.'};
-    }
     
+    //spit out a promise
+    return new Promise(function(resolve, reject){
 
+        //process input string.
+        var fileHash = shortid.generate();
+        var cleanText = textSanitizer.getSanitizedString(inputStr.toLowerCase());
+        var inputArray = cleanText.split(' ');
+        var filelistString = '';
+        var outputStatus;
+        var availability = checkWordAvailability(inputArray, wordLibrary, badwords);
+
+        // if words are missing or badwords are found, reject
+        if (availability.notFoundWords.length > 0 || availability.badWords.length > 0) {
+            reject({status: 'rejected', payload: availability });
+        } else {
+
+            // --- build filelist file ---
+            inputArray.forEach(function(elem, ind, arr){
+                filelistString = filelistString + " file '" + configObject.libraryFolder + elem + ".mp4'\n";
+            });
+
+            // --- write file to disk
+
+            fs.writeFile(configObject.tempFolder + fileHash + '.txt', filelistString, {encoding: 'utf8'}, function(err){
+                if(err){
+                    console.log(chalk.red('Error writing filelist.'));
+                    reject({status: 'error', payload: {message: 'Error writing filelist.'}});
+                } else {
+                    // --- check file string file
+                    fs.readFile(configObject.tempFolder + fileHash + '.txt', function(err, data){
+                        if(err){
+                            console.log(chalk.red('Error reading filelist'));
+                            reject({status: 'error', payload: {message: 'Error reading filelist.'}});
+                        } else {
+                            // --- if filestring file exists, concat!
+
+                            var relFilePath = configObject.tempFolder + fileHash + '.txt';
+                            var outputFileName = configObject.outputFolder + getFileName(cleanText);
+
+                            //TODO: FIX THIS so file name actually means file name.
+                            console.log(relFilePath);   //relFilePath
+                            console.log(outputFileName);    //outputFileName
+
+                            // spawn child process (TODO: FIX CALLBACK HELL!!!)
+                            child_process.exec('ffmpeg -y -f concat -safe 0 -i ' + relFilePath + ' -c copy ' + outputFileName, {encoding: 'utf8'}, function(err, stdout, stderr) {
+                                if(err) {
+                                    console.log(chalk.red('Error generating video file. ' + err));
+                                    reject({status: 'rejected', payload: {message: 'Error generating video file. '}});
+                                } else {
+                                    //if file generation was successful (not sure why status goes to stderr though)
+                                    if(stderr) {
+                                        console.log(chalk.green('Successful video creation.'));
+                                        // attempt to read the file
+
+
+                                            // if this doesn't work, use SYNC.
+                                            fs.readFile(outputFileName, {encoding: 'utf8'}, function(err, data){
+                                                if(err){
+                                                    console.log(chalk.red('Error reading video file ' + outputFileName));
+                                                    reject({status: 'error', payload:{message:'Error reading video file ' + outputFileName}});
+                                                } else {
+                                                    //everything is A OKAY!
+                                                    console.log(chalk.green('File read confirmed! ' + outputFileName + ' is ready for consumption!'));
+                                                    resolve({status: 'completed', payload: {messsage: 'Video file ' + getFileName(cleanText) + ' created. ', videoUrl: getFileName(cleanText)}});
+                                                }
+                                            });
+
+
+
+
+
+                                    } else {
+                                        // this never gets seen.
+                                        console.log(stdout + 'Success message.');
+                                        resolve({status: 'miracle', payload: {message: 'Miraculously childprocess actually spat out the proper finish code.'}});
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 };
 
 /**

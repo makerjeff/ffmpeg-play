@@ -30,7 +30,7 @@ const sdb               = require('./models/signin-db');
 // =========================
 // CONFIGURATION ===========
 // =========================
-var serverVersion       = 'v0.0.6c';
+var serverVersion       = 'v0.0.7';
 var tokenLifespan       = '1h';
 
 var connectedClients    = 0;
@@ -148,8 +148,7 @@ app.get('/wordspromise', function(req, res){
 
 // GET video page
 app.get('/video', function(req, res){
-
-    //TODO: REMOVE THIS, ADD to /VM/
+    
     jwt.verify(req.signedCookies.token, sdb.credentials.signingkey, function(err, decoded){
         if(err) {
             console.log(chalk.red(err));
@@ -190,7 +189,18 @@ app.post('/videopromise', function(req, res){
             res.send('Token expired! &nbsp; <b><a href="/">LOGIN. </a> </b>');
         } else {
             console.log(decoded);
-            var statusObject = vdb.generateVideoPromise(req.body.datum);
+            console.log(chalk.yellow('Route: Attempting to resolve or reject promise...'));
+
+            // --- attempt to satisfy promise...
+            vdb.generateVideoPromise(req.body.datum).then(function(val){
+                console.log(val);
+                res.json(val);
+
+            }).catch(function(reason){
+                console.log(reason);
+                res.json(reason);
+
+            });
         }
     });
 });

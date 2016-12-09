@@ -55,7 +55,7 @@ form.addEventListener('submit', function(e){
     // TODO: clean up into an TWL client side API.
     //AJAX call to API
     $.ajax({
-        url: '/video',
+        url: '/videopromise',
         type:'POST',
         data:{datum: grabbedData.value},
         success: function(data, textStatus, jqXHR){
@@ -83,11 +83,11 @@ form.addEventListener('submit', function(e){
                     //TODO promisify video creation and load here.
 
                     break;
-                case 'failed':
-                    console.log('Video creation failed on the server.');
+                case 'error':
+                    console.log('Server error: ' + data.payload.message);
                     break;
                 case 'rejected':
-                    console.log('Video creation rejected, not all words available.');
+                    console.log('Video creation rejected: ' + data.payload.message);
                     console.log(data.payload);
                     break;
                 default: console.log("from server: " + data.payload);
