@@ -30,7 +30,7 @@ const sdb               = require('./models/signin-db');
 // =========================
 // CONFIGURATION ===========
 // =========================
-var serverVersion       = 'v0.0.7b';
+var serverVersion       = 'v0.0.7c';
 var tokenLifespan       = '1h';
 
 var connectedClients    = 0;
