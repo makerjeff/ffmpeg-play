@@ -8,4 +8,5 @@ _fileBackups/
 logger_data.txt
 password.txt
 signingkey.txt
+repeatwords-play/
 .DS_Store
