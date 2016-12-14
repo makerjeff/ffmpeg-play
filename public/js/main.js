@@ -79,8 +79,11 @@ form.addEventListener('submit', function(e){
             switch (data.status) {
                 case 'completed':
 
-                    createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
-                    //TODO promisify video creation and load here.
+                    // createLoadVideoButton(document.getElementById('debugControlsDiv'), data);
+
+                    // create video instead of button
+                    createVideo(document.getElementById('resultDiv'), data);
+
                     break;
                 case 'error':
                     console.log('Server error: ' + data.payload.message);
@@ -108,9 +111,6 @@ wordListButton.addEventListener('click', function(e){
     overlayGen.createWaitOverlay();     // create wait overlay
     getWords();                         // get available words from server
 });
-
-
-
 
 
 // =========================
@@ -154,29 +154,29 @@ function createLoadVideoButton(targetDiv, data){
 
         // =============================
         //TODO: MAKE VIDEO FUNCTION ====
-        var video = document.createElement('video');
-        video.id = 'videoElement';
-        video.src = '/videos/' + data.payload.videoUrl;
-
-        video.setAttribute('autoplay', true);
-
-        resultDiv.appendChild(video);
-
-        // if it can play through, start playing.
-        video.addEventListener('canplaythrough', function(e){
-            this.play();
-        });
-
-        // when the user clicks, the video will play again if it's stopped.
-        video.addEventListener('click', function(e){
-            if(this.paused) {
-                this.play();
-            }
-        });
+        // var video = document.createElement('video');
+        // video.id = 'videoElement';
+        // video.src = '/videos/' + data.payload.videoUrl;
+        //
+        // video.setAttribute('autoplay', true);
+        //
+        // resultDiv.appendChild(video);
+        //
+        // // if it can play through, start playing.
+        // video.addEventListener('canplaythrough', function(e){
+        //     this.play();
+        // });
+        //
+        // // when the user clicks, the video will play again if it's stopped.
+        // video.addEventListener('click', function(e){
+        //     if(this.paused) {
+        //         this.play();
+        //     }
+        // });
+        createVideo(document.getElementById('resultDiv'), data);
 
         //remove button
         this.parentNode.removeChild(this);
-
 
         // --- create download button ---
         var dlb = document.createElement('a');
@@ -193,9 +193,25 @@ function createLoadVideoButton(targetDiv, data){
     });
 }
 
-// create video function, TODO: reorganize.
+// create video function,
 function createVideo(rDiv, data) {
+    var video = document.createElement('video');
+    video.id = 'videoElement';
+    video.src = '/videos/' + data.payload.videoUrl;
 
+    video.setAttribute('autoplay', true);
+
+    rDiv.appendChild(video);
+
+    video.addEventListener('canplaythrough', function(e){
+        this.play();
+    });
+
+    video.addEventListener('click', function(e){
+        if(this.paused) {
+            this.play();
+        }
+    });
 }
 
 
@@ -226,7 +242,6 @@ function getWords() {
         }
     });
 }
-
 
 
 /**
