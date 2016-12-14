@@ -13,21 +13,24 @@ var cleanArray = [];
 
 files.forEach(function(elem, ind, arr){
 
-    //strip extension
+    //SCHEMA
+    // var wordObject = {
+    //     word: 'word',   //elem.split('.').shift();
+    //     files: ['word.mp4', 'word_1.mp4', 'word_2.mp4']
+    // };
+
+    var regexp = /[_]/;     // regex to find '_' marker.
+
+    // strip extension
     var noExtFileName = elem.split('.').shift();
-    //console.log(noExtFileName);
 
-    //look for the '_' character
-    if (noExtFileName.search(/[_]/) === -1) {
-
-        var returnObject = {word: noExtFileName, index: 'master', filename: elem};
-
-        //console.log(returnObject);
-        cleanArray.push(returnObject);
+    // check to see if the '_' exists in the file name
+    if (noExtFileName.search(regexp) === -1) {
+        //if the marker exists it's a SLAVE
+        cleanArray.push({word: noExtFileName, files: elem});
     } else {
-        returnObject = { word: noExtFileName, index: noExtFileName[noExtFileName.search(/[_]/) + 1] , filename: elem};
-        //console.log(returnObject);
-        cleanArray.push(returnObject);
+        // if no marker, it's a MASTER
+        cleanArray.push({ word: noExtFileName, index: noExtFileName[noExtFileName.search(regexp) + 1] , filename: elem});
     }
 
 });
