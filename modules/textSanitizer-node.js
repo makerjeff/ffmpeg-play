@@ -29,7 +29,7 @@ function sanitizeString2 (dirtyString) {
     var cleanString = dirtyString.replace(/[0-9]/g, '');
 
     // strip special characters
-    cleanString = cleanString.replace(/[~`!@#$%^&*()_+-=<>?,./]/g, '');
+    cleanString = cleanString.replace(/[~`!@#$%^&*()_+-=<>?,./;':"]/g, '');
 
     // strip backslashes
     cleanString = cleanString.replace(/\\/g, '');

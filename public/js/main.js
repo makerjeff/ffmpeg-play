@@ -84,6 +84,15 @@ form.addEventListener('submit', function(e){
                     // create video instead of button
                     createVideo(document.getElementById('resultDiv'), data);
 
+                    //TODO: make and call function instead of this crap.
+                    // --- create download button ---
+                    var dlb = document.createElement('a');
+                    dlb.href = '/videos/' + data.payload.videoUrl;
+                    dlb.setAttribute('download', data.payload.videoUrl);    //sets the download file name, can be customized.
+                    dlb.innerHTML = 'download';
+                    dlb.classList.add('pull-right');
+                    resultDiv.appendChild(dlb);
+
                     break;
                 case 'error':
                     console.log('Server error: ' + data.payload.message);
@@ -200,6 +209,7 @@ function createVideo(rDiv, data) {
     video.src = '/videos/' + data.payload.videoUrl;
 
     video.setAttribute('autoplay', true);
+    video.setAttribute('poster', '/images/posterFrame.jpg');
 
     rDiv.appendChild(video);
 
