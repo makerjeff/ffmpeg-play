@@ -1,0 +1,29 @@
+<h3>(delivery.js play) </h3>
+
+{{! ---- DEBUG ---- }}
+{{#if server}}
+    <div class="serverVersion">{{server}} <span id="userCount" class="label label-primary thinLabel">0 users online</span></div>
+{{/if}}
+
+
+{{!--LIBRARIES & MODULES--}}
+<script src="/js/pingerTool.js"></script>
+<script src="/js/textSanitizer.js"></script>
+<script src="/js/overlayGen.js"></script>
+<script src="/js/videoGen.js"></script>
+<script src="/js/charCreator.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- number of users indicator (to fill in the room)-->
+<div class="characterContainer"> </div>
+
+
+<!-- MAIN DIV -->
+<div class="container">
+    <!--Results Div-->
+    <div id="resultDiv"></div>
+</div>
+
+<script>
+
+</script>
