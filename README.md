@@ -73,5 +73,6 @@ Experimenting with FFMPEG and FFMPEG node modules.
 - [NPM: BadWords: Starter list of bad words.](https://github.com/MauriceButler/badwords)
 - [Delivery.JS: Bidirectional File Transfers for Node.js via Socket.IO](https://www.npmjs.com/package/delivery)
 - [Modulus.io: Getting Started with Mongoose](http://blog.modulus.io/getting-started-with-mongoose)
+- [IPTABLES-PERSISTENT](http://askubuntu.com/questions/270693/how-can-set-these-iptables-rules-to-run-at-startup): Use this to make IPTABLES settings persistent.
 
 
